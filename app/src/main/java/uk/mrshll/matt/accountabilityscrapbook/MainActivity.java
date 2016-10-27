@@ -68,7 +68,13 @@ public class MainActivity extends AppCompatActivity
         {
 //        Make toast
             RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
+            String resultString = "I know of the following Scrapbooks:";
+            for (Scrapbook s : results)
+            {
+                resultString = resultString + " " + s.getName();
+            }
             
+            Toast.makeText(this, resultString, Toast.LENGTH_SHORT).show();
 
 
         } else
