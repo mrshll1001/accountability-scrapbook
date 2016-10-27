@@ -4,6 +4,7 @@ import io.realm.RealmObject;
 
 /**
  * Created by matt on 27/10/16.
+ * Scrapbook model.
  */
 
 public class Scrapbook extends RealmObject

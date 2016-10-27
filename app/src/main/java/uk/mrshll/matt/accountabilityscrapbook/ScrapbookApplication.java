@@ -8,6 +8,7 @@ import android.app.Application;
  */
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class ScrapbookApplication extends Application
 {
@@ -16,5 +17,7 @@ public class ScrapbookApplication extends Application
     {
         super.onCreate();
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder().build();
+        Realm.setDefaultConfiguration(config);
     }
 }

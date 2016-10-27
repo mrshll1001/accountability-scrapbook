@@ -1,5 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,13 +16,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import io.realm.Realm;
+
+import io.realm.RealmResults;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class MainActivity extends AppCompatActivity
 
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Realm realm;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,10 +57,51 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
 //        TRY TO INITIALISE REALM DATABASE
         realm = Realm.getDefaultInstance();
 
 
+//        Check to see if the application has been run by checking if a preference exists
+        preferences = getPreferences(Context.MODE_PRIVATE);
+        if (preferences.contains("DATE_INITIALISED"))
+        {
+//        Make toast
+            RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
+            
+
+
+        } else
+        {
+//        Else, create the preference, set the date, and create the default scrapbook
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("DATE_INITIALISED", "I was initialised today yo!");
+
+            createDefaultScrapbook(this.realm);
+
+            editor.apply();
+
+        }
+
+
+
+
+    }
+
+    /**
+     * Creates the default scrapbook during initialisation.
+     * @param realm
+     * @return
+     */
+    private void createDefaultScrapbook(Realm realm)
+    {
+        realm.beginTransaction();
+        Scrapbook default_scrapbook = realm.createObject(Scrapbook.class);
+        default_scrapbook.setName("Example Scrapbook");
+        realm.commitTransaction();
+
+        Toast.makeText(this, default_scrapbook.getName() + " Created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -99,6 +148,8 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.nav_slideshow) {
+
+            Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.nav_manage) {
 
