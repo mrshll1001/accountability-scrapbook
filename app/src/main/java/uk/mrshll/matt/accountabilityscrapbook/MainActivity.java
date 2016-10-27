@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,8 +82,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Toast.makeText(getApplicationContext(), "Hello Marshall. I am your app", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_gallery) {
+            Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.nav_slideshow) {
 
