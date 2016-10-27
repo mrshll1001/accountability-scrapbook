@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 //        TRY TO INITIALISE REALM DATABASE
+        realm = Realm.getDefaultInstance();
 
 
     }
