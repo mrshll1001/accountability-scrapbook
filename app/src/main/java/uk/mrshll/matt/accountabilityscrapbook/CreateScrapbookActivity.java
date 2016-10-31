@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -68,6 +69,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                     Scrapbook new_scrapbook = realm.createObject(Scrapbook.class);
                     new_scrapbook.setName(name.getText().toString());
                     new_scrapbook.setDateCreated(new Date());
+                    new_scrapbook.setColour(scrapbookColour);
 
                     realm.commitTransaction();
 
@@ -85,8 +87,10 @@ public class CreateScrapbookActivity extends AppCompatActivity {
         colourBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ColorDrawable btnColor = (ColorDrawable) colourBtn.getBackground();
+
                 new ChromaDialog.Builder().
-                        initialColor(Color.BLUE)
+                        initialColor(btnColor.getColor())
                         .colorMode(ColorMode.RGB)
                         .indicatorMode(IndicatorMode.HEX)
                         .onColorSelected(new OnColorSelectedListener() {
@@ -95,11 +99,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
 
 //                                Set the scrapbook colour
                                 scrapbookColour = color;
-                                Toast.makeText(CreateScrapbookActivity.this, "Well done on your new colour " + ChromaUtil.getFormattedColorString(color, false), Toast.LENGTH_SHORT).show();
                                 colourBtn.setBackgroundColor(color);
-
-                                ImageView indicator = (ImageView) findViewById(R.id.colour_indicator);
-                                indicator.setBackgroundT
                             }
                         })
                         .create()

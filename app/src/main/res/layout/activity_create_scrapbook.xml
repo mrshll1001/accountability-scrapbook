@@ -12,28 +12,35 @@
     tools:context="uk.mrshll.matt.accountabilityscrapbook.CreateScrapbookActivity">
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="47dp"
-        android:id="@+id/scrapbook_name"
-        android:selectAllOnFocus="true"
-        android:textAlignment="center"
-        android:hint="Scrapbook Name"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name:"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_marginLeft="44dp"
+            android:id="@+id/scrapbook_name"
+            android:selectAllOnFocus="true"
+            android:textAlignment="center"
+            android:hint="Scrapbook Name"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/colour_button"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/scrapbook_name"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="27dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/colour_button"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_marginTop="29dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_below="@+id/scrapbook_name"
+            android:layout_alignStart="@+id/complete_button" />
 
     <Button
         android:text="Done"
@@ -44,13 +51,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/colour_indicator"
-        android:backgroundTint="@color/colorAccent"
-        android:layout_alignBottom="@+id/colour_button"
-        android:layout_toStartOf="@+id/scrapbook_name"
-        android:id="@+id/colour_indicator" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick a Colour"
+        android:layout_alignTop="@+id/colour_button"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>
