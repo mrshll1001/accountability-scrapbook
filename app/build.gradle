@@ -28,6 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:design:25.0.0'
-    compile "com.github.danielnilsson9:color-picker-view:1.4.0@aar"
     testCompile 'junit:junit:4.12'
+    compile 'com.pavelsikun:vintage-chroma:1.5'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

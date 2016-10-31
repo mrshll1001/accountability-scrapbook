@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity
 
             Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
             MainActivity.this.startActivity(intent);
-
         }
 
 

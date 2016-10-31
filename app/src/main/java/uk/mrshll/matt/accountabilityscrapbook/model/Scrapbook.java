@@ -13,7 +13,7 @@ public class Scrapbook extends RealmObject
 {
     private String name;        // Name
     private Date dateCreated;   // Date the scrapbook was registered
-    private String colour;      // Colour used to sort the scrapbook
+    private int colour;      // Colour used to sort the scrapbook
 
     /**
      * Returns name
@@ -43,7 +43,7 @@ public class Scrapbook extends RealmObject
      * Returns the colour string (expects hex)
      * @return
      */
-    public String getColour() {
+    public int getColour() {
         return colour;
     }
 
@@ -51,7 +51,7 @@ public class Scrapbook extends RealmObject
      * Sets colopur (expects hex)
      * @param colour
      */
-    public void setColour(String colour) {
+    public void setColour(int colour) {
         this.colour = colour;
     }
 
