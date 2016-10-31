@@ -80,14 +80,14 @@ public class MainActivity extends AppCompatActivity
 
         } else
         {
-//        Else, create the preference, set the date, and create the default scrapbook
+//        Else, create the preference, set the date, and prompt the user to create a scrapbook first thing
 
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("DATE_INITIALISED", "I was initialised today yo!");
-
-            createDefaultScrapbook(this.realm);
-
             editor.apply();
+
+            Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
+            MainActivity.this.startActivity(intent);
 
         }
 
