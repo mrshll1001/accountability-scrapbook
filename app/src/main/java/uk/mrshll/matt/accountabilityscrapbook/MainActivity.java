@@ -1,6 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity
             {
                 resultString = resultString + " " + s.getName();
             }
-            
+
             Toast.makeText(this, resultString, Toast.LENGTH_SHORT).show();
 
 

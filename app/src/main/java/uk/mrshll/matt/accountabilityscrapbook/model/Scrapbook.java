@@ -1,5 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 
 /**
@@ -9,10 +11,9 @@ import io.realm.RealmObject;
 
 public class Scrapbook extends RealmObject
 {
-    /**
-     * Name of the Scrapbook
-     */
-    private String name;
+    private String name;        // Name
+    private Date dateCreated;   // Date the scrapbook was registered
+    private String colour;      // Colour used to sort the scrapbook
 
     /**
      * Returns name
@@ -28,5 +29,37 @@ public class Scrapbook extends RealmObject
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Returns the date created
+     * @return
+     */
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    /**
+     * Returns the colour string (expects hex)
+     * @return
+     */
+    public String getColour() {
+        return colour;
+    }
+
+    /**
+     * Sets colopur (expects hex)
+     * @param colour
+     */
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    /**
+     * Sets the date (expects Date object)
+     * @param dateCreated
+     */
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
