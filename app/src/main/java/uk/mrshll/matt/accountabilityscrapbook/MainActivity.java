@@ -1,11 +1,10 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
 
     private Realm realm;
     private SharedPreferences preferences;
+    private ScrapbookAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,12 +42,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // The floater button is designed to add scrapbooks
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
-                MainActivity.this.startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -72,13 +75,46 @@ public class MainActivity extends AppCompatActivity
         } else
         {
             // TODO Draw the collection of scrapbooks
-            Toast.makeText(this, "There are " + results.size() + " Scrapbooks in my database", Toast.LENGTH_SHORT).show();
+//            // Get the gridview from the layout I suppose
+            ListView grid = (ListView) findViewById(R.id.scrapbook_grid);
+
+           // Convert the realm results into an array of scrapbooks
+            ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
+            for(Scrapbook s : results)
+            {
+                values.add(s);
+            }
+            this.adapter = new ScrapbookAdapter(this, values);
+            grid.setAdapter(adapter);
         }
 
 
+    }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
 
+    }
 
+    /**
+     * We're adding this to redraw the list with new data
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == 1)
+        {
+            if (resultCode == Activity.RESULT_OK){
+                
+
+             this.adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override

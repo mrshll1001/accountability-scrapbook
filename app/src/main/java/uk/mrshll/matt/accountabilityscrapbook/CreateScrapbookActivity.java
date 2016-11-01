@@ -1,5 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -73,7 +75,10 @@ public class CreateScrapbookActivity extends AppCompatActivity {
 
                     realm.commitTransaction();
 
-//                And then finish, going back to the main menu
+//                And then finish, going back to the main menu AND PASSING THE DATA BACK TO REDRAW THE LIST
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+
                     Toast.makeText(CreateScrapbookActivity.this, "Scrapbook " + name.getText().toString() + " created", Toast.LENGTH_SHORT).show();
                     finish();
 

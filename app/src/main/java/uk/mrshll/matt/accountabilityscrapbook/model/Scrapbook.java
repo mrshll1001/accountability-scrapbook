@@ -3,6 +3,7 @@ package uk.mrshll.matt.accountabilityscrapbook.model;
 import java.util.Date;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by matt on 27/10/16.
@@ -11,7 +12,9 @@ import io.realm.RealmObject;
 
 public class Scrapbook extends RealmObject
 {
+
     private String name;        // Name
+
     private Date dateCreated;   // Date the scrapbook was registered
     private int colour;      // Colour used to sort the scrapbook
 
@@ -40,7 +43,7 @@ public class Scrapbook extends RealmObject
     }
 
     /**
-     * Returns the colour string (expects hex)
+     * Returns the colour string
      * @return
      */
     public int getColour() {
@@ -48,7 +51,7 @@ public class Scrapbook extends RealmObject
     }
 
     /**
-     * Sets colopur (expects hex)
+     * Sets colopur
      * @param colour
      */
     public void setColour(int colour) {
