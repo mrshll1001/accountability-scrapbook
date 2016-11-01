@@ -62,52 +62,23 @@ public class MainActivity extends AppCompatActivity
 //        TRY TO INITIALISE REALM DATABASE
         realm = Realm.getDefaultInstance();
 
+//        Check to see if we have scrapbooks. If we don't, then we start off by running the activity to create one
+        RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
 
-//        Check to see if the application has been run by checking if a preference exists
-        preferences = getPreferences(Context.MODE_PRIVATE);
-        if (preferences.contains("DATE_INITIALISED"))
+        if(results.isEmpty()) // Check length of results array
         {
-//        Make toast
-            RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
-            String resultString = "I know of the following Scrapbooks:";
-            for (Scrapbook s : results)
-            {
-                resultString = resultString + " " + s.getName();
-            }
-
-            Toast.makeText(this, resultString, Toast.LENGTH_SHORT).show();
-
-
-        } else
-        {
-//        Else, create the preference, set the date, and prompt the user to create a scrapbook first thing
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("DATE_INITIALISED", "I was initialised today yo!");
-            editor.apply();
-
             Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
             MainActivity.this.startActivity(intent);
+        } else
+        {
+            // TODO Draw the collection of scrapbooks
+            Toast.makeText(this, "There are " + results.size() + " Scrapbooks in my database", Toast.LENGTH_SHORT).show();
         }
 
 
 
 
-    }
 
-    /**
-     * Creates the default scrapbook during initialisation.
-     * @param realm
-     * @return
-     */
-    private void createDefaultScrapbook(Realm realm)
-    {
-        realm.beginTransaction();
-        Scrapbook default_scrapbook = realm.createObject(Scrapbook.class);
-        default_scrapbook.setName("Example Scrapbook");
-        realm.commitTransaction();
-
-        Toast.makeText(this, default_scrapbook.getName() + " Created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
