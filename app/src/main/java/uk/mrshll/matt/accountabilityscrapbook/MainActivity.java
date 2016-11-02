@@ -109,10 +109,21 @@ public class MainActivity extends AppCompatActivity
     {
         if (requestCode == 1)
         {
-            if (resultCode == Activity.RESULT_OK){
-                
+            if (resultCode == Activity.RESULT_OK)
+            {
+                // Quite dirty but might work for now; reload all of the scrapbooks
+                RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
+                ListView grid = (ListView) findViewById(R.id.scrapbook_grid);
 
-             this.adapter.notifyDataSetChanged();
+                // Convert the realm results into an array of scrapbooks
+                ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
+                for(Scrapbook s : results)
+                {
+                    values.add(s);
+                }
+                this.adapter = new ScrapbookAdapter(this, values);
+                grid.setAdapter(adapter);
+                this.adapter.notifyDataSetChanged();
             }
         }
     }
