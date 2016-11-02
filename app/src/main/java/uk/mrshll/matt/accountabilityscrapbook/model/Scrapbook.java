@@ -67,4 +67,22 @@ public class Scrapbook extends RealmObject
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
+
+    /**
+     * Adds a tag to the database
+     * @param tag
+     */
+    public void addTag(Tag tag)
+    {
+        this.tagList.add(tag);
+    }
+
+    /**
+     * Returns the tag list
+     * @return 
+     */
+    public RealmList<Tag> getTagList()
+    {
+        return this.tagList;
+    }
 }
