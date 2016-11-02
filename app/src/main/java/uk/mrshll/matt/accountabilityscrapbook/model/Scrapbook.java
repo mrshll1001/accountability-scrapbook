@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook.model;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -17,6 +18,7 @@ public class Scrapbook extends RealmObject
 
     private Date dateCreated;   // Date the scrapbook was registered
     private int colour;      // Colour used to sort the scrapbook
+    private RealmList<Tag> tagList; // All dem tags it's been tagged with
 
     /**
      * Returns name

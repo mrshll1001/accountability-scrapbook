@@ -44,7 +44,7 @@ public class ScrapbookAdapter extends ArrayAdapter<Scrapbook>
         // Modify the textviews
         heading.setText(itemList.get(position).getName());
         heading.setTextColor(itemList.get(position).getColour());
-        value.setText("X items");
+        value.setText("Created " + itemList.get(position).getDateCreated().toString() );
 
         // Return
         return scrapbookRow;
