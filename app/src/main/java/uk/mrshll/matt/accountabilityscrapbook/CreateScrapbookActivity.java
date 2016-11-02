@@ -33,6 +33,7 @@ import java.util.Date;
 
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
+import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class CreateScrapbookActivity extends AppCompatActivity {
 
@@ -58,20 +59,36 @@ public class CreateScrapbookActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                Get the data for the scrapbook
                 EditText name = (EditText) findViewById(R.id.scrapbook_name);
+                EditText tags = (EditText) (findViewById(R.id.scrapbook_add_tags));
 
 
 //                Check name isn't blank
-                if (name.getText().toString().matches("")) {
+                if (name.getText().toString().matches(""))
+                {
                     Toast.makeText(CreateScrapbookActivity.this, "Please give the scrapbook a name!", Toast.LENGTH_SHORT).show();
 
 
-                } else {
+                } else if (tags.getText().toString().matches(""))
+                {
+                    Toast.makeText(CreateScrapbookActivity.this, "Please enter some tags!", Toast.LENGTH_SHORT).show();
+                } else
+                {
 //                    Make the scrapbook
                     realm.beginTransaction();
+
                     Scrapbook new_scrapbook = realm.createObject(Scrapbook.class);
                     new_scrapbook.setName(name.getText().toString());
                     new_scrapbook.setDateCreated(new Date());
                     new_scrapbook.setColour(scrapbookColour);
+
+                    // Begin the tags
+                    String[] tokens  = tags.getText().toString().split(" ");
+                    for (String t : tokens)
+                    {
+                        Tag tag = new Tag();
+                        tag.setTagName("#"+t);
+                        realm.copyToRealmOrUpdate(tag);
+                    }
 
                     realm.commitTransaction();
 

@@ -79,7 +79,7 @@ public class Scrapbook extends RealmObject
 
     /**
      * Returns the tag list
-     * @return 
+     * @return
      */
     public RealmList<Tag> getTagList()
     {
