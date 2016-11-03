@@ -67,11 +67,12 @@ public class MainActivity extends AppCompatActivity
 
 //        Check to see if we have scrapbooks. If we don't, then we start off by running the activity to create one
         RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
-
+//        Toast.makeText(this, results.size(), Toast.LENGTH_SHORT).show();
         if(results.isEmpty()) // Check length of results array
         {
+            Toast.makeText(this, "THere don't appear to be any scrapbooks", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
-            MainActivity.this.startActivity(intent);
+            startActivityForResult(intent, 1);
         } else
         {
             // TODO Draw the collection of scrapbooks

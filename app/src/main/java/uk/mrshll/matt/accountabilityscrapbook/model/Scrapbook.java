@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class Scrapbook extends RealmObject
 {
-
+    @PrimaryKey
     private String name;        // Name
 
     private Date dateCreated;   // Date the scrapbook was registered

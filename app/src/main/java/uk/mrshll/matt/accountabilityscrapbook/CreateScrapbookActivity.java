@@ -75,11 +75,11 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                 {
 //                    Make the scrapbook
                     realm.beginTransaction();
-
-                    Scrapbook new_scrapbook = realm.createObject(Scrapbook.class);
-                    new_scrapbook.setName(name.getText().toString());
-                    new_scrapbook.setDateCreated(new Date());
-                    new_scrapbook.setColour(scrapbookColour);
+                    
+                    Scrapbook scrapbook = new Scrapbook();
+                    scrapbook.setName(name.getText().toString());
+                    scrapbook.setDateCreated(new Date());
+                    scrapbook.setColour(scrapbookColour);
 
                     // Begin the tags
                     String[] tokens  = tags.getText().toString().split(" ");
@@ -90,6 +90,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                         realm.copyToRealmOrUpdate(tag);
                     }
 
+                    realm.copyToRealmOrUpdate(scrapbook);
                     realm.commitTransaction();
 
 //                And then finish, going back to the main menu AND PASSING THE DATA BACK TO REDRAW THE LIST
