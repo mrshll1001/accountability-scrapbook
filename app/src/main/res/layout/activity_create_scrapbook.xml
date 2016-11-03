@@ -11,20 +11,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="uk.mrshll.matt.accountabilityscrapbook.CreateScrapbookActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/notebook_64"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:id="@+id/imageView6" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name:"
-        android:layout_below="@id/imageView6"
+        android:text="Name"
         android:layout_marginTop="20dp"
         android:id="@+id/text_name" />
 
@@ -33,13 +23,11 @@
         android:layout_height="wrap_content"
         android:inputType="textCapWords"
         android:ems="10"
-        android:layout_marginLeft="44dp"
         android:id="@+id/scrapbook_name"
         android:selectAllOnFocus="true"
-        android:textAlignment="center"
         android:hint="Scrapbook Name"
-        android:layout_below="@id/imageView6"
-        android:layout_toRightOf="@id/text_name"
+        android:layout_below="@id/text_name"
+        android:textSize="30sp"
 
         />
 
@@ -48,10 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pick a Colour"
-        android:layout_below="@+id/text_name"
+        android:layout_below="@+id/scrapbook_name"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="58dp"
-        android:id="@+id/text_pick_name" />
+        android:layout_marginTop="10dp"
+        android:id="@+id/text_pick_colour" />
 
 
 
@@ -61,12 +49,28 @@
             android:id="@+id/colour_button"
             style="@style/Widget.AppCompat.Button.Small"
         android:background="@color/colorPrimaryDark"
-        android:layout_toRightOf="@+id/text_pick_name"
-        android:layout_below="@id/scrapbook_name"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_below="@+id/text_pick_colour"
+        android:layout_marginTop="10dp"
          />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrapbook_add_tags_label"
+        android:text="Add some tags (tags should be separated by a space):"
+        android:layout_below="@id/colour_button"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_below="@+id/scrapbook_add_tags_label"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/scrapbook_add_tags"
+        android:layout_above="@+id/complete_button" />
 
     <Button
         android:text="Done"
@@ -76,26 +80,13 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_marginBottom="29dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageView6" />
+        android:layout_alignParentRight="true"
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrapbook_add_tags_label"
-        android:text="Add some tags (tags should be separated by a space):"
-        android:layout_below="@id/text_pick_name"
-        android:layout_marginTop="58dp"
         />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:layout_below="@+id/scrapbook_add_tags_label"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="17dp"
-        android:id="@+id/scrapbook_add_tags"
-        android:layout_above="@+id/complete_button" />
+
+
+
 
 
 </RelativeLayout>

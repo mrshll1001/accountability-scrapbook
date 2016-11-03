@@ -75,7 +75,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                 {
 //                    Make the scrapbook
                     realm.beginTransaction();
-                    
+
                     Scrapbook scrapbook = new Scrapbook();
                     scrapbook.setName(name.getText().toString());
                     scrapbook.setDateCreated(new Date());
