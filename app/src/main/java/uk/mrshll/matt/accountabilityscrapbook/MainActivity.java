@@ -168,7 +168,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            Toast.makeText(getApplicationContext(), "Hello Marshall. I am your app", Toast.LENGTH_LONG).show();
+            // Start the create photo scrap
+            Intent intent = new Intent(MainActivity.this, AddPhotoscrapActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_gallery) {
             Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
 
