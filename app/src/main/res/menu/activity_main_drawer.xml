@@ -16,9 +16,9 @@
             android:title="Get a quote" />
 
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_calendar"
+            android:title="Add an Event" />
     </group>
 
     <item android:title="Communicate">

@@ -1,4 +1,4 @@
-package uk.mrshll.matt.accountabilityscrapbook.model;
+package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
