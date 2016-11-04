@@ -6,8 +6,9 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".ScrapbookApplication"
@@ -16,7 +17,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="uk.mrshll.matt.accountabilityscrapbook.fileprovider"
@@ -24,9 +24,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
-
 
         <activity
             android:name=".MainActivity"
@@ -47,11 +46,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".AddPhotoscrapActivity"
-            android:parentActivityName=".MainActivity"
-                  android:label="Add a Photo Scrap">
-
-        </activity>
+        <activity
+            android:name=".AddPhotoscrapActivity"
+            android:label="Add a Photo Scrap"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".AddSpendscrapActivity"></activity>
     </application>
 
 </manifest>
