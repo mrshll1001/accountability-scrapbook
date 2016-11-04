@@ -13,12 +13,11 @@ import io.realm.annotations.PrimaryKey;
 
 public class Scrapbook extends RealmObject
 {
-    @PrimaryKey
     private String name;        // Name
 
     private Date dateCreated;   // Date the scrapbook was registered
     private int colour;      // Colour used to sort the scrapbook
-    private RealmList<Tag> tagList; // All dem tags it's been tagged with
+    public RealmList<Tag> tagList; // All dem tags it's been tagged with
 
     /**
      * Returns name

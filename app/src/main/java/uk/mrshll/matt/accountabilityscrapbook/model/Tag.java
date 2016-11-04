@@ -9,7 +9,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class Tag extends RealmObject
 {
-    @PrimaryKey
     public String tagName;
 
     /**

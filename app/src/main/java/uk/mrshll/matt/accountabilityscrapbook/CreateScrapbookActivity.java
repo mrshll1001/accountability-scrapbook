@@ -29,6 +29,8 @@ import com.pavelsikun.vintagechroma.IndicatorMode;
 import com.pavelsikun.vintagechroma.OnColorSelectedListener;
 import com.pavelsikun.vintagechroma.colormode.ColorMode;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -58,8 +60,8 @@ public class CreateScrapbookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Get the data for the scrapbook
-                EditText name = (EditText) findViewById(R.id.scrapbook_name);
-                EditText tags = (EditText) (findViewById(R.id.scrapbook_add_tags));
+                final EditText name = (EditText) findViewById(R.id.scrapbook_name);
+                final EditText tags = (EditText) (findViewById(R.id.scrapbook_add_tags));
 
 
 //                Check name isn't blank
@@ -73,25 +75,49 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                     Toast.makeText(CreateScrapbookActivity.this, "Please enter some tags!", Toast.LENGTH_SHORT).show();
                 } else
                 {
+                    realm.executeTransaction(new Realm.Transaction(){
+                        @Override
+                        public void execute(Realm realm)
+                        {
+                            Scrapbook scrapbook = realm.createObject(Scrapbook.class);
+                            scrapbook.setName(name.getText().toString());
+                            scrapbook.setDateCreated(new Date());
+                            scrapbook.setColour(scrapbookColour);
+
+                            // Begin the tags
+                            String[] tokens  = tags.getText().toString().split(" ");
+                            for (String t : tokens)
+                            {
+                                Tag tag = realm.createObject(Tag.class);
+                                tag.setTagName("#"+t);
+                                scrapbook.tagList.add(tag);
+                            }
+
+                        }
+                    });
 //                    Make the scrapbook
-                    realm.beginTransaction();
+//                    realm.beginTransaction();
+//
+//                    Scrapbook scrapbook = new Scrapbook();
+//                    scrapbook.setName(name.getText().toString());
+//                    scrapbook.setDateCreated(new Date());
+//                    scrapbook.setColour(scrapbookColour);
+//
+//                    // Begin the tags
+//                    String[] tokens  = tags.getText().toString().split(" ");
+//                    ArrayList<Tag> taglist = new ArrayList<Tag>();
+//                    for (String t : tokens)
+//                    {
+//                        Tag tag = new Tag();
+//                        tag.setTagName("#"+t);
+//
+//
+//                        taglist.add(tag);
+//
+//                    }
+//                    realm.copyToRealmOrUpdate(scrapbook);
+//                    realm.commitTransaction();
 
-                    Scrapbook scrapbook = new Scrapbook();
-                    scrapbook.setName(name.getText().toString());
-                    scrapbook.setDateCreated(new Date());
-                    scrapbook.setColour(scrapbookColour);
-
-                    // Begin the tags
-                    String[] tokens  = tags.getText().toString().split(" ");
-                    for (String t : tokens)
-                    {
-                        Tag tag = new Tag();
-                        tag.setTagName("#"+t);
-                        realm.copyToRealmOrUpdate(tag);
-                    }
-
-                    realm.copyToRealmOrUpdate(scrapbook);
-                    realm.commitTransaction();
 
 //                And then finish, going back to the main menu AND PASSING THE DATA BACK TO REDRAW THE LIST
                     Intent returnIntent = new Intent();

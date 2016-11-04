@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
+import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 /**
  * Created by marshall on 01/11/16.
@@ -44,7 +45,18 @@ public class ScrapbookAdapter extends ArrayAdapter<Scrapbook>
         // Modify the textviews
         heading.setText(itemList.get(position).getName());
         heading.setTextColor(itemList.get(position).getColour());
-        value.setText("Created " + itemList.get(position).getDateCreated().toString() );
+
+        String tags = "";
+        for (Tag t : itemList.get(position).getTagList())
+        {
+            tags = tags + t.getTagName();
+            if ( itemList.get(position).getTagList().indexOf(t) != itemList.get(position).getTagList().size() - 1)
+            {
+                tags = tags + ", ";
+            }
+        }
+
+        value.setText(tags);
 
         // Return
         return scrapbookRow;
