@@ -177,9 +177,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent =  new Intent(MainActivity.this, AddSpendscrapActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
-
-            Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_quote) {
+            // Start the create quote scrap
+            Intent intent  = new Intent(MainActivity.this, AddQuotescrapActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
 

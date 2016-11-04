@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/create_photoscrap_imagewell"
+                android:scaleType="fitXY"
                 />
 
             <ImageButton
@@ -29,7 +30,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:id="@+id/create_photoscrap_camerabutton"
-                android:background="@android:drawable/ic_menu_camera" />
+                android:background="@drawable/ic_menu_camera" />
 
         </FrameLayout>
 
