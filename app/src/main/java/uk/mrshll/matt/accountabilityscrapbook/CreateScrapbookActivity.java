@@ -75,7 +75,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                     Toast.makeText(CreateScrapbookActivity.this, "Please enter some tags!", Toast.LENGTH_SHORT).show();
                 } else
                 {
-                    realm.executeTransaction(new Realm.Transaction(){
+                    realm.executeTransactionAsync(new Realm.Transaction(){
                         @Override
                         public void execute(Realm realm)
                         {
@@ -94,37 +94,21 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                             }
 
                         }
+                    }, new Realm.Transaction.OnSuccess()
+                    {
+                        public void onSuccess()
+                        {
+                            // And then finish, going back to the main menu AND PASSING THE DATA BACK TO REDRAW THE LIST
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_OK, returnIntent);
+
+                            finish();
+                            Toast.makeText(CreateScrapbookActivity.this, "Scrapbook " + name.getText().toString() + " created", Toast.LENGTH_SHORT).show();
+                        }
+
                     });
-//                    Make the scrapbook
-//                    realm.beginTransaction();
-//
-//                    Scrapbook scrapbook = new Scrapbook();
-//                    scrapbook.setName(name.getText().toString());
-//                    scrapbook.setDateCreated(new Date());
-//                    scrapbook.setColour(scrapbookColour);
-//
-//                    // Begin the tags
-//                    String[] tokens  = tags.getText().toString().split(" ");
-//                    ArrayList<Tag> taglist = new ArrayList<Tag>();
-//                    for (String t : tokens)
-//                    {
-//                        Tag tag = new Tag();
-//                        tag.setTagName("#"+t);
-//
-//
-//                        taglist.add(tag);
-//
-//                    }
-//                    realm.copyToRealmOrUpdate(scrapbook);
-//                    realm.commitTransaction();
 
 
-//                And then finish, going back to the main menu AND PASSING THE DATA BACK TO REDRAW THE LIST
-                    Intent returnIntent = new Intent();
-                    setResult(Activity.RESULT_OK, returnIntent);
-
-                    Toast.makeText(CreateScrapbookActivity.this, "Scrapbook " + name.getText().toString() + " created", Toast.LENGTH_SHORT).show();
-                    finish();
 
                 }
             }
