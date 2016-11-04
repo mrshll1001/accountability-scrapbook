@@ -49,8 +49,12 @@
         <activity
             android:name=".AddPhotoscrapActivity"
             android:label="Add a Photo Scrap"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".AddSpendscrapActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".AddSpendscrapActivity"
+            android:label="Add a Spend Scrap"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".AddQuotescrapActivity"></activity>
     </application>
 
 </manifest>

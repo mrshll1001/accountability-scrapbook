@@ -167,15 +167,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_add_photo) {
             // Start the create photo scrap
             Intent intent = new Intent(MainActivity.this, AddPhotoscrapActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_add_spend) {
+            // Start the create spend scrap
+            Intent intent =  new Intent(MainActivity.this, AddSpendscrapActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_gallery) {
 
             Toast.makeText(getApplicationContext(), "That tickles", Toast.LENGTH_LONG).show();
 
