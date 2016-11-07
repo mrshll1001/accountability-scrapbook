@@ -1,13 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_add_eventscrap"
+<ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="uk.mrshll.matt.accountabilityscrapbook.AddEventscrapActivity">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
-</RelativeLayout>
+    <LinearLayout android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <FrameLayout android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:background="@color/colorWellGrey"
+            android:id="@+id/create_eventscrap_framelayout"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:id="@+id/create_eventscrap_mapbutton"
+                android:background="@android:drawable/ic_menu_mylocation" />
+
+        </FrameLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_add_eventscrap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="uk.mrshll.matt.accountabilityscrapbook.AddeventscrapActivity">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What date was the event?"
+                android:id="@+id/create_eventscrap_date_label"
+                />
+
+            <DatePicker
+                android:id="@+id/create_eventscrap_date_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:layout_below="@+id/create_eventscrap_date_label"
+                android:layout_marginTop="10dp"
+                ></DatePicker>
+
+            <TextView
+                android:id="@+id/create_eventscrap_tags_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/create_eventscrap_date_picker"
+                android:layout_marginTop="10dp"
+                android:text="Add some tags"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_below="@+id/create_eventscrap_tags_label"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:id="@+id/create_eventscrap_tags"
+                android:hint="(Tags should be separated by spaces)"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>
