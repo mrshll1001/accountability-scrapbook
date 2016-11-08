@@ -17,12 +17,28 @@
             android:id="@+id/create_eventscrap_framelayout"
             xmlns:android="http://schemas.android.com/apk/res/android">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/create_eventcrap_imagewell"
+                android:scaleType="centerCrop"
+                />
+
             <ImageButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:id="@+id/create_eventscrap_mapbutton"
-                android:background="@android:drawable/ic_menu_mylocation" />
+                android:background="@drawable/ic_map_marker"
+                android:backgroundTint="#FFFFFFFF" />
+            <TextView
+                android:id="@+id/create_eventscrap_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose a Place"
+                android:textColor="#FFFFFFFF"
+                android:layout_margin="10dp"
+                android:layout_gravity="bottom"/>
 
         </FrameLayout>
 
@@ -37,10 +53,26 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="uk.mrshll.matt.accountabilityscrapbook.AddeventscrapActivity">
 
+            <TextView
+                android:id="@+id/create_eventscrap_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What was the name of the event?"
+                android:layout_margin="10dp"/>
+
+            <EditText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/create_eventscrap_name_label"
+                android:id="@+id/create_eventscrap_name"
+                android:textSize="30dp"
+                android:hint="Event Name"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/create_eventscrap_name"
                 android:text="What date was the event?"
                 android:id="@+id/create_eventscrap_date_label"
                 />
