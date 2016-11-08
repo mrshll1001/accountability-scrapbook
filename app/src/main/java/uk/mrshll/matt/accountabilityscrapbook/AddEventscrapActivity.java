@@ -17,11 +17,17 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class AddEventscrapActivity extends AppCompatActivity {
 
+    String thePlace;
+    int PLACE_PICKER_REQUEST = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_eventscrap);
+
+        this.thePlace = "";
+
         final Activity mug = this;
 
         final ImageButton getLocation = (ImageButton) findViewById(R.id.create_eventscrap_mapbutton);
@@ -30,7 +36,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 try {
-                    int PLACE_PICKER_REQUEST = 3;
+
                     PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     startActivityForResult(builder.build(mug), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesNotAvailableException e)
@@ -47,6 +53,20 @@ public class AddEventscrapActivity extends AppCompatActivity {
         });
 
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == PLACE_PICKER_REQUEST)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                Place place = PlacePicker.getPlace(data, this);
+                String toast = String.format("You have chosen: %s", place.getAddress());
+                Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }
