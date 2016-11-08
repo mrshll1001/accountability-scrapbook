@@ -13,15 +13,12 @@
     tools:context="uk.mrshll.matt.accountabilityscrapbook.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/scrapbook_recycler"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrapbook_grid"
-        android:dividerHeight="0dp"
-        android:divider="@null">
+        android:layout_height="match_parent">
 
-
-
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

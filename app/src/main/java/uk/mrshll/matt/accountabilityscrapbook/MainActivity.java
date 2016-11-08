@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 
 import io.realm.RealmResults;
+import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapbookAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class MainActivity extends AppCompatActivity
@@ -32,6 +35,10 @@ public class MainActivity extends AppCompatActivity
     private Realm realm;
     private SharedPreferences preferences;
     private ScrapbookAdapter adapter;
+
+    private RecyclerView recyclerView;
+    private ScrapbookAdapter viewAdapter;
+    private RecyclerView.LayoutManager viewLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,23 +77,24 @@ public class MainActivity extends AppCompatActivity
 //        Toast.makeText(this, results.size(), Toast.LENGTH_SHORT).show();
         if(results.isEmpty()) // Check length of results array
         {
-            Toast.makeText(this, "THere don't appear to be any scrapbooks", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Add your first scrapbook here", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
             startActivityForResult(intent, 1);
         } else
         {
             // TODO Draw the collection of scrapbooks
 //            // Get the gridview from the layout I suppose
-            ListView grid = (ListView) findViewById(R.id.scrapbook_grid);
+            recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
+            viewLayoutManager = new LinearLayoutManager(this);
 
+            viewAdapter = new ScrapbookAdapter(results);
+            recyclerView.setAdapter(viewAdapter);
            // Convert the realm results into an array of scrapbooks
-            ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
-            for(Scrapbook s : results)
-            {
-                values.add(s);
-            }
-            this.adapter = new ScrapbookAdapter(this, values);
-            grid.setAdapter(adapter);
+//            ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
+//            for(Scrapbook s : results)
+//            {
+//                values.add(s);
+//            }
         }
 
 
@@ -114,17 +122,9 @@ public class MainActivity extends AppCompatActivity
             {
                 // Quite dirty but might work for now; reload all of the scrapbooks
                 RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
-                ListView grid = (ListView) findViewById(R.id.scrapbook_grid);
+                recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
+                recyclerView.setAdapter(new ScrapbookAdapter(results));
 
-                // Convert the realm results into an array of scrapbooks
-                ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
-                for(Scrapbook s : results)
-                {
-                    values.add(s);
-                }
-                this.adapter = new ScrapbookAdapter(this, values);
-                grid.setAdapter(adapter);
-                this.adapter.notifyDataSetChanged();
             }
         }
     }
