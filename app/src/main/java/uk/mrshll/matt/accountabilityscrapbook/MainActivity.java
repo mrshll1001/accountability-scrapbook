@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity
         } else
         {
             // TODO Draw the collection of scrapbooks
-//            // Get the gridview from the layout I suppose
             recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
             viewLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(viewLayoutManager);
 
             viewAdapter = new ScrapbookAdapter(results);
             recyclerView.setAdapter(viewAdapter);

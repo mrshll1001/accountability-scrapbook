@@ -72,11 +72,19 @@
             android:layout_marginTop="10dp"
             ></DatePicker>
 
+        <Button
+            android:id="@+id/create_spendscrap_scrapbook_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/create_spendscrap_date_picker"
+            android:text="Select Scrapbooks"
+            android:layout_margin="10dp"/>
+
         <TextView
             android:id="@+id/create_spendscrap_tags_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/create_spendscrap_date_picker"
+            android:layout_below="@+id/create_spendscrap_scrapbook_button"
             android:layout_marginTop="10dp"
             android:text="Add some tags"
 
