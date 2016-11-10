@@ -99,7 +99,6 @@
             android:id="@+id/create_spendscrap_tags"
             android:hint="(Tags should be separated by spaces)"/>
 
-
     </RelativeLayout>
 
 </ScrollView>
