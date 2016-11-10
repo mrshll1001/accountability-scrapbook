@@ -23,18 +23,19 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
 {
 
     private Context context;
+    private ArrayList<Scrapbook> selectedScrapbooks; // THIS IS A REFERENCE PASSED FROM THE ACTIVITY ALLOWING US TO UPDATE IT
 
     private Realm realm; // Realm for actually getting the scrapbooks
 
     private AlertDialog dialog;
 
 
-    public FetchScrapbookDialogListener(Context context)
+    public FetchScrapbookDialogListener(Context context, Realm realm, ArrayList<Scrapbook> selectedScrapbooks)
     {
         this.context = context;
+        this.selectedScrapbooks = selectedScrapbooks;
 
-        // Set up Realm
-        this.realm = Realm.getDefaultInstance();
+        this.realm = realm;
     }
 
     @Override
@@ -86,14 +87,14 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                String toast = "I think you chose:\n";
+                // Add all of the things to the selected scrapbooks via lookup
                 for(Integer index : selectedIndexes)
                 {
-                    toast = toast + scrapbookIntegerMap.get(index).getName() + "\n";
+                   selectedScrapbooks.add(scrapbookIntegerMap.get(index));
                 }
 
-//                      // CODE TO SAVE THE items here
-                Toast.makeText(theContext, toast, Toast.LENGTH_SHORT).show();
+//
+
             }
 
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener()

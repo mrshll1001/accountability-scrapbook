@@ -19,12 +19,26 @@ public class Scrapbook extends RealmObject
     private int colour;      // Colour used to sort the scrapbook
     public RealmList<Tag> tagList; // All dem tags it's been tagged with
 
+    public RealmList<SpendScrap> spendList; // All the spends it has
+
     /**
      * Returns name
      * @return
      */
     public String getName() {
         return name;
+    }
+
+    public void setTagList(RealmList<Tag> tagList) {
+        this.tagList = tagList;
+    }
+
+    public RealmList<SpendScrap> getSpendList() {
+        return spendList;
+    }
+
+    public void setSpendList(RealmList<SpendScrap> spendList) {
+        this.spendList = spendList;
     }
 
     /**
