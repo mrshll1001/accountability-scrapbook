@@ -12,7 +12,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/scrapbook_row_value"
+        android:id="@+id/scrapbook_row_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/scrapbook_row_heading"

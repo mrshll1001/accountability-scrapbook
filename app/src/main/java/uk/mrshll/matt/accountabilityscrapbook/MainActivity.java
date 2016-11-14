@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity
     private ScrapbookAdapter viewAdapter;
     private RecyclerView.LayoutManager viewLayoutManager;
 
+    private int CREATE_SCRAPBOOK_REQUEST = 1;
+    private int CREATE_SPEND_REQUEST = 2;
+    private int CREATE_PHOTO_REQUEST = 3;
+    private int CREATE_EVENT_REQUEST = 4;
+    private int CREATE_QUOTE_REQUEST = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -55,7 +61,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateScrapbookActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, CREATE_SCRAPBOOK_REQUEST);
             }
         });
 
@@ -82,19 +88,13 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent, 1);
         } else
         {
-            // TODO Draw the collection of scrapbooks
             recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
             viewLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(viewLayoutManager);
 
             viewAdapter = new ScrapbookAdapter(results);
             recyclerView.setAdapter(viewAdapter);
-           // Convert the realm results into an array of scrapbooks
-//            ArrayList<Scrapbook> values = new ArrayList<Scrapbook>();
-//            for(Scrapbook s : results)
-//            {
-//                values.add(s);
-//            }
+
         }
 
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == 1)
+        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST)
         {
             if (resultCode == Activity.RESULT_OK)
             {
@@ -173,9 +173,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_add_spend) {
+
+
             // Start the create spend scrap
             Intent intent =  new Intent(MainActivity.this, AddSpendscrapActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CREATE_SPEND_REQUEST);
 
         } else if (id == R.id.nav_quote) {
             // Start the create quote scrap

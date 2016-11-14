@@ -1,6 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -9,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class Tag extends RealmObject
 {
+    @Index
     public String tagName;
 
     /**

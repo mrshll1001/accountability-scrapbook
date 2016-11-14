@@ -88,8 +88,16 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                             String[] tokens  = tags.getText().toString().split(" ");
                             for (String t : tokens)
                             {
-                                Tag tag = realm.createObject(Tag.class);
-                                tag.setTagName("#"+t);
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", "#"+t).findFirst();
+
+                                if (tag == null)
+                                {
+                                    // Create if not null
+                                    tag = realm.createObject(Tag.class, t);
+                                    tag.setTagName("#"+t);
+                                }
+
+
                                 scrapbook.tagList.add(tag);
                             }
 

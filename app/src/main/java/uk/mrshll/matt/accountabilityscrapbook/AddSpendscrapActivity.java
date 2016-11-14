@@ -1,6 +1,8 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
@@ -23,7 +27,7 @@ import uk.mrshll.matt.accountabilityscrapbook.model.SpendScrap;
 public class AddSpendscrapActivity extends AppCompatActivity {
 
     private Realm realm;
-    private ArrayList<Scrapbook> selectedScrapbooks;
+    private ArrayList<String> selectedScrapbooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +37,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
 
         // Initialise realm
         this.realm = Realm.getDefaultInstance();
-        this.selectedScrapbooks = new ArrayList<Scrapbook>();
+        this.selectedScrapbooks = new ArrayList<String>();
 
         // Add the dialog box functionality
         Button addScrapbooks = (Button) findViewById(R.id.create_spendscrap_scrapbook_button);
@@ -75,11 +79,11 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                             scrap.setName("Test");
                             scrap.setValue(11.99);
 
-                            for (Scrapbook s : selectedScrapbooks)
+                            for (String s : selectedScrapbooks)
                             {
-                                s.spendList.add(scrap);
+                                Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
+                                result.spendList.add(scrap);
                             }
-
 
 
                         }
@@ -88,7 +92,17 @@ public class AddSpendscrapActivity extends AppCompatActivity {
 
                         @Override
                         public void onSuccess() {
+
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_OK, returnIntent);
                             finish();
+
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Toast.makeText(AddSpendscrapActivity.this, "Error adding Spend", Toast.LENGTH_SHORT).show();
+                            error.printStackTrace();
                         }
                     });
 

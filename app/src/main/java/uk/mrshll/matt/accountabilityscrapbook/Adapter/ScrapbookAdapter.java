@@ -28,6 +28,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private TextView scrapbookName;
+        private TextView scrapbookSubtitle;
         private Scrapbook scrapBook;
 
         private static final String SCRAPBOOK_KEY = "SCRAPBOOK";
@@ -37,7 +38,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             super(v);
 
             this.scrapbookName = (TextView) v.findViewById(R.id.scrapbook_row_heading);
-
+            this.scrapbookSubtitle = (TextView) v.findViewById(R.id.scrapbook_row_subtitle);
             v.setOnClickListener(this);
         }
 
@@ -51,6 +52,10 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             scrapBook = s;
             scrapbookName.setText(scrapBook.getName());
             scrapbookName.setTextColor(scrapBook.getColour());
+
+            int items = scrapBook.getSpendList().size();
+
+            scrapbookSubtitle.setText(items + " Items");
         }
 
 

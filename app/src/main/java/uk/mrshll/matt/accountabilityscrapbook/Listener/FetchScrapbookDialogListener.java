@@ -23,14 +23,14 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
 {
 
     private Context context;
-    private ArrayList<Scrapbook> selectedScrapbooks; // THIS IS A REFERENCE PASSED FROM THE ACTIVITY ALLOWING US TO UPDATE IT
+    private ArrayList<String> selectedScrapbooks; // THIS IS A REFERENCE PASSED FROM THE ACTIVITY ALLOWING US TO UPDATE IT
 
     private Realm realm; // Realm for actually getting the scrapbooks
 
     private AlertDialog dialog;
 
 
-    public FetchScrapbookDialogListener(Context context, Realm realm, ArrayList<Scrapbook> selectedScrapbooks)
+    public FetchScrapbookDialogListener(Context context, Realm realm, ArrayList<String> selectedScrapbooks)
     {
         this.context = context;
         this.selectedScrapbooks = selectedScrapbooks;
@@ -56,16 +56,15 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
         final ArrayList<Integer> selectedIndexes = new ArrayList<Integer>();
 
         // Set up a map of the index to the scrapbook objects
-        final HashMap<Integer, Scrapbook> scrapbookIntegerMap = new HashMap<Integer, Scrapbook>();
+        final HashMap<Integer, String> scrapbookIntegerMap = new HashMap<Integer, String>();
         for (Scrapbook s : results)
         {
             // Presume that the results array is in the same order as the array
-            scrapbookIntegerMap.put(results.indexOf(s), s);
+            scrapbookIntegerMap.put(results.indexOf(s), s.getName());
         }
 
         // Now a dialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
-        final Context theContext = this.context;
         builder.setTitle("Choose Scrapbooks");
         builder.setMultiChoiceItems(scrapbookItems, null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
