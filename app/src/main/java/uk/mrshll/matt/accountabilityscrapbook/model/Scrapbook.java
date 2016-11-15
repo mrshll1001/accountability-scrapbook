@@ -24,13 +24,6 @@ public class Scrapbook extends RealmObject
 
 
 
-
-
-
-
-
-
-
     public RealmList<PhotoScrap> getPhotoList() {
         return photoList;
     }
