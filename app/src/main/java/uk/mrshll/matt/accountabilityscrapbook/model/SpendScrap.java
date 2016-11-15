@@ -24,16 +24,9 @@ public class SpendScrap extends RealmObject
         return inheritedTags;
     }
 
-    public void setInheritedTags(RealmList<Tag> inheritedTags) {
-        this.inheritedTags = inheritedTags;
-    }
 
     public RealmList<Tag> getCustomTags() {
         return customTags;
-    }
-
-    public void setCustomTags(RealmList<Tag> customTags) {
-        this.customTags = customTags;
     }
 
     public String getName() {

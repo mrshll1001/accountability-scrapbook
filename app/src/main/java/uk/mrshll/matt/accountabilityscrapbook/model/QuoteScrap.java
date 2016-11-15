@@ -4,31 +4,37 @@ import java.util.Date;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by marshall on 03/11/16.
+ * Created by marshall on 15/11/16.
  */
 
-public class PhotoScrap extends RealmObject
+public class QuoteScrap extends RealmObject
 {
-    @PrimaryKey
-    private String photoURI; // Filepath for the associated image
 
-    private Date dateCreated; // Date created using the app, used for primary key as always unique (seconds go forwards)
-    private Date dateGiven; // Date given by the user for the item
+    private String quoteText;
+    private String quoteSource;
+
+    private Date dateCreated;
+    private Date dateGiven;
 
     private RealmList<Tag> inheritedTags;
     private RealmList<Tag> customTags;
 
-
-
-    public String getPhotoURI() {
-        return photoURI;
+    public String getQuoteText() {
+        return quoteText;
     }
 
-    public void setPhotoURI(String photoURI) {
-        this.photoURI = photoURI;
+    public void setQuoteText(String quoteText) {
+        this.quoteText = quoteText;
+    }
+
+    public String getQuoteSource() {
+        return quoteSource;
+    }
+
+    public void setQuoteSource(String quoteSource) {
+        this.quoteSource = quoteSource;
     }
 
     public Date getDateCreated() {
@@ -51,9 +57,7 @@ public class PhotoScrap extends RealmObject
         return inheritedTags;
     }
 
-
     public RealmList<Tag> getCustomTags() {
         return customTags;
     }
-
 }

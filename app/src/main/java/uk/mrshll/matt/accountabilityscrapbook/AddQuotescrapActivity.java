@@ -28,6 +28,6 @@ public class AddQuotescrapActivity extends AppCompatActivity {
         scrapbooksButton.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
         // Set activity for the done button
-        
+
     }
 }

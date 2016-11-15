@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook.model;
 
 import java.util.Date;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -21,16 +22,13 @@ public class Scrapbook extends RealmObject
 
     private RealmList<SpendScrap> spendList; // All the spends it has
     private RealmList<PhotoScrap> photoList; // All the photos it has
-
+    private RealmList<QuoteScrap> quoteList; // All of the quotes it has
 
 
     public RealmList<PhotoScrap> getPhotoList() {
         return photoList;
     }
 
-    public void setPhotoList(RealmList<PhotoScrap> photoList) {
-        this.photoList = photoList;
-    }
 
     /**
      * Returns name
@@ -40,17 +38,11 @@ public class Scrapbook extends RealmObject
         return name;
     }
 
-    public void setTagList(RealmList<Tag> tagList) {
-        this.tagList = tagList;
-    }
 
     public RealmList<SpendScrap> getSpendList() {
         return spendList;
     }
 
-    public void setSpendList(RealmList<SpendScrap> spendList) {
-        this.spendList = spendList;
-    }
 
     /**
      * Sets the name
