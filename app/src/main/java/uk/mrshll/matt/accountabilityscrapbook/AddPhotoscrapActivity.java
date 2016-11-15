@@ -88,18 +88,18 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         });
 
         // Set up the scrapbook button
-        Button scrapbookButton = (Button) findViewById(R.id.create_photoscrap_scrapbook_button);
+        Button scrapbookButton = (Button) findViewById(R.id.create_scrap_scrapbook_button);
         scrapbookButton.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
         // Set up the Done button
-        Button done = (Button) findViewById(R.id.create_photoscrap_done);
+        Button done = (Button) findViewById(R.id.create_scrap_done);
         done.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
                 // Get the details
-                final EditText tags = (EditText) findViewById(R.id.create_photoscrap_tags);
-                DatePicker datePicker = (DatePicker) findViewById(R.id.create_photoscrap_date_picker);
+                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
+                DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform checks
                 if (photoURI == null)
@@ -190,7 +190,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
             ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
 
             well.setImageURI(photoURI);
-            Toast.makeText(this, photoURI.toString() + " captured, good job!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, photoURI.toString() + " captured, good job!", Toast.LENGTH_SHORT).show();
         }
     }
 

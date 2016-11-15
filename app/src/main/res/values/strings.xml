@@ -5,4 +5,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+<!-- Common Interface elements -->
+    <string name="create_scrap_date_label">On what date was the activity?</string>
+    <string name="create_scrap_scrapbooks_button">Select Scrapbooks</string>
+    <string name="create_scrap_tags_label">Add some Tags</string>
+    <string name="create_scrap_tags_hint">(Tags should be separated by spaces)</string>
+    <string name="create_scrap_done_button">Done</string>
+
+
 </resources>

@@ -44,11 +44,11 @@ public class AddSpendscrapActivity extends AppCompatActivity {
         this.selectedScrapbooks = new ArrayList<String>();
 
         // Add the dialog box functionality
-        Button addScrapbooks = (Button) findViewById(R.id.create_spendscrap_scrapbook_button);
+        Button addScrapbooks = (Button) findViewById(R.id.create_scrap_scrapbook_button);
         addScrapbooks.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
         // Set the behaviour for the done button
-        Button doneButton = (Button) findViewById(R.id.create_spendscrap_done);
+        Button doneButton = (Button) findViewById(R.id.create_scrap_done);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -56,8 +56,9 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                 // Get the values
                 final EditText nameField = (EditText) findViewById(R.id.create_spendscrap_name);
                 final EditText valueField = (EditText) findViewById(R.id.create_spendscrap_value);
-                final EditText tags = (EditText) findViewById(R.id.create_spendscrap_tags);
-                DatePicker dateField = (DatePicker) findViewById(R.id.create_spendscrap_date_picker);
+
+                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
+                DatePicker dateField = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
 
                 // Perform the checks

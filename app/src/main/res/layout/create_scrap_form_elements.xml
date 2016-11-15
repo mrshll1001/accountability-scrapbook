@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/create_scrap_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_scrap_date_label"
+
+        />
+
+    <DatePicker
+        android:id="@+id/create_scrap_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:layout_below="@+id/create_scrap_date_label"
+        android:layout_marginTop="10dp"
+        ></DatePicker>
+
+    <Button
+        android:id="@+id/create_scrap_scrapbook_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_scrap_date_picker"
+        android:text="@string/create_scrap_scrapbooks_button"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/create_scrap_tags_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_scrap_scrapbook_button"
+        android:layout_marginTop="10dp"
+        android:text="@string/create_scrap_tags_label"
+
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_below="@+id/create_scrap_tags_label"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/create_scrap_tags"
+        android:hint="@string/create_scrap_tags_hint"/>
+
+    <Button
+        android:text="@string/create_scrap_done_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_scrap_done"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_below="@+id/create_scrap_tags"
+         />
+
+</RelativeLayout>
