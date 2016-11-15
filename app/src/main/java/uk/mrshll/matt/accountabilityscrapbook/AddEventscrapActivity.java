@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,9 +35,10 @@ import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListe
 
 public class AddEventscrapActivity extends AppCompatActivity {
 
-    String placeName;
-    String placeAddress;
-    LatLng placeLatLong;
+    private String placeName;
+    private String placeAddress;
+    private LatLng placeLatLong;
+
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
 
@@ -86,7 +88,36 @@ public class AddEventscrapActivity extends AppCompatActivity {
         scrapbookButton.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
         // Done Button
+        Button doneButton = (Button) findViewById(R.id.create_scrap_done);
+        doneButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                // Get values
+                EditText eventName = (EditText) findViewById(R.id.create_eventscrap_name);
+                EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
 
+                // Perform the checks
+                if (placeLatLong == null)
+                {
+                    Toast.makeText(mug, "Please choose a place on the map", Toast.LENGTH_SHORT).show();
+                } else if (eventName.getText().toString().matches(""))
+                {
+                    Toast.makeText(mug, "Please enter a name for the event", Toast.LENGTH_SHORT).show();
+                } else if(tags.getText().toString().matches(""))
+                {
+                    Toast.makeText(mug, "Please add some tags", Toast.LENGTH_SHORT).show();
+                } else if(selectedScrapbooks.isEmpty())
+                {
+                    Toast.makeText(mug, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(mug, "Well done", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 

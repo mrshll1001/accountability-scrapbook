@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_event) {
             Intent intent = new Intent(MainActivity.this, AddEventscrapActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CREATE_EVENT_REQUEST);
 
         } else if (id == R.id.nav_share) {
 
