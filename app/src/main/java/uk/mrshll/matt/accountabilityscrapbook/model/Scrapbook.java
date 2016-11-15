@@ -24,6 +24,9 @@ public class Scrapbook extends RealmObject
     private RealmList<PhotoScrap> photoList; // All the photos it has
     private RealmList<QuoteScrap> quoteList; // All of the quotes it has
 
+    public RealmList<QuoteScrap> getQuoteList() {
+        return quoteList;
+    }
 
     public RealmList<PhotoScrap> getPhotoList() {
         return photoList;
@@ -108,6 +111,6 @@ public class Scrapbook extends RealmObject
      */
     public int getTotalItems()
     {
-        return spendList.size() + photoList.size();
+        return spendList.size() + photoList.size() + quoteList.size();
     }
 }

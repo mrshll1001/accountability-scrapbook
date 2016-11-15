@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST || requestCode == CREATE_PHOTO_REQUEST)
+        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST || requestCode == CREATE_PHOTO_REQUEST || requestCode == CREATE_QUOTE_REQUEST)
         {
             if (resultCode == Activity.RESULT_OK)
             {
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_quote) {
             // Start the create quote scrap
             Intent intent  = new Intent(MainActivity.this, AddQuotescrapActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CREATE_QUOTE_REQUEST);
 
         } else if (id == R.id.nav_event) {
             Intent intent = new Intent(MainActivity.this, AddEventscrapActivity.class);

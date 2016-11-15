@@ -12,7 +12,7 @@ import io.realm.RealmObject;
 public class QuoteScrap extends RealmObject
 {
 
-    private String quoteText;
+    private String quoteText; // NOTE: this isn't a primary key because some people might say the same things e.g. "brilliant!"
     private String quoteSource;
 
     private Date dateCreated;
