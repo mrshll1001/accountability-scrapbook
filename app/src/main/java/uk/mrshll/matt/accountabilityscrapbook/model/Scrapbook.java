@@ -19,7 +19,25 @@ public class Scrapbook extends RealmObject
     private int colour;      // Colour used to sort the scrapbook
     public RealmList<Tag> tagList; // All dem tags it's been tagged with
 
-    public RealmList<SpendScrap> spendList; // All the spends it has
+    private RealmList<SpendScrap> spendList; // All the spends it has
+    private RealmList<PhotoScrap> photoList; // All the photos it has
+
+
+
+
+
+
+
+
+
+
+    public RealmList<PhotoScrap> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(RealmList<PhotoScrap> photoList) {
+        this.photoList = photoList;
+    }
 
     /**
      * Returns name

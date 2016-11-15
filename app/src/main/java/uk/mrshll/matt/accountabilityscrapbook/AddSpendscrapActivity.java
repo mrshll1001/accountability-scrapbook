@@ -120,7 +120,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                                 // Inherit the tags from the scrapbooks
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
-                                result.spendList.add(scrap);
+                                result.getSpendList().add(scrap);
 
 
                             }
