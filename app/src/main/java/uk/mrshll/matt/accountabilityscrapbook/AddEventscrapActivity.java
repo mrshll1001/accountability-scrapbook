@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,12 +27,19 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 
 public class AddEventscrapActivity extends AppCompatActivity {
 
     String placeName;
     String placeAddress;
     LatLng placeLatLong;
+    private Realm realm;
+    private ArrayList<String> selectedScrapbooks;
+
     int PLACE_PICKER_REQUEST = 3;
 
     @Override
@@ -45,9 +53,12 @@ public class AddEventscrapActivity extends AppCompatActivity {
         this.placeAddress = null;
         this.placeLatLong = null;
 
+        // Set up realm and the scrapbooks
+        this.realm = Realm.getDefaultInstance();
+        this.selectedScrapbooks = new ArrayList<String>();
 
+        // Retrieve Location button
         final Activity mug = this;
-
         final ImageButton getLocation = (ImageButton) findViewById(R.id.create_eventscrap_mapbutton);
         getLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +80,12 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
             }
         });
+
+        // Scrapbooks button
+        Button scrapbookButton = (Button) findViewById(R.id.create_scrap_scrapbook_button);
+        scrapbookButton.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
+
+        // Done Button
 
 
     }

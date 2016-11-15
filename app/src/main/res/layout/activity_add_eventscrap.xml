@@ -69,43 +69,9 @@
                 android:textSize="30dp"
                 android:hint="Event Name"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/create_eventscrap_name"
-                android:text="What date was the event?"
-                android:id="@+id/create_eventscrap_date_label"
-                />
-
-            <DatePicker
-                android:id="@+id/create_eventscrap_date_picker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:datePickerMode="spinner"
-                android:layout_below="@+id/create_eventscrap_date_label"
-                android:layout_marginTop="10dp"
-                ></DatePicker>
-
-            <TextView
-                android:id="@+id/create_eventscrap_tags_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/create_eventscrap_date_picker"
-                android:layout_marginTop="10dp"
-                android:text="Add some tags"
-
-                />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:layout_below="@+id/create_eventscrap_tags_label"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
-                android:id="@+id/create_eventscrap_tags"
-                android:hint="(Tags should be separated by spaces)"/>
-
         </RelativeLayout>
+
+        <include layout="@layout/create_scrap_form_elements" />
     </LinearLayout>
 
 </ScrollView>
