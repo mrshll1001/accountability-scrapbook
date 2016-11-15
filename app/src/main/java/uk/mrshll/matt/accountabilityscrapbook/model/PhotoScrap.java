@@ -22,7 +22,7 @@ public class PhotoScrap extends RealmObject
     private RealmList<Tag> customTags;
 
 
-    
+
     public String getPhotoURI() {
         return photoURI;
     }

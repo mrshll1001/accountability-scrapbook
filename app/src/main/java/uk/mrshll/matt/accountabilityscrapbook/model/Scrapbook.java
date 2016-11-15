@@ -116,6 +116,6 @@ public class Scrapbook extends RealmObject
      */
     public int getTotalItems()
     {
-        return spendList.size();
+        return spendList.size() + photoList.size();
     }
 }

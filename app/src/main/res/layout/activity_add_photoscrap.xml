@@ -62,11 +62,19 @@
                 android:layout_marginTop="10dp"
                 ></DatePicker>
 
+            <Button
+                android:id="@+id/create_photoscrap_scrapbook_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/create_photoscrap_date_picker"
+                android:text="Select Scrapbooks"
+                android:layout_margin="10dp"/>
+
             <TextView
                 android:id="@+id/create_photoscrap_tags_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/create_photoscrap_date_picker"
+                android:layout_below="@+id/create_photoscrap_scrapbook_button"
                 android:layout_marginTop="10dp"
                 android:text="Add some tags"
 
@@ -80,6 +88,17 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/create_photoscrap_tags"
                 android:hint="(Tags should be separated by spaces)"/>
+
+            <Button
+                android:text="Done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_photoscrap_done"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/create_photoscrap_tags"
+
+                />
 
         </RelativeLayout>
     </LinearLayout>

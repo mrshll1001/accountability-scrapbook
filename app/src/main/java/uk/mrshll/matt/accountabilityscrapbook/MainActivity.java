@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST)
+        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST || requestCode == CREATE_PHOTO_REQUEST)
         {
             if (resultCode == Activity.RESULT_OK)
             {
@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity
                 recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(new ScrapbookAdapter(results));
-
             }
         }
     }
@@ -173,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_add_photo) {
             // Start the create photo scrap
             Intent intent = new Intent(MainActivity.this, AddPhotoscrapActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CREATE_PHOTO_REQUEST);
 
         } else if (id == R.id.nav_add_spend) {
 
