@@ -28,6 +28,8 @@ import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapbookAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
+import static android.support.design.R.styleable.RecyclerView;
+
 public class MainActivity extends AppCompatActivity
 
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity
                 // Quite dirty but might work for now; reload all of the scrapbooks
                 RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
                 recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(new ScrapbookAdapter(results));
 
             }

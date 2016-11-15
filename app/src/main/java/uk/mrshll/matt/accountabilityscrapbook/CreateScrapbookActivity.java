@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +50,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
 
 //        Preamble
         setTitle("Add Scrapbook");
-        scrapbookColour = R.color.colorPrimaryDark;
+        this.scrapbookColour = R.color.colorPrimaryDark;
         realm = Realm.getDefaultInstance();
 
         setContentView(R.layout.activity_create_scrapbook);
@@ -92,9 +93,9 @@ public class CreateScrapbookActivity extends AppCompatActivity {
 
                                 if (tag == null)
                                 {
+                                    Log.d("CreateScapbook:", "Found a null tag, attempting to add");
                                     // Create if not null
-                                    tag = realm.createObject(Tag.class, t);
-                                    tag.setTagName("#"+t);
+                                    tag = realm.createObject(Tag.class, "#"+t);
                                 }
 
 
@@ -114,6 +115,13 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                             Toast.makeText(CreateScrapbookActivity.this, "Scrapbook " + name.getText().toString() + " created", Toast.LENGTH_SHORT).show();
                         }
 
+                    }, new Realm.Transaction.OnError()
+                    {
+                        @Override
+                        public void onError(Throwable error) {
+                            error.printStackTrace();
+                            Toast.makeText(CreateScrapbookActivity.this, "Error adding scrapbook", Toast.LENGTH_SHORT).show();
+                        }
                     });
 
 

@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.SpendScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class AddSpendscrapActivity extends AppCompatActivity {
 
@@ -50,9 +54,10 @@ public class AddSpendscrapActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 // Get the values
-                EditText nameField = (EditText) findViewById(R.id.create_spendscrap_name);
-                EditText valueField = (EditText) findViewById(R.id.create_spendscrap_value);
-
+                final EditText nameField = (EditText) findViewById(R.id.create_spendscrap_name);
+                final EditText valueField = (EditText) findViewById(R.id.create_spendscrap_value);
+                final EditText tags = (EditText) findViewById(R.id.create_spendscrap_tags);
+                DatePicker dateField = (DatePicker) findViewById(R.id.create_spendscrap_date_picker);
 
 
                 // Perform the checks
@@ -66,23 +71,58 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                 } else if (selectedScrapbooks.isEmpty())
                 {
                     Toast.makeText(AddSpendscrapActivity.this, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
+                } else if (tags.getText().toString().matches(""))
+                {
+                    Toast.makeText(AddSpendscrapActivity.this, "Please add some tags", Toast.LENGTH_SHORT).show();
                 } else
                 {
-                    // All checks have passed -- get the proper values and get realming
-//                   final String name = nameField.getText().toString();
-//                   final double value = Double.valueOf(valueField.getText().toString());
+
+                    // All checks have passed -- now get the date fields
+                    final Date dateCreated = new Date();
+                    final Date dateOfSpend = new Date(dateField.getYear(), dateField.getMonth(), dateField.getDayOfMonth());
+
+
+                    // Finally, execute the realm transaction
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm)
                         {
-                            SpendScrap scrap = realm.createObject(SpendScrap.class);
-                            scrap.setName("Test");
-                            scrap.setValue(11.99);
 
+                            // Create the spendscrap
+                            SpendScrap scrap = realm.createObject(SpendScrap.class);
+                            scrap.setName(nameField.getText().toString());
+                            scrap.setValue(Double.valueOf(valueField.getText().toString()));
+                            scrap.setDateCreated(dateCreated);
+                            scrap.setDateOfSpend(dateOfSpend);
+
+                            // Add the tags
+                            String[] tokens = tags.getText().toString().split(" ");
+                            for (String t : tokens)
+                            {
+
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", "#"+t).findFirst();
+
+                                if (tag == null)
+                                {
+                                    Log.d("Add Spend:", "Found a null tag, attempting to add");
+                                    // Create if not null
+                                    tag = realm.createObject(Tag.class, "#"+t);
+                                }
+
+                                scrap.getCustomTags().add(tag);
+                            }
+
+                            // Add the scrap to the scrapbooks
                             for (String s : selectedScrapbooks)
                             {
                                 Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
+
+                                // Inherit the tags from the scrapbooks
+                                scrap.getInheritedTags().addAll(result.getTagList());
+
                                 result.spendList.add(scrap);
+
+
                             }
 
 

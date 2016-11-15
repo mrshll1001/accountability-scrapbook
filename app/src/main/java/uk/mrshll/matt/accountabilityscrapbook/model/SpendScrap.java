@@ -1,5 +1,9 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import java.util.Date;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 /**
@@ -10,8 +14,27 @@ public class SpendScrap extends RealmObject
 {
     private String name;
     private double value;
+    private Date dateOfSpend;
+    private Date dateCreated;
 
+    private RealmList<Tag> inheritedTags;
+    private RealmList<Tag> customTags;
 
+    public RealmList<Tag> getInheritedTags() {
+        return inheritedTags;
+    }
+
+    public void setInheritedTags(RealmList<Tag> inheritedTags) {
+        this.inheritedTags = inheritedTags;
+    }
+
+    public RealmList<Tag> getCustomTags() {
+        return customTags;
+    }
+
+    public void setCustomTags(RealmList<Tag> customTags) {
+        this.customTags = customTags;
+    }
 
     public String getName() {
         return name;
@@ -27,5 +50,21 @@ public class SpendScrap extends RealmObject
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public Date getDateOfSpend() {
+        return dateOfSpend;
+    }
+
+    public void setDateOfSpend(Date dateOfSpend) {
+        this.dateOfSpend = dateOfSpend;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
