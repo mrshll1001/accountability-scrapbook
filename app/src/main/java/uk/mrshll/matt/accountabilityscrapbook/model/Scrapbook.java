@@ -98,4 +98,13 @@ public class Scrapbook extends RealmObject
     {
         return this.tagList;
     }
+
+    /**
+     * Returns a total of all of the items
+     * @return
+     */
+    public int getTotalItems()
+    {
+        return spendList.size();
+    }
 }

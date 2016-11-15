@@ -15,6 +15,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.R;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
+import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 /**
  * Created by marshall on 08/11/16.
@@ -29,6 +30,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
     {
         private TextView scrapbookName;
         private TextView scrapbookSubtitle;
+        private TextView scrapbookItemCount;
         private Scrapbook scrapBook;
 
         private static final String SCRAPBOOK_KEY = "SCRAPBOOK";
@@ -38,6 +40,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             super(v);
 
             this.scrapbookName = (TextView) v.findViewById(R.id.scrapbook_row_heading);
+            this.scrapbookItemCount = (TextView) v.findViewById(R.id.scrapbook_row_itemcount);
             this.scrapbookSubtitle = (TextView) v.findViewById(R.id.scrapbook_row_subtitle);
             v.setOnClickListener(this);
         }
@@ -53,9 +56,17 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             scrapbookName.setText(scrapBook.getName());
             scrapbookName.setTextColor(scrapBook.getColour());
 
-            int items = scrapBook.getSpendList().size();
 
-            scrapbookSubtitle.setText(items + " Items");
+            scrapbookItemCount.setText(String.valueOf(s.getTotalItems()) + " Items");
+
+            // Get the tags
+            String tags = "";
+            for (Tag t:s.getTagList())
+            {
+                tags = tags + t.getTagName();
+            }
+
+            scrapbookSubtitle.setText(tags);
         }
 
 
