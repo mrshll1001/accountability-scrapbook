@@ -1,17 +1,19 @@
 <resources>
-    <string name="app_name">Accountability \n Scrapbook</string>
+    <string name="app_name">Contextual Accounts</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 
-<!-- Common Interface elements -->
+    <!-- Common Interface elements -->
     <string name="create_scrap_date_label">On what date was the activity?</string>
     <string name="create_scrap_scrapbooks_button">Select Scrapbooks</string>
     <string name="create_scrap_tags_label">Add some Tags</string>
     <string name="create_scrap_tags_hint">(Tags should be separated by spaces)</string>
     <string name="create_scrap_done_button">Done</string>
+    <string name="title_activity_view_scrapbook">ViewScrapbookActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>

@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             viewLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(viewLayoutManager);
 
-            viewAdapter = new ScrapbookAdapter(results);
+            viewAdapter = new ScrapbookAdapter(MainActivity.this, results);
             recyclerView.setAdapter(viewAdapter);
 
         }
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity
                 RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
                 recyclerView = (RecyclerView) findViewById(R.id.scrapbook_recycler);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                recyclerView.setAdapter(new ScrapbookAdapter(results));
+                recyclerView.setAdapter(new ScrapbookAdapter(MainActivity.this, results));
             }
         }
     }

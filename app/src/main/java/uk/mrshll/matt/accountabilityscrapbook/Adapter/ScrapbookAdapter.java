@@ -1,6 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import org.w3c.dom.Text;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.R;
+import uk.mrshll.matt.accountabilityscrapbook.ViewScrapbookActivity;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
@@ -25,6 +27,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
 {
 
    private RealmResults<Scrapbook> data;
+    private Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
@@ -32,12 +35,14 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
         private TextView scrapbookSubtitle;
         private TextView scrapbookItemCount;
         private Scrapbook scrapBook;
+        private Context context;
 
         private static final String SCRAPBOOK_KEY = "SCRAPBOOK";
 
-        public ViewHolder(View v)
+        public ViewHolder(View v, Context c)
         {
             super(v);
+            this.context = c;
 
             this.scrapbookName = (TextView) v.findViewById(R.id.scrapbook_row_heading);
             this.scrapbookItemCount = (TextView) v.findViewById(R.id.scrapbook_row_itemcount);
@@ -47,7 +52,10 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
 
         @Override
         public void onClick(View view) {
-            Log.d("Scrapbook Recycler", "Clicked item");
+            Log.d("Scrapbook Recycler", "Clicked item: " + scrapbookName.getText().toString());
+
+            Intent intent = new Intent(context, ViewScrapbookActivity.class);
+            context.startActivity(intent);
         }
 
         public void bindScrapbook(Scrapbook s)
@@ -72,8 +80,9 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
 
     }
 
-    public ScrapbookAdapter(RealmResults<Scrapbook> data)
+    public ScrapbookAdapter(Context context, RealmResults<Scrapbook> data)
     {
+        this.context = context;
         this.data = data;
     }
 
@@ -82,7 +91,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.scrapbook_row, parent, false);
 
-        return new ViewHolder(inflatedView);
+        return new ViewHolder(inflatedView, this.context);
     }
 
     @Override
