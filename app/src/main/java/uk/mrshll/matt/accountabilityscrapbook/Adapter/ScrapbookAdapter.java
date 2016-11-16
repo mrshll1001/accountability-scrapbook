@@ -55,6 +55,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             Log.d("Scrapbook Recycler", "Clicked item: " + scrapbookName.getText().toString());
 
             Intent intent = new Intent(context, ViewScrapbookActivity.class);
+            intent.putExtra("scrapbook_name", scrapbookName.getText().toString());
             context.startActivity(intent);
         }
 

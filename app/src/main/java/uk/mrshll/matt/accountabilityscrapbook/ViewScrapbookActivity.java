@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import io.realm.Realm;
+
 public class ViewScrapbookActivity extends AppCompatActivity
 {
 
@@ -37,6 +39,10 @@ public class ViewScrapbookActivity extends AppCompatActivity
      */
     private ViewPager mViewPager;
 
+
+    private String scrapbookName;
+    private Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,11 @@ public class ViewScrapbookActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Get the intent and store it, used for Realm and UI interaction later
+        this.scrapbookName = getIntent().getStringExtra("scrapbook_name");
+        this.setTitle(this.scrapbookName);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -56,15 +67,9 @@ public class ViewScrapbookActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // Set up realm
+        this.realm = Realm.getDefaultInstance();
+        
 
     }
 
