@@ -9,8 +9,10 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,9 +31,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.model.EventScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
+import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class AddEventscrapActivity extends AppCompatActivity {
 
@@ -94,8 +100,9 @@ public class AddEventscrapActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Get values
-                EditText eventName = (EditText) findViewById(R.id.create_eventscrap_name);
-                EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
+                final EditText eventName = (EditText) findViewById(R.id.create_eventscrap_name);
+                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
+                DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform the checks
                 if (placeLatLong == null)
@@ -113,7 +120,73 @@ public class AddEventscrapActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(mug, "Well done", Toast.LENGTH_SHORT).show();
+                    // Checks have passed, get the date
+                    final Date dateCreated = new Date();
+                    final Date dateGiven = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+
+                    // Let's get realming
+                    realm.executeTransactionAsync(new Realm.Transaction()
+                    {
+                        @Override
+                        public void execute(Realm realm)
+                        {
+                            // Create the scraps
+                            EventScrap scrap = realm.createObject(EventScrap.class);
+                            scrap.setDateCreated(dateCreated);
+                            scrap.setDateGiven(dateGiven);
+                            scrap.setEventName(eventName.getText().toString());
+                            scrap.setPlaceAddress(placeAddress);
+                            scrap.setPlaceName(placeName);
+                            scrap.setPlaceLatLng(placeLatLong.toString());
+
+                            // Sort the tags
+                            String[] tokens = tags.getText().toString().split(" ");
+                            for (String t : tokens)
+                            {
+
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", "#"+t).findFirst();
+
+                                if (tag == null)
+                                {
+                                    Log.d("Add Spend:", "Found a null tag, attempting to add");
+                                    // Create if not null
+                                    tag = realm.createObject(Tag.class, "#"+t);
+                                }
+
+                                scrap.getCustomTags().add(tag);
+                            }
+
+                            // Add the scrap to scrapbooks
+                            for (String s : selectedScrapbooks)
+                            {
+                                Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
+
+                                // Inherit the tags from the scrapbooks
+                                scrap.getInheritedTags().addAll(result.getTagList());
+
+                                result.getEventList().add(scrap);
+
+
+                            }
+
+
+
+                        }
+                    }, new Realm.Transaction.OnSuccess()
+                    {
+                        @Override
+                        public void onSuccess() {
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
+                        }
+                    }, new Realm.Transaction.OnError()
+                    {
+                        @Override
+                        public void onError(Throwable error) {
+                            Toast.makeText(mug, "Error creating Scrap", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
             }

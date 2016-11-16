@@ -118,7 +118,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == CREATE_SCRAPBOOK_REQUEST || requestCode == CREATE_SPEND_REQUEST || requestCode == CREATE_PHOTO_REQUEST || requestCode == CREATE_QUOTE_REQUEST)
+        if (requestCode == CREATE_SCRAPBOOK_REQUEST
+                || requestCode == CREATE_SPEND_REQUEST
+                || requestCode == CREATE_PHOTO_REQUEST
+                || requestCode == CREATE_QUOTE_REQUEST
+                || requestCode == CREATE_EVENT_REQUEST)
         {
             if (resultCode == Activity.RESULT_OK)
             {
