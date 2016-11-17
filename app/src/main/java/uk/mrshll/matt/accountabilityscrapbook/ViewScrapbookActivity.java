@@ -70,7 +70,7 @@ public class ViewScrapbookActivity extends AppCompatActivity
                         RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
                         recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
                         recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
-                        
+
 
                         break;
                     case SPINNER_SELECTED_QUOTES:
@@ -82,8 +82,6 @@ public class ViewScrapbookActivity extends AppCompatActivity
                     default:
                         Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();
                 }
-
-                Toast.makeText(ViewScrapbookActivity.this, text + " Items", Toast.LENGTH_SHORT).show();
 
             }
 

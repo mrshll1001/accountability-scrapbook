@@ -65,13 +65,17 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             scrapbookItemCount.setText(String.valueOf(s.getTotalItems()) + " Items");
 
             // Get the tags
-            String tags = "";
+            StringBuilder sb = new StringBuilder();
             for (Tag t:s.getTagList())
             {
-                tags = tags + t.getTagName();
+                sb.append(t.getTagName());
+                if(s.getTagList().indexOf(t) != s.getTagList().size() -1)
+                {
+                    sb.append(", ");
+                }
             }
 
-            scrapbookSubtitle.setText(tags);
+            scrapbookSubtitle.setText(sb.toString());
         }
 
 
