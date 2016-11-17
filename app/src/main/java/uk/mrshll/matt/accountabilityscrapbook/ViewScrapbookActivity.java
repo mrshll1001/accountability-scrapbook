@@ -1,8 +1,10 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,8 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class ViewScrapbookActivity extends AppCompatActivity
 {
@@ -67,10 +71,14 @@ public class ViewScrapbookActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Set up realm
+        // Set up realm and query for the scrapbook
         this.realm = Realm.getDefaultInstance();
-        
+        Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", this.scrapbookName).findFirst();
 
+        // Bit of pizzazz
+        ColorDrawable colour = new ColorDrawable(scrapbook.getColour());
+        ActionBar bar = this.getSupportActionBar();
+        bar.setBackgroundDrawable(colour);
     }
 
 
@@ -154,18 +162,22 @@ public class ViewScrapbookActivity extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "All";
                 case 1:
-                    return "SECTION 2";
+                    return "Photo";
                 case 2:
-                    return "SECTION 3";
+                    return "Spend";
+                case 3:
+                    return "Quote";
+                case 4:
+                    return "Event";
             }
             return null;
         }
