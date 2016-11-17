@@ -8,11 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.R;
 import uk.mrshll.matt.accountabilityscrapbook.ViewScrapbookActivity;

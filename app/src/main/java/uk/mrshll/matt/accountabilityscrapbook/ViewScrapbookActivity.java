@@ -1,25 +1,12 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import io.realm.Realm;
@@ -28,158 +15,77 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 public class ViewScrapbookActivity extends AppCompatActivity
 {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
-
-    private String scrapbookName;
     private Realm realm;
+    private String scrapbookName;
+
+//    final private int SPINNER_SELECTED_ALL = 0;
+    final private int SPINNER_SELECTED_PHOTOGRAPHS = 0;
+    final private int SPINNER_SELECTED_SPENDS = 1;
+    final private int SPINNER_SELECTED_QUOTES = 2;
+    final private int SPINNER_SELECTED_EVENTS = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_scrapbook);
+        setContentView(R.layout.activity_view_scrapbook2);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Set up realm
+        this.realm = Realm.getDefaultInstance();
 
-        // Get the intent and store it, used for Realm and UI interaction later
+        // Get the Scrapbook name and give it to Realm
         this.scrapbookName = getIntent().getStringExtra("scrapbook_name");
         this.setTitle(this.scrapbookName);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        final Scrapbook scrapbook = realm.where(Scrapbook.class)
+                                    .equalTo("name", this.scrapbookName)
+                                    .findFirst();
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Get a bit cute with the interface
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(scrapbook.getColour()));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
-        // Set up realm and query for the scrapbook
-        this.realm = Realm.getDefaultInstance();
-        Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", this.scrapbookName).findFirst();
-
-        // Bit of pizzazz
-        ColorDrawable colour = new ColorDrawable(scrapbook.getColour());
-        ActionBar bar = this.getSupportActionBar();
-        bar.setBackgroundDrawable(colour);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_scrapbook, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment
-    {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState)
+        // Get the spinner and attach an event listener to fire on item select
+        Spinner spinner = (Spinner) findViewById(R.id.view_scrapbook_filter_spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
-            View rootView = inflater.inflate(R.layout.fragment_view_scrapbook, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
+            {
+                // Set up variable to hold results of query
+                String text = "";
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
-    {
+                // Switch on the position to determine which query to run.
+                switch (pos)
+                {
+//                    case SPINNER_SELECTED_ALL:
+//                        text = "All";
+//                        break;
+                    case SPINNER_SELECTED_PHOTOGRAPHS:
+                        text = String.valueOf(scrapbook.getPhotoList().size());
+                        break;
+                    case SPINNER_SELECTED_SPENDS:
+                        text = String.valueOf(scrapbook.getSpendList().size());
+                        break;
+                    case SPINNER_SELECTED_QUOTES:
+                        text = String.valueOf(scrapbook.getQuoteList().size());
+                        break;
+                    case SPINNER_SELECTED_EVENTS:
+                        text = String.valueOf(scrapbook.getEventList().size());
+                        break;
+                    default:
+                        Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();
+                }
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+                Toast.makeText(ViewScrapbookActivity.this, text + " Items", Toast.LENGTH_SHORT).show();
 
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 5;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "All";
-                case 1:
-                    return "Photo";
-                case 2:
-                    return "Spend";
-                case 3:
-                    return "Quote";
-                case 4:
-                    return "Event";
             }
-            return null;
-        }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
+        });
+
     }
 }

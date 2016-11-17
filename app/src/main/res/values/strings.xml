@@ -16,4 +16,15 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
 
+    <!-- Options for the spinner in ViewScrapbook to filter items -->
+    <string name="scrapbook_filter_prompt">What type of item to show?</string>
+    <string-array name="scrapbook_filters_arrays">
+        <!--<item>All</item>-->
+        <item>Photographs</item>
+        <item>Spends</item>
+        <item>Quotes</item>
+        <item>Events</item>
+    </string-array>
+
+
 </resources>
