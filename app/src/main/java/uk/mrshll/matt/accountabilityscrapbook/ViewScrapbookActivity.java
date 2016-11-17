@@ -4,12 +4,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.Adapter.SpendScrapAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class ViewScrapbookActivity extends AppCompatActivity
@@ -64,7 +67,11 @@ public class ViewScrapbookActivity extends AppCompatActivity
                         text = String.valueOf(scrapbook.getPhotoList().size());
                         break;
                     case SPINNER_SELECTED_SPENDS:
-                        text = String.valueOf(scrapbook.getSpendList().size());
+                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
+                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
+                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
+                        
+
                         break;
                     case SPINNER_SELECTED_QUOTES:
                         text = String.valueOf(scrapbook.getQuoteList().size());
