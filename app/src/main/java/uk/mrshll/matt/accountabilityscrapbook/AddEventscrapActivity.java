@@ -36,6 +36,7 @@ import java.util.Date;
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.EventScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
@@ -131,10 +132,11 @@ public class AddEventscrapActivity extends AppCompatActivity {
                         public void execute(Realm realm)
                         {
                             // Create the scraps
-                            EventScrap scrap = realm.createObject(EventScrap.class);
+                            Scrap scrap = realm.createObject(Scrap.class);
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateGiven);
-                            scrap.setEventName(eventName.getText().toString());
+                            scrap.setType(Scrap.TYPE_EVENT);
+                            scrap.setName(eventName.getText().toString());
                             scrap.setPlaceAddress(placeAddress);
                             scrap.setPlaceName(placeName);
                             scrap.setPlaceLatLng(placeLatLong.toString());
@@ -164,7 +166,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                                 // Inherit the tags from the scrapbooks
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
-                                result.getEventList().add(scrap);
+                                result.getScrapList().add(scrap);
 
 
                             }

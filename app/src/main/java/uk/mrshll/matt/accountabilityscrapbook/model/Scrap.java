@@ -16,10 +16,10 @@ import io.realm.RealmObject;
 public class Scrap extends RealmObject
 {
     // Type definitions
-    static int TYPE_SPEND = 0;
-    static int TYPE_QUOTE = 1;
-    static int TYPE_EVENT = 2;
-    static int TYPE_PHOTO = 4;
+    public static int TYPE_SPEND = 0;
+    public static int TYPE_QUOTE = 1;
+    public static int TYPE_EVENT = 2;
+    public static int TYPE_PHOTO = 4;
 
     // Meta. Type and date
     private Date dateCreated;               // Date created on system

@@ -17,6 +17,7 @@ import java.util.Date;
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.QuoteScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
@@ -77,7 +78,7 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                         public void execute(Realm realm)
                         {
                             // Create the Scrap
-                            QuoteScrap scrap = realm.createObject(QuoteScrap.class);
+                            Scrap scrap = realm.createObject(Scrap.class);
                             scrap.setDateGiven(dateGiven);
                             scrap.setDateCreated(dateCreated);
                             scrap.setQuoteText(quoteText.getText().toString());
@@ -109,7 +110,7 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                                 // Inherit the tags from the scrapbooks
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
-                                result.getQuoteList().add(scrap);
+                                result.getScrapList().add(scrap);
 
                             }
 

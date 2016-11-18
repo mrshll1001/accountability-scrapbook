@@ -24,6 +24,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.SpendScrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
@@ -90,11 +91,12 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                         {
 
                             // Create the spendscrap
-                            SpendScrap scrap = realm.createObject(SpendScrap.class);
+                            Scrap scrap = realm.createObject(Scrap.class);
                             scrap.setName(nameField.getText().toString());
-                            scrap.setValue(Double.valueOf(valueField.getText().toString()));
+                            scrap.setSpendValue(Double.valueOf(valueField.getText().toString()));
                             scrap.setDateCreated(dateCreated);
-                            scrap.setDateOfSpend(dateOfSpend);
+                            scrap.setDateGiven(dateOfSpend);
+                            scrap.setType(Scrap.TYPE_SPEND);
 
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
@@ -121,7 +123,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                                 // Inherit the tags from the scrapbooks
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
-                                result.getSpendList().add(scrap);
+                                result.getScrapList().add(scrap);
 
 
                             }

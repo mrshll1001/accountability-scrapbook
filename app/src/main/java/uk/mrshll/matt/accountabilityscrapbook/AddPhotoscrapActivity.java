@@ -32,6 +32,7 @@ import java.util.Date;
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.PhotoScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
@@ -124,9 +125,11 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                         public void execute(Realm realm) {
 
                             // Create the photo scrap
-                            PhotoScrap scrap = realm.createObject(PhotoScrap.class, photoURI.toString());
+                            Scrap scrap = realm.createObject(Scrap.class);
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateGiven);
+                            scrap.setType(Scrap.TYPE_PHOTO);
+                            scrap.setPhotoUri(photoURI.toString());
 
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
@@ -153,7 +156,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                                 // Inherit the tags from the scrapbooks
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
-                                result.getPhotoList().add(scrap);
+                                result.getScrapList().add(scrap);
                             }
 
                         }

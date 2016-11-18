@@ -65,21 +65,19 @@ public class ViewScrapbookActivity extends AppCompatActivity
 //                        text = "All";
 //                        break;
                     case SPINNER_SELECTED_PHOTOGRAPHS:
-                        text = String.valueOf(scrapbook.getPhotoList().size());
+                        // Shit
                         break;
                     case SPINNER_SELECTED_SPENDS:
-                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
-                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
-//                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
-                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
-
-
+//                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
+//                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
+////                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
+//                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
                         break;
                     case SPINNER_SELECTED_QUOTES:
-                        text = String.valueOf(scrapbook.getQuoteList().size());
+                        // Shit
                         break;
                     case SPINNER_SELECTED_EVENTS:
-                        text = String.valueOf(scrapbook.getEventList().size());
+//                        Shit
                         break;
                     default:
                         Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();

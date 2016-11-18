@@ -20,24 +20,9 @@ public class Scrapbook extends RealmObject
     private int colour;      // Colour used to sort the scrapbook
     public RealmList<Tag> tagList; // All dem tags it's been tagged with
 
-    private RealmList<SpendScrap> spendList; // All the spends it has
-    private RealmList<PhotoScrap> photoList; // All the photos it has
-    private RealmList<QuoteScrap> quoteList; // All of the quotes it has
-    private RealmList<EventScrap> eventList;
+    public RealmList<Scrap> scrapList; // All the scrapss
 
 
-
-    public RealmList<QuoteScrap> getQuoteList() {
-        return quoteList;
-    }
-
-    public RealmList<PhotoScrap> getPhotoList() {
-        return photoList;
-    }
-
-    public RealmList<EventScrap> getEventList() {
-        return eventList;
-    }
 
     /**
      * Returns name
@@ -47,9 +32,13 @@ public class Scrapbook extends RealmObject
         return name;
     }
 
-
-    public RealmList<SpendScrap> getSpendList() {
-        return spendList;
+    /**
+     * Returns access to the scraplist
+     * @return
+     */
+    public RealmList<Scrap> getScrapList()
+    {
+        return this.scrapList;
     }
 
 
@@ -117,6 +106,6 @@ public class Scrapbook extends RealmObject
      */
     public int getTotalItems()
     {
-        return spendList.size() + photoList.size() + quoteList.size() + eventList.size();
+        return this.scrapList.size();
     }
 }
