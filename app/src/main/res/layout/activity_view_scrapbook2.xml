@@ -23,7 +23,7 @@
         android:layout_below="@+id/view_scrapbook_filter_spinner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp" />
+        android:layout_margin="1dp" />
 
 
 </RelativeLayout>

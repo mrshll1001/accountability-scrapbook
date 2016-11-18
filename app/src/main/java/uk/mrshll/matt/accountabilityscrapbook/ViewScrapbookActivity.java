@@ -4,6 +4,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -69,6 +70,7 @@ public class ViewScrapbookActivity extends AppCompatActivity
                     case SPINNER_SELECTED_SPENDS:
                         RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
                         recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
+//                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
                         recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
 
 
