@@ -16,7 +16,7 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmList;
 import uk.mrshll.matt.accountabilityscrapbook.R;
-import uk.mrshll.matt.accountabilityscrapbook.model.SpendScrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 /**
@@ -25,7 +25,7 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class SpendScrapAdapter extends RecyclerView.Adapter<SpendScrapAdapter.ViewHolder>
 {
-    private RealmList<SpendScrap> data;
+    private RealmList<Scrap> data;
     private Context context;
 
 
@@ -35,7 +35,7 @@ public class SpendScrapAdapter extends RecyclerView.Adapter<SpendScrapAdapter.Vi
         private Context context;
 
         // View variables here
-        private SpendScrap spend;
+        private Scrap spend;
         private TextView spendName;
         private TextView spendValue;
         private TextView spendDate;
@@ -63,13 +63,13 @@ public class SpendScrapAdapter extends RecyclerView.Adapter<SpendScrapAdapter.Vi
         }
 
         // This is where the data is set
-        public void bindScrap(SpendScrap s)
+        public void bindScrap(Scrap s)
         {
             this.spend = s;
 
             spendName.setText(this.spend.getName());
-            spendDate.setText(String.format("%d/%d/%d", this.spend.getDateOfSpend().getDate(), this.spend.getDateOfSpend().getMonth() + 1, this.spend.getDateOfSpend().getYear()));
-            spendValue.setText(String.format("£%s", this.spend.getValue()));
+            spendDate.setText(String.format("%d/%d/%d", this.spend.getDateGiven().getDate(), this.spend.getDateGiven().getMonth() + 1, this.spend.getDateGiven().getYear()));
+            spendValue.setText(String.format("£%s", this.spend.getSpendValue()));
 
             ArrayList<Tag> tagList = new ArrayList<Tag>();
             tagList.addAll(this.spend.getCustomTags());
@@ -93,7 +93,7 @@ public class SpendScrapAdapter extends RecyclerView.Adapter<SpendScrapAdapter.Vi
     }
 
 
-    public SpendScrapAdapter(Context context, RealmList<SpendScrap> data)
+    public SpendScrapAdapter(Context context, RealmList<Scrap> data)
     {
         this.data = data;
         this.context = context;
@@ -111,7 +111,7 @@ public class SpendScrapAdapter extends RecyclerView.Adapter<SpendScrapAdapter.Vi
     @Override
     public void onBindViewHolder(SpendScrapAdapter.ViewHolder holder, int position)
     {
-        SpendScrap s = data.get(position);
+        Scrap s = data.get(position);
         holder.bindScrap(s);
     }
 

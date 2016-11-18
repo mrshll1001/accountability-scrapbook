@@ -26,7 +26,6 @@ import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
-import uk.mrshll.matt.accountabilityscrapbook.model.SpendScrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class AddSpendscrapActivity extends AppCompatActivity {

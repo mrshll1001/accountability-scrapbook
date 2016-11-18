@@ -35,7 +35,6 @@ import java.util.Date;
 
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
-import uk.mrshll.matt.accountabilityscrapbook.model.EventScrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
