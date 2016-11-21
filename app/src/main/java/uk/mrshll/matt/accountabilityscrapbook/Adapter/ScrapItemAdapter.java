@@ -1,14 +1,18 @@
 package uk.mrshll.matt.accountabilityscrapbook.Adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.location.places.Place;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import io.realm.RealmList;
@@ -46,8 +50,12 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             case 0:
                 // Find the layout and inflate and return it.
-                View inflatedView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spendscrap_card, parent, false);
-                return new SpendViewHolder(inflatedView, this.context);
+                View spendCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.spendscrap_card, parent, false);
+                return new SpendViewHolder(spendCard, this.context);
+            case 4:
+                // Find the layout and inflate and return
+                View photoCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.photoscrap_card, parent, false);
+                return new PhotoViewHolder(photoCard, this.context);
             default:
                 return null;
         }
@@ -64,10 +72,15 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             case 0:
                 SpendViewHolder spendHolder = (SpendViewHolder) holder;
-                Scrap s = data.get(position);
+                Scrap spend = data.get(position);
 
-                spendHolder.bindScrap(s);
+                spendHolder.bindScrap(spend);
                 break;
+            case 4:
+                PhotoViewHolder photoHolder = (PhotoViewHolder) holder;
+                Scrap photo = data.get(position);
+
+                photoHolder.bindScrap(photo);
         }
 
     }
@@ -130,6 +143,58 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             spendTags.setText(builder.toString());
         }
     }
+
+    /**
+     * ViewHolder for the photo scrap type
+     */
+    class PhotoViewHolder extends RecyclerView.ViewHolder
+    {
+        private Context context;
+
+        // View variables here
+        private Scrap scrap;
+        private ImageView imageView;
+        private TextView date;
+        private TextView tags;
+
+        public PhotoViewHolder(View v, Context c)
+        {
+            super(v);
+            this.context = c;
+
+            this.imageView = (ImageView) v.findViewById(R.id.photoscrap_imageview);
+            this.date = (TextView) v.findViewById(R.id.photoscrap_date);
+            this.tags = (TextView) v.findViewById(R.id.photoscrap_tags);
+        }
+
+        // This is where the data is set
+        public void bindScrap(Scrap s)
+        {
+            this.scrap = s;
+
+            imageView.setImageURI(Uri.parse(s.getPhotoUri()));
+            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+
+            ArrayList<Tag> tagList = new ArrayList<Tag>();
+            tagList.addAll(this.scrap.getCustomTags());
+            tagList.addAll(this.scrap.getInheritedTags());
+
+            // Build the tag string
+            StringBuilder builder = new StringBuilder();
+            for (Tag t : tagList)
+            {
+                builder.append(t.getTagName());
+                if(tagList.indexOf(t) != tagList.size() - 1)
+                {
+                    builder.append(", ");
+                }
+            }
+
+            tags.setText(builder.toString());
+
+        }
+    }
+
 
 
 }
