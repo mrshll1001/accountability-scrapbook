@@ -82,6 +82,7 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                             scrap.setDateCreated(dateCreated);
                             scrap.setQuoteText(quoteText.getText().toString());
                             scrap.setQuoteSource(quoteSource.getText().toString());
+                            scrap.setType(Scrap.TYPE_QUOTE);
 
                             // Add the tags
                             // Add the tags

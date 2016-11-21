@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.location.places.Place;
 
+import org.w3c.dom.Text;
+
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -52,6 +54,10 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 // Find the layout and inflate and return it.
                 View spendCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.spendscrap_card, parent, false);
                 return new SpendViewHolder(spendCard, this.context);
+            case 1:
+                // Find the layout and inflate and return
+                View quoteCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.quotescrap_card, parent, false);
+                return new QuoteViewHolder(quoteCard, this.context);
             case 4:
                 // Find the layout and inflate and return
                 View photoCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.photoscrap_card, parent, false);
@@ -76,6 +82,12 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 spendHolder.bindScrap(spend);
                 break;
+            case 1:
+                QuoteViewHolder quoteHolder = (QuoteViewHolder) holder;
+                Scrap quote = data.get(position);
+
+                quoteHolder.bindScrap(quote);
+                break;
             case 4:
                 PhotoViewHolder photoHolder = (PhotoViewHolder) holder;
                 Scrap photo = data.get(position);
@@ -88,6 +100,61 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return this.data.size();
+    }
+
+    class QuoteViewHolder extends RecyclerView.ViewHolder
+    {
+        private Context context;
+
+        // View variables
+        private Scrap scrap;
+        private TextView quoteText;
+        private TextView quoteSource;
+        private TextView tags;
+        private TextView date;
+
+
+
+        public QuoteViewHolder(View v, Context c)
+        {
+            super(v);
+            this.context = c;
+
+            this.quoteText = (TextView) v.findViewById(R.id.quotescrap_text);
+            this.tags = (TextView) v.findViewById(R.id.quotescrap_tags);
+            this.date = (TextView) v.findViewById(R.id.quotescrap_date);
+            this.quoteSource = (TextView) v.findViewById(R.id.quotescrap_source);
+
+        }
+
+        // This is where the data is set
+        public void bindScrap(Scrap s)
+        {
+            this.scrap = s;
+
+            quoteText.setText(String.format("\"%s\"", s.getQuoteText()));
+            quoteSource.setText(String.format("- %s", s.getQuoteSource()));
+            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+
+            ArrayList<Tag> tagList = new ArrayList<Tag>();
+            tagList.addAll(this.scrap.getCustomTags());
+            tagList.addAll(this.scrap.getInheritedTags());
+
+            // Build the tag string
+            StringBuilder builder = new StringBuilder();
+            for (Tag t : tagList)
+            {
+                builder.append(t.getTagName());
+                if(tagList.indexOf(t) != tagList.size() - 1)
+                {
+                    builder.append(", ");
+                }
+            }
+
+            tags.setText(builder.toString());
+        }
+
+
     }
 
 
