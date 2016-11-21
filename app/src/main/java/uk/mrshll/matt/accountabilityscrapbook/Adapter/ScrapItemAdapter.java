@@ -22,6 +22,8 @@ import uk.mrshll.matt.accountabilityscrapbook.R;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
+import static uk.mrshll.matt.accountabilityscrapbook.model.Scrap.TYPE_SPEND;
+
 /**
  * Created by marshall on 21/11/16.
  */
