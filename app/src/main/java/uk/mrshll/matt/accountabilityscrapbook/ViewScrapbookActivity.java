@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapItemAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.SpendScrapAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
@@ -48,6 +49,12 @@ public class ViewScrapbookActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(scrapbook.getColour()));
 
+        // Sort out the recycler view
+        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
+        recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+
+
         // Get the spinner and attach an event listener to fire on item select
         Spinner spinner = (Spinner) findViewById(R.id.view_scrapbook_filter_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -58,30 +65,30 @@ public class ViewScrapbookActivity extends AppCompatActivity
                 // Set up variable to hold results of query
                 String text = "";
 
-                // Switch on the position to determine which query to run.
-                switch (pos)
-                {
-//                    case SPINNER_SELECTED_ALL:
-//                        text = "All";
+//                // Switch on the position to determine which query to run.
+//                switch (pos)
+//                {
+////                    case SPINNER_SELECTED_ALL:
+////                        text = "All";
+////                        break;
+//                    case SPINNER_SELECTED_PHOTOGRAPHS:
+//                        // Shit
 //                        break;
-                    case SPINNER_SELECTED_PHOTOGRAPHS:
-                        // Shit
-                        break;
-                    case SPINNER_SELECTED_SPENDS:
-//                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
-//                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
-////                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
-//                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
-                        break;
-                    case SPINNER_SELECTED_QUOTES:
-                        // Shit
-                        break;
-                    case SPINNER_SELECTED_EVENTS:
-//                        Shit
-                        break;
-                    default:
-                        Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();
-                }
+//                    case SPINNER_SELECTED_SPENDS:
+////                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
+////                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
+//////                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
+////                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
+//                        break;
+//                    case SPINNER_SELECTED_QUOTES:
+//                        // Shit
+//                        break;
+//                    case SPINNER_SELECTED_EVENTS:
+////                        Shit
+//                        break;
+//                    default:
+//                        Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();
+//                }
 
             }
 
