@@ -1,5 +1,6 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -139,5 +140,38 @@ public class Scrap extends RealmObject
 
     public void setPlaceAddress(String placeAddress) {
         this.placeAddress = placeAddress;
+    }
+
+    /**
+     * Returns a formatted string comprised of all tags
+     * @return
+     */
+    public String getFormattedTagString(boolean includeInherited, boolean includeCustom)
+    {
+        ArrayList<Tag> tagList = new ArrayList<>();
+
+        if (includeCustom)
+        {
+            tagList.addAll(this.getCustomTags());
+        }
+
+        if (includeInherited)
+        {
+            tagList.addAll(this.getInheritedTags());
+        }
+
+        // Build the tag string
+        StringBuilder builder = new StringBuilder();
+        for (Tag t : tagList)
+        {
+            builder.append(t.getTagName());
+            if(tagList.indexOf(t) != tagList.size() - 1)
+            {
+                builder.append(", ");
+            }
+        }
+
+        return builder.toString();
+
     }
 }
