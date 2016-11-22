@@ -60,6 +60,10 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 // Find the layout and inflate and return
                 View quoteCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.quotescrap_card, parent, false);
                 return new QuoteViewHolder(quoteCard, this.context);
+            case 2:
+                // Find layout and return
+                View eventCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.eventscrap_card, parent, false);
+                return new EventViewHolder(eventCard, this.context);
             case 4:
                 // Find the layout and inflate and return
                 View photoCard = LayoutInflater.from(parent.getContext()).inflate(R.layout.photoscrap_card, parent, false);
@@ -90,6 +94,12 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 quoteHolder.bindScrap(quote);
                 break;
+            case 2:
+                EventViewHolder eventHolder = (EventViewHolder) holder;
+                Scrap event = data.get(position);
+
+                eventHolder.bindScrap(event);
+                break;
             case 4:
                 PhotoViewHolder photoHolder = (PhotoViewHolder) holder;
                 Scrap photo = data.get(position);
@@ -104,6 +114,59 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return this.data.size();
     }
 
+
+    /**
+     * Viewholder for the Event View
+     */
+    class EventViewHolder extends RecyclerView.ViewHolder
+    {
+        private Context context;
+
+        // View variables
+        private Scrap scrap;
+        private TextView eventName;
+        private TextView date;
+        private TextView tags;
+
+        public EventViewHolder(View v, Context c)
+        {
+            super(v);
+            this.context = c;
+
+            this.eventName = (TextView) v.findViewById(R.id.eventscrap_name);
+            this.date = (TextView) v.findViewById(R.id.eventscrap_date);
+            this.tags = (TextView) v.findViewById(R.id.eventscrap_tags);
+        }
+
+        // Set the data
+        public void bindScrap(Scrap s)
+        {
+            this.scrap = s;
+            eventName.setText(s.getName());
+            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+
+            ArrayList<Tag> tagList = new ArrayList<Tag>();
+            tagList.addAll(this.scrap.getCustomTags());
+            tagList.addAll(this.scrap.getInheritedTags());
+
+            // Build the tag string
+            StringBuilder builder = new StringBuilder();
+            for (Tag t : tagList)
+            {
+                builder.append(t.getTagName());
+                if(tagList.indexOf(t) != tagList.size() - 1)
+                {
+                    builder.append(", ");
+                }
+            }
+
+            tags.setText(builder.toString());
+        }
+    }
+
+    /**
+     * Viewholder for the Quote view
+     */
     class QuoteViewHolder extends RecyclerView.ViewHolder
     {
         private Context context;
