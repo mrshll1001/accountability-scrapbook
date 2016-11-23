@@ -1,6 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import io.realm.Realm;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapItemAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.SpendScrapAdapter;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class ViewScrapbookActivity extends AppCompatActivity
@@ -53,7 +55,8 @@ public class ViewScrapbookActivity extends AppCompatActivity
         // Sort out the recycler view
         final RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
-        recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+        final ScrapItemAdapter adapter = new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList());
+        recycler.setAdapter(adapter);
 
         // Set up the function to handle deletion of the item
         ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
@@ -63,12 +66,29 @@ public class ViewScrapbookActivity extends AppCompatActivity
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 realm.beginTransaction();
-                scrapbook.getScrapList().remove(viewHolder.getAdapterPosition());
+                final Scrap deletedScrap = scrapbook.getScrapList().get(viewHolder.getAdapterPosition());
+                scrapbook.getScrapList().remove(deletedScrap);
                 realm.commitTransaction();
-
+//                 adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+//                adapter.notifyDataSetChanged();
+
+                Snackbar snackbar = Snackbar.make(recycler, String.format("Removed %s from Scrapbook", deletedScrap.getName()), Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View view) {
+                                realm.beginTransaction();
+                                scrapbook.getScrapList().add(deletedScrap);
+                                realm.commitTransaction();
+
+                                recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+
+                            }
+                        });
+                snackbar.show();
             }
         };
 
