@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -50,9 +51,29 @@ public class ViewScrapbookActivity extends AppCompatActivity
         actionBar.setBackgroundDrawable(new ColorDrawable(scrapbook.getColour()));
 
         // Sort out the recycler view
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
+        final RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
         recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+
+        // Set up the function to handle deletion of the item
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                realm.beginTransaction();
+                scrapbook.getScrapList().remove(viewHolder.getAdapterPosition());
+                realm.commitTransaction();
+
+                recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recycler);
 
 
         // Get the spinner and attach an event listener to fire on item select

@@ -68,11 +68,17 @@
             android:name=".AddEventscrapActivity"
             android:label="Add an Event Scrap"
             android:parentActivityName=".MainActivity"/>
-
         <activity
             android:name=".ViewScrapbookActivity"
             android:parentActivityName=".MainActivity"/>
-
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.mrshll.matt.accountabilityscrapbook.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
