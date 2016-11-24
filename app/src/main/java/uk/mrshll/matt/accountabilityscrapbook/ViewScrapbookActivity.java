@@ -14,7 +14,10 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
+import io.realm.RealmList;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapItemAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.SpendScrapAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
@@ -26,11 +29,11 @@ public class ViewScrapbookActivity extends AppCompatActivity
     private Realm realm;
     private String scrapbookName;
 
-//    final private int SPINNER_SELECTED_ALL = 0;
-    final private int SPINNER_SELECTED_PHOTOGRAPHS = 0;
-    final private int SPINNER_SELECTED_SPENDS = 1;
-    final private int SPINNER_SELECTED_QUOTES = 2;
-    final private int SPINNER_SELECTED_EVENTS = 3;
+    final private int SPINNER_SELECTED_ALL = 0;
+    final private int SPINNER_SELECTED_PHOTOGRAPHS = 1;
+    final private int SPINNER_SELECTED_SPENDS = 2;
+    final private int SPINNER_SELECTED_QUOTES = 3;
+    final private int SPINNER_SELECTED_EVENTS = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,33 +106,27 @@ public class ViewScrapbookActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
             {
-                // Set up variable to hold results of query
-                String text = "";
+                RealmList<Scrap> scrapList = null;
+              switch (pos)
+              {
+                  case SPINNER_SELECTED_ALL:
+                      scrapList = scrapbook.getScrapList();
+                      break;
+                  case SPINNER_SELECTED_EVENTS:
+                      scrapList = scrapbook.getScrapListByType(Scrap.TYPE_EVENT);
+                      break;
+                  case SPINNER_SELECTED_PHOTOGRAPHS:
+                      scrapList = scrapbook.getScrapListByType(Scrap.TYPE_PHOTO);
+                      break;
+                  case SPINNER_SELECTED_QUOTES:
+                      scrapList = scrapbook.getScrapListByType(Scrap.TYPE_QUOTE);
+                      break;
+                  case SPINNER_SELECTED_SPENDS:
+                      scrapList = scrapbook.getScrapListByType(Scrap.TYPE_SPEND);
+                      break;
+              }
 
-//                // Switch on the position to determine which query to run.
-//                switch (pos)
-//                {
-////                    case SPINNER_SELECTED_ALL:
-////                        text = "All";
-////                        break;
-//                    case SPINNER_SELECTED_PHOTOGRAPHS:
-//                        // Shit
-//                        break;
-//                    case SPINNER_SELECTED_SPENDS:
-////                        RecyclerView recycler = (RecyclerView) findViewById(R.id.view_scrapbook_recycler);
-////                        recycler.setLayoutManager(new LinearLayoutManager(ViewScrapbookActivity.this));
-//////                        recycler.setLayoutManager(new GridLayoutManager(ViewScrapbookActivity.this, ));
-////                        recycler.setAdapter(new SpendScrapAdapter(ViewScrapbookActivity.this, scrapbook.getSpendList()));
-//                        break;
-//                    case SPINNER_SELECTED_QUOTES:
-//                        // Shit
-//                        break;
-//                    case SPINNER_SELECTED_EVENTS:
-////                        Shit
-//                        break;
-//                    default:
-//                        Toast.makeText(ViewScrapbookActivity.this, "Error has occurred, invalid option", Toast.LENGTH_SHORT).show();
-//                }
+                recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapList));
 
             }
 

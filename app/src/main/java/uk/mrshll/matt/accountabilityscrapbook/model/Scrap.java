@@ -185,4 +185,5 @@ public class Scrap extends RealmObject
        return String.format("%d/%d/%d", date.getDate(), date.getMonth() + 1, date.getYear());
 
     }
+
 }

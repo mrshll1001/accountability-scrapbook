@@ -1,5 +1,6 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -107,5 +108,25 @@ public class Scrapbook extends RealmObject
     public int getTotalItems()
     {
         return this.scrapList.size();
+    }
+
+    /**
+     * Returns a list of scraps filtered by a type argument
+     * @param type
+     * @return
+     */
+    public RealmList<Scrap> getScrapListByType(int type)
+    {
+        RealmList<Scrap> list = new RealmList<>();
+
+        for (Scrap s : this.scrapList)
+        {
+            if (s.getType() == type)
+            {
+                list.add(s);
+            }
+        }
+
+        return list;
     }
 }
