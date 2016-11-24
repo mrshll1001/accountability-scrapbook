@@ -1,8 +1,14 @@
 package uk.mrshll.matt.accountabilityscrapbook.Adapter;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.formats.NativeAd;
+import com.google.android.gms.fitness.result.FileUriResult;
 import com.google.android.gms.location.places.Place;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -275,9 +286,74 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             this.scrap = s;
 
-            imageView.setImageURI(Uri.parse(s.getPhotoUri()));
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             tags.setText(this.scrap.getFormattedTagString(true, true));
+
+            // Load a smaller bitmap so that it doesn't crap itself
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;
+//            BitmapFactory.decodeFile(this.scrap.getPhotoUri());
+//            int imageHeight = options.outHeight;
+//            int imageWidth = options.outWidth;
+
+
+            imageView.setImageBitmap(decodeSampledBitmapFromFile(this.scrap.getPhotoUri(), 100, 100));
+//            imageView.setImageURI(Uri.parse(this.scrap.getPhotoUri()));
+
+
+        }
+
+        private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+        {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+                // height and width larger than the requested height and width.
+                while ((halfHeight / inSampleSize) >= reqHeight
+                        && (halfWidth / inSampleSize) >= reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+
+        }
+
+        private Bitmap decodeSampledBitmapFromFile(String uriString, int reqWidth, int reqHeight)
+        {
+
+            // First we do this just to check dimensions (apparently)
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+
+
+                BitmapFactory.decodeFile(uriString);
+
+
+                // Calculate inSampleSize
+                options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+                // And then return with inSampleSize set
+                options.inJustDecodeBounds = false;
+
+
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+            // And then return with inSampleSize set
+            options.inJustDecodeBounds = false;
+
+
+            return BitmapFactory.decodeFile(uriString, options);
 
 
         }

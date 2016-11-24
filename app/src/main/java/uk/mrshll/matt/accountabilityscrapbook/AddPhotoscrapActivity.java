@@ -102,7 +102,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                 DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform checks
-                if (photoURI == null)
+                if (photoURI == null || currentPhotoPath == null)
                 {
                     Toast.makeText(AddPhotoscrapActivity.this, "Please select a photo", Toast.LENGTH_SHORT).show();
                 } else if (selectedScrapbooks.isEmpty())
@@ -128,8 +128,8 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateGiven);
                             scrap.setType(Scrap.TYPE_PHOTO);
-                            scrap.setPhotoUri(photoURI.toString());
-
+//                            scrap.setPhotoUri(photoURI.toString());
+                            scrap.setPhotoUri(currentPhotoPath);
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
                             for (String t : tokens)
@@ -207,6 +207,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
         currentPhotoPath = "file:" + image.getAbsolutePath();
+//        currentPhotoPath = image.getAbsolutePath();
         return image;
 
     }
