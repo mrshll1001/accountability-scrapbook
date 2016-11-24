@@ -143,24 +143,10 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             this.scrap = s;
             eventName.setText(s.getName());
-            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+            date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            tags.setText(this.scrap.getFormattedTagString(true, true));
 
-            ArrayList<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(this.scrap.getCustomTags());
-            tagList.addAll(this.scrap.getInheritedTags());
 
-            // Build the tag string
-            StringBuilder builder = new StringBuilder();
-            for (Tag t : tagList)
-            {
-                builder.append(t.getTagName());
-                if(tagList.indexOf(t) != tagList.size() - 1)
-                {
-                    builder.append(", ");
-                }
-            }
-
-            tags.setText(builder.toString());
         }
     }
 
@@ -199,7 +185,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             quoteText.setText(String.format("\"%s\"", s.getQuoteText()));
             quoteSource.setText(String.format("- %s", s.getQuoteSource()));
-            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+            date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
 
             ArrayList<Tag> tagList = new ArrayList<Tag>();
             tagList.addAll(this.scrap.getCustomTags());
@@ -231,48 +217,33 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private Context context;
 
         // View variables here
-        private Scrap spend;
-        private TextView spendName;
-        private TextView spendValue;
-        private TextView spendDate;
-        private TextView spendTags;
+        private Scrap scrap;
+        private TextView name;
+        private TextView value;
+        private TextView date;
+        private TextView tags;
 
         public SpendViewHolder(View v, Context c)
         {
             super(v);
             this.context = c;
 
-            this.spendName = (TextView) v.findViewById(R.id.spendscrap_name);
-            this.spendValue = (TextView) v.findViewById(R.id.spendscrap_value);
-            this.spendDate = (TextView) v.findViewById(R.id.spendscrap_date);
-            this.spendTags = (TextView) v.findViewById(R.id.spendscrap_tags);
+            this.name = (TextView) v.findViewById(R.id.spendscrap_name);
+            this.value = (TextView) v.findViewById(R.id.spendscrap_value);
+            this.date = (TextView) v.findViewById(R.id.spendscrap_date);
+            this.tags = (TextView) v.findViewById(R.id.spendscrap_tags);
         }
 
         // This is where the data is set
         public void bindScrap(Scrap s)
         {
-            this.spend = s;
+            this.scrap = s;
 
-            spendName.setText(this.spend.getName());
-            spendDate.setText(String.format("%d/%d/%d", this.spend.getDateGiven().getDate(), this.spend.getDateGiven().getMonth() + 1, this.spend.getDateGiven().getYear()));
-            spendValue.setText(String.format("£%s", this.spend.getSpendValue()));
+            name.setText(this.scrap.getName());
+            date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            value.setText(String.format("£%s", this.scrap.getSpendValue()));
+            tags.setText(this.scrap.getFormattedTagString(true, true));
 
-            ArrayList<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(this.spend.getCustomTags());
-            tagList.addAll(this.spend.getInheritedTags());
-
-            // Build the tag string
-            StringBuilder builder = new StringBuilder();
-            for (Tag t : tagList)
-            {
-                builder.append(t.getTagName());
-                if(tagList.indexOf(t) != tagList.size() - 1)
-                {
-                    builder.append(", ");
-                }
-            }
-
-            spendTags.setText(builder.toString());
         }
     }
 
@@ -305,24 +276,9 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.scrap = s;
 
             imageView.setImageURI(Uri.parse(s.getPhotoUri()));
-            date.setText(String.format("%d/%d/%d", this.scrap.getDateGiven().getDate(), this.scrap.getDateGiven().getMonth() + 1, this.scrap.getDateGiven().getYear()));
+            date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            tags.setText(this.scrap.getFormattedTagString(true, true));
 
-            ArrayList<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(this.scrap.getCustomTags());
-            tagList.addAll(this.scrap.getInheritedTags());
-
-            // Build the tag string
-            StringBuilder builder = new StringBuilder();
-            for (Tag t : tagList)
-            {
-                builder.append(t.getTagName());
-                if(tagList.indexOf(t) != tagList.size() - 1)
-                {
-                    builder.append(", ");
-                }
-            }
-
-            tags.setText(builder.toString());
 
         }
     }

@@ -174,4 +174,15 @@ public class Scrap extends RealmObject
         return builder.toString();
 
     }
+
+    /**
+     * Returns a formatted date string for the object in dd/mm/yyyy
+     * @param date
+     * @return
+     */
+    public String getFormattedDateString(Date date)
+    {
+       return String.format("%d/%d/%d", date.getDate(), date.getMonth() + 1, date.getYear());
+
+    }
 }
