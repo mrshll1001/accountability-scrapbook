@@ -79,6 +79,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.mrshll.matt.accountabilityscrapbook.MainActivity"/>
         </activity>
+        <activity android:name=".UserSettingsActivity">
+        </activity>
     </application>
 
 </manifest>
