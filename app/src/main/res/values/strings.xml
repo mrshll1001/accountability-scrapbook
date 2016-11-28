@@ -16,6 +16,10 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
 
+    <!-- Manage connected services activity -->
+    <string name="text_manage_services">Here you can add services to share your data with, add the url of the service and data will be sent there every time you hit the share button on the app.</string>
+    <string name="manage_services_add_button">Add</string>
+
     <!-- Options for the spinner in ViewScrapbook to filter items -->
     <string name="scrapbook_filter_prompt">What type of item to show?</string>
     <string-array name="scrapbook_filters_arrays">

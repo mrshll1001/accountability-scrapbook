@@ -72,15 +72,13 @@
             android:name=".ViewScrapbookActivity"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="uk.mrshll.matt.accountabilityscrapbook.MainActivity"/>
-        </activity>
-        <activity android:name=".UserSettingsActivity">
-        </activity>
+            android:name=".UserSettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ManageConnectedServicesActivity"
+            android:label="Manage Connected Services"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

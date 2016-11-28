@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
+
     }
 
     @Override
@@ -160,7 +162,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
+            Intent intent = new Intent(MainActivity.this, ManageConnectedServicesActivity.class);
+            startActivity(intent);
             return true;
         }
 
