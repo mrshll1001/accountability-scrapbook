@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmList;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ScrapItemAdapter;
-import uk.mrshll.matt.accountabilityscrapbook.Adapter.SpendScrapAdapter;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
