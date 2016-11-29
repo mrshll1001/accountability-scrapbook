@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
 {
 
     Realm realm;
+    RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,8 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(ManageConnectedServicesActivity.this, input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ManageConnectedServicesActivity.this, input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        addConnectedService(input.getText().toString());
                     }
                 });
 
@@ -71,13 +74,69 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
         });
 
         // Set up the recycler view
-        RealmResults<ConnectedService> results = realm.where(ConnectedService.class).findAll();
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.manage_connections_recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(ManageConnectedServicesActivity.this));
-        recycler.setAdapter(new ConnectedServiceAdapter(ManageConnectedServicesActivity.this, results));
-
-
-
+        recycler = (RecyclerView) findViewById(R.id.manage_connections_recycler);
+        populateRecyclerView();
 
     }
+
+    /**
+     * Populates the recycler view
+     */
+    private void populateRecyclerView()
+    {
+        final RealmResults<ConnectedService> results = realm.where(ConnectedService.class).findAll();
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setAdapter(new ConnectedServiceAdapter(this, results));
+
+
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
+        {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                realm.beginTransaction();
+                ConnectedService cs = results.get(viewHolder.getAdapterPosition());
+                cs.deleteFromRealm();
+                realm.commitTransaction();
+                populateRecyclerView();
+            }
+        };
+
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recycler);
+    }
+
+    /**
+     * Runs the realm operation to add the connected service item
+     * @param urlString
+     */
+    private void addConnectedService(final String urlString)
+    {
+        realm.executeTransactionAsync(new Realm.Transaction()
+        {
+
+            @Override
+            public void execute(Realm realm) {
+                ConnectedService cs = realm.createObject(ConnectedService.class, urlString);
+
+            }
+        }, new Realm.Transaction.OnSuccess()
+        {
+            @Override
+            public void onSuccess() {
+                populateRecyclerView();
+            }
+        }, new Realm.Transaction.OnError()
+        {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(ManageConnectedServicesActivity.this, "There was an error adding this URL", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

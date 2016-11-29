@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/scrapbook_row_heading"
         android:textSize="12sp"
-        android:paddingLeft="5dp">
+        android:paddingLeft="5dp"
+        android:textColor="@color/colorLinkBlue">
     </TextView>
 </RelativeLayout>
