@@ -136,6 +136,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         // View variables
         private Scrap scrap;
         private TextView eventName;
+        private TextView eventAddress;
         private TextView date;
         private TextView tags;
         private ImageView icon;
@@ -145,7 +146,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(v);
             this.context = c;
 
-            this.eventName = (TextView) v.findViewById(R.id.eventscrap_name);
+            this.eventName = (TextView) v.findViewById(R.id.eventcard_content_title);
+            this.eventAddress = (TextView) v.findViewById(R.id.eventcard_content_address);
             this.date = (TextView) v.findViewById(R.id.scrapcard_date);
             this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.scrapcard_tags_content);
@@ -156,6 +158,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             this.scrap = s;
             eventName.setText(s.getName());
+            eventAddress.setText(s.getPlaceName());
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_calendar_clock));
 

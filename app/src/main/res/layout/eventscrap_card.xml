@@ -16,25 +16,26 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            >
 
             <include layout="@layout/component_scrap_card_date"
                      android:id="@+id/eventcard_date" />
 
-            <TextView
-                android:id="@+id/eventscrap_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/event_content"
                 android:layout_below="@+id/eventcard_date"
-                android:textColor="@color/colorBlack"
-                android:textSize="25dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/component_eventcard_content"
+                    />
+
+            </LinearLayout>
 
             <!-- Include tag is basically broken so wrap footer in its own layout -->
             <LinearLayout
-                android:layout_below="@id/eventscrap_name"
+                android:layout_margin="10dp"
+                android:layout_below="@id/event_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <include layout="@layout/component_scrapcard_tags" />
