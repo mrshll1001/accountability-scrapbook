@@ -190,10 +190,10 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(v);
             this.context = c;
 
-            this.quoteText = (TextView) v.findViewById(R.id.quotescrap_text);
+            this.quoteText = (TextView) v.findViewById(R.id.quotecard_content_quotetext);
             this.tags = (TextView) v.findViewById(R.id.scrapcard_tags_content);
             this.date = (TextView) v.findViewById(R.id.scrapcard_date);
-            this.quoteSource = (TextView) v.findViewById(R.id.quotescrap_source);
+            this.quoteSource = (TextView) v.findViewById(R.id.quotecard_content_source);
             this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
 
         }
@@ -207,23 +207,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             quoteSource.setText(String.format("- %s", s.getQuoteSource()));
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_quotebubble));
-
-            ArrayList<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(this.scrap.getCustomTags());
-            tagList.addAll(this.scrap.getInheritedTags());
-
-            // Build the tag string
-            StringBuilder builder = new StringBuilder();
-            for (Tag t : tagList)
-            {
-                builder.append(t.getTagName());
-                if(tagList.indexOf(t) != tagList.size() - 1)
-                {
-                    builder.append(", ");
-                }
-            }
-
-            tags.setText(builder.toString());
+            tags.setText(this.scrap.getFormattedTagString(true, true));
         }
 
 
