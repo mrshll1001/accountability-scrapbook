@@ -35,6 +35,8 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 public class AddPhotoscrapActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 2;
@@ -69,6 +71,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                         photoFile = createImageFile();
                     }catch (IOException ex)
                     {
+                        ex.printStackTrace();
                         Toast.makeText(AddPhotoscrapActivity.this, "Shit self when creating image file", Toast.LENGTH_SHORT).show();
                     }
 
@@ -76,6 +79,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                     if (photoFile != null)
                     {
                         photoURI = FileProvider.getUriForFile(AddPhotoscrapActivity.this, "uk.mrshll.matt.accountabilityscrapbook.fileprovider", photoFile);
+
 
                         // Tell the intent where to stick the output photo
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -203,11 +207,12 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         // Create image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStorageDirectory();
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
-        currentPhotoPath = "file:" + image.getAbsolutePath();
-//        currentPhotoPath = image.getAbsolutePath();
+//        currentPhotoPath = "file:" + image.getAbsolutePath();
+        currentPhotoPath = image.getAbsolutePath();
         return image;
 
     }
