@@ -234,8 +234,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(v);
             this.context = c;
 
-            this.name = (TextView) v.findViewById(R.id.spendscrap_name);
-            this.value = (TextView) v.findViewById(R.id.spendscrap_value);
+            this.name = (TextView) v.findViewById(R.id.spendcard_content_name);
+            this.value = (TextView) v.findViewById(R.id.spendcard_content_value);
             this.date = (TextView) v.findViewById(R.id.scrapcard_date);
             this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.scrapcard_tags_content);

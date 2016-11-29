@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/spendcard_content_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/colorOffWhite"
+        android:text="0.00"
+        android:textStyle="bold"
+        android:textSize="25dp"/>
+
+    <TextView
+        android:id="@+id/spendcard_content_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spendcard_content_value"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="I was spent ona  thing"
+        android:textStyle="bold|italic"
+        android:textColor="@color/colorOffWhite"
+        android:textSize="20dp"/>
+
+
+
+</RelativeLayout>

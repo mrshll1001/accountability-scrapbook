@@ -14,33 +14,23 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+           >
 
             <include layout="@layout/component_scrap_card_date"
                      android:id="@+id/spendcard_date" />
 
-            <TextView
-            android:id="@+id/spendscrap_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spendcard_date"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="5dp"
-            />
+            <LinearLayout
+                android:id="@+id/spendcard_content"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/spendcard_date"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_marginTop="5dp"
-                android:id="@+id/spendscrap_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spendscrap_name"
-                android:textSize="15dp"
-                />
+                <include layout="@layout/component_spendcard_content" />
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_below="@id/spendscrap_value"
+                android:layout_margin="10dp"
+                android:layout_below="@id/spendcard_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <include layout="@layout/component_scrapcard_tags" />
