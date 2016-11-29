@@ -2,8 +2,7 @@
 <LinearLayout android:layout_height="wrap_content"
               android:layout_width="match_parent"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_marginTop="2dp"
-              android:layout_marginBottom="2dp"
+
               xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.CardView
@@ -11,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="1dp"
+        app:cardCornerRadius="2dp"
         app:cardElevation="2dp">
 
         <RelativeLayout
@@ -19,19 +18,14 @@
             android:layout_height="wrap_content"
             android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/eventscrap_map_marker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorBlack"
-                android:background="@drawable/ic_calendar"
-                />
+            <include layout="@layout/component_scrap_card_date"
+                     android:id="@+id/eventcard_date" />
 
             <TextView
                 android:id="@+id/eventscrap_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/eventscrap_map_marker"
+                android:layout_below="@+id/eventcard_date"
                 android:textColor="@color/colorBlack"
                 android:textSize="25dp"
                 android:layout_marginLeft="10dp"
@@ -49,13 +43,6 @@
 
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/eventscrap_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"/>
 
     </android.support.v7.widget.CardView>
 

@@ -138,6 +138,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView eventName;
         private TextView date;
         private TextView tags;
+        private ImageView icon;
 
         public EventViewHolder(View v, Context c)
         {
@@ -145,7 +146,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.context = c;
 
             this.eventName = (TextView) v.findViewById(R.id.eventscrap_name);
-            this.date = (TextView) v.findViewById(R.id.eventscrap_date);
+            this.date = (TextView) v.findViewById(R.id.scrapcard_date);
+            this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.eventscrap_tags);
         }
 
@@ -155,6 +157,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.scrap = s;
             eventName.setText(s.getName());
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_calendar));
+
             tags.setText(this.scrap.getFormattedTagString(true, true));
 
 
@@ -174,6 +178,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView quoteSource;
         private TextView tags;
         private TextView date;
+        private ImageView icon;
 
 
 
@@ -184,8 +189,9 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             this.quoteText = (TextView) v.findViewById(R.id.quotescrap_text);
             this.tags = (TextView) v.findViewById(R.id.quotescrap_tags);
-            this.date = (TextView) v.findViewById(R.id.quotescrap_date);
+            this.date = (TextView) v.findViewById(R.id.scrapcard_date);
             this.quoteSource = (TextView) v.findViewById(R.id.quotescrap_source);
+            this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
 
         }
 
@@ -197,6 +203,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             quoteText.setText(String.format("\"%s\"", s.getQuoteText()));
             quoteSource.setText(String.format("- %s", s.getQuoteSource()));
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_quotes));
 
             ArrayList<Tag> tagList = new ArrayList<Tag>();
             tagList.addAll(this.scrap.getCustomTags());
@@ -233,6 +240,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView value;
         private TextView date;
         private TextView tags;
+        private ImageView icon;
 
         public SpendViewHolder(View v, Context c)
         {
@@ -241,7 +249,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             this.name = (TextView) v.findViewById(R.id.spendscrap_name);
             this.value = (TextView) v.findViewById(R.id.spendscrap_value);
-            this.date = (TextView) v.findViewById(R.id.spendscrap_date);
+            this.date = (TextView) v.findViewById(R.id.scrapcard_date);
+            this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.spendscrap_tags);
         }
 
@@ -253,6 +262,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             name.setText(this.scrap.getName());
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             value.setText(String.format("£%s", this.scrap.getSpendValue()));
+            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_menu_sterling));
+
             tags.setText(this.scrap.getFormattedTagString(true, true));
 
         }
@@ -270,6 +281,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView imageView;
         private TextView date;
         private TextView tags;
+        private ImageView icon;
 
         public PhotoViewHolder(View v, Context c)
         {
@@ -277,7 +289,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.context = c;
 
             this.imageView = (ImageView) v.findViewById(R.id.photoscrap_imageview);
-            this.date = (TextView) v.findViewById(R.id.photoscrap_date);
+            this.date = (TextView) v.findViewById(R.id.scrapcard_date);
+            this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.photoscrap_tags);
         }
 
@@ -287,6 +300,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.scrap = s;
 
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
+            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_menu_camera));
+
             tags.setText(this.scrap.getFormattedTagString(true, true));
 
             // Load a smaller bitmap so that it doesn't crap itself

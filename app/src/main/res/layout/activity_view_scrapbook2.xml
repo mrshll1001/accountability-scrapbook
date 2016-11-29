@@ -5,8 +5,6 @@
     android:id="@+id/activity_view_scrapbook2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="uk.mrshll.matt.accountabilityscrapbook.ViewScrapbookActivity">
 
@@ -14,6 +12,8 @@
         android:id="@+id/view_scrapbook_filter_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"
         android:entries="@array/scrapbook_filters_arrays"
         android:prompt="@string/scrapbook_filter_prompt"/>
 
@@ -22,7 +22,7 @@
         android:layout_below="@+id/view_scrapbook_filter_spinner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp" />
+        android:layout_marginTop="10dp" />
 
 
 </RelativeLayout>

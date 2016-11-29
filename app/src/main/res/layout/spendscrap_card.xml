@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="1dp"
+        app:cardCornerRadius="2dp"
         app:cardElevation="2dp">
 
         <RelativeLayout
@@ -16,10 +16,14 @@
             android:layout_height="wrap_content"
             android:padding="10dp">
 
+            <include layout="@layout/component_scrap_card_date"
+                     android:id="@+id/spendcard_date" />
+
             <TextView
             android:id="@+id/spendscrap_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/spendcard_date"
             android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
@@ -45,12 +49,6 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/spendscrap_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"/>
 
     </android.support.v7.widget.CardView>
 
