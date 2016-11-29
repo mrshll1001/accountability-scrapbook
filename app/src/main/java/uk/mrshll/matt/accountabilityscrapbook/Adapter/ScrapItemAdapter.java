@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import io.realm.RealmList;
@@ -248,7 +249,8 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             name.setText(this.scrap.getName());
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
-            value.setText(String.format("£%s", this.scrap.getSpendValue()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            value.setText(String.format("£%s", df.format(this.scrap.getSpendValue())));
             icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_coin_stack));
 
             tags.setText(this.scrap.getFormattedTagString(true, true));
