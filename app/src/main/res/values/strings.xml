@@ -15,6 +15,8 @@
     <string name="title_activity_view_scrapbook">ViewScrapbookActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <string name="scrapcard_tag_label">Tags:</string>
+
 
     <!-- Manage connected services activity -->
     <string name="text_manage_services">Here you can add services to share your data with, add the url of the service and data will be sent there every time you hit the share button on the app.</string>
@@ -102,6 +104,10 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <!-- Lorem Ipsum-->
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
 
 
 </resources>

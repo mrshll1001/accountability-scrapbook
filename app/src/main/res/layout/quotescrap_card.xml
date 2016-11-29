@@ -50,11 +50,13 @@
                     />
 
 
-                <TextView
-                    android:id="@+id/quotescrap_tags"
+                <LinearLayout
+                    android:layout_below="@id/quotescrap_source"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/quotescrap_source"/>
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/component_scrapcard_tags" />
+
+                </LinearLayout>
 
 
 

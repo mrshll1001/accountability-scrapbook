@@ -29,18 +29,17 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="25dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 />
 
-            <TextView
-                android:id="@+id/eventscrap_tags"
-                android:layout_marginTop="10dp"
+            <!-- Include tag is basically broken so wrap footer in its own layout -->
+            <LinearLayout
+                android:layout_below="@id/eventscrap_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/eventscrap_name"/>
+                android:layout_height="wrap_content">
+                <include layout="@layout/component_scrapcard_tags" />
 
-
-
-
+            </LinearLayout>
 
         </RelativeLayout>
 

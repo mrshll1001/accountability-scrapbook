@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="2dp"
-        app:cardElevation="5dp">
+        app:cardElevation="2dp">
 
 
 
@@ -35,12 +35,14 @@
                 android:layout_marginTop="20dp"
                 />
 
-            <TextView
-                android:id="@+id/photoscrap_tags"
+            <LinearLayout
+                android:layout_below="@id/photoscrap_imageview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/photoscrap_imageview"/>
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/component_scrapcard_tags" />
+
+            </LinearLayout>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

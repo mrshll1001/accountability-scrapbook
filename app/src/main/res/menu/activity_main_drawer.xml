@@ -8,16 +8,16 @@
             android:title="Take a Photo" />
         <item
             android:id="@+id/nav_add_spend"
-            android:icon="@drawable/ic_menu_sterling"
+            android:icon="@drawable/ic_coin_stack"
             android:title="Add a Spend" />
         <item
             android:id="@+id/nav_quote"
-            android:icon="@drawable/ic_quotes"
+            android:icon="@drawable/ic_quotebubble"
             android:title="Get a quote" />
 
         <item
             android:id="@+id/nav_event"
-            android:icon="@drawable/ic_calendar"
+            android:icon="@drawable/ic_calendar_clock"
             android:title="Add an Event" />
     </group>
 

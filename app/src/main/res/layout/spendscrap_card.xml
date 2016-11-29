@@ -39,11 +39,13 @@
                 android:textSize="15dp"
                 />
 
-            <TextView
-                android:id="@+id/spendscrap_tags"
+            <LinearLayout
+                android:layout_below="@id/spendscrap_value"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spendscrap_value"/>
+                android:layout_height="wrap_content">
+                <include layout="@layout/component_scrapcard_tags" />
+
+            </LinearLayout>
 
 
 
