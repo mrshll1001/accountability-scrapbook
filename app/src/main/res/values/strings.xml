@@ -109,5 +109,12 @@
     <!-- Lorem Ipsum-->
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
 
+    <string name="button_choose_scrapbooks">Choose Scrapbooks</string>
+    <string name="button_generate_accounts">Generate</string>
+    <string name="button_share_accounts">Share</string>
+    
+    
+    <!-- On-screen instructions for email accounts etc -->
+    <string name="email_accounts_text">This screen allows you to generate records for use in your budget software. Select your Scrapbooks below, and hit the button. This will generate a CSV file which you can then share via services such as email or Dropbox. This file can be imported, or copied, to software such Libreoffice Calc, Microsoft Excel, or Sage Accounts (among others).</string>
 
 </resources>

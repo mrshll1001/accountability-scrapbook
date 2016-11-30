@@ -24,7 +24,7 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
 
     private Context context;
     private ArrayList<String> selectedScrapbooks; // THIS IS A REFERENCE PASSED FROM THE ACTIVITY ALLOWING US TO UPDATE IT
-
+    private ArrayList<Integer> checkedIndexes;
     private Realm realm; // Realm for actually getting the scrapbooks
 
     private AlertDialog dialog;
@@ -34,7 +34,7 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
     {
         this.context = context;
         this.selectedScrapbooks = selectedScrapbooks;
-
+        this.checkedIndexes = new ArrayList<>();
         this.realm = realm;
     }
 
@@ -63,10 +63,18 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
             scrapbookIntegerMap.put(results.indexOf(s), s.getName());
         }
 
+        // Create the array of checked values
+        boolean[] checked = new boolean[results.size()];
+        for(Integer i : checkedIndexes)
+        {
+            checked[i] = true;
+        }
+
+
         // Now a dialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
         builder.setTitle("Choose Scrapbooks");
-        builder.setMultiChoiceItems(scrapbookItems, null, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(scrapbookItems, checked, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean isChecked)
             {
@@ -76,9 +84,12 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
                     // Add to the list of selected items
                     selectedIndexes.add(i);
 
-                } else if(selectedIndexes.contains(i))
+                } else
                 {
                     selectedIndexes.remove(Integer.valueOf(i));
+                    selectedScrapbooks.remove(scrapbookIntegerMap.get(i));
+                    checkedIndexes.remove(Integer.valueOf(i));
+
                 }
             }
         }).setPositiveButton("Ok", new DialogInterface.OnClickListener()
@@ -86,11 +97,16 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                // Create a new arraylist of strings, and then pass it back to the reference to replace the list each time.
+                ArrayList<String> newSelection = new ArrayList<>();
                 // Add all of the things to the selected scrapbooks via lookup
                 for(Integer index : selectedIndexes)
                 {
                    selectedScrapbooks.add(scrapbookIntegerMap.get(index));
+                    checkedIndexes.add(index);
                 }
+                // Replace the selected scrapbook list with the new list
+
 
 //
 
