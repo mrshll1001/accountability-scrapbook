@@ -1,11 +1,15 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -37,11 +41,44 @@ public class EmailAccountsActivity extends AppCompatActivity
         {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EmailAccountsActivity.this, selectedScrapbooks.toString(), Toast.LENGTH_SHORT).show();
+
+                // Set up the folders and files
+                File folder = new File(Environment.getExternalStorageDirectory() + "/contextual_accounts");
+
+                // Attempt to create the folder if it doesn't exist
+                if (!folder.exists())
+                {
+                    if(!folder.mkdir())
+                    {
+                        Toast.makeText(EmailAccountsActivity.this, "Error creating folder", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                // Create a new CSV file
+                File budgetFile = new File(folder.getPath() + System.currentTimeMillis());
+                try {
+                    // TODO install the csvwriter library from apache!! https://sourceforge.net/projects/opencsv/
+                    CSVWriter writer = new CSVWriter(new FileWriter(budgetFile));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // TODO get each scrapbook by querying for the name
+
+                // TODO get the list of spends and iterate through them, writing each as a line in a CSV
+
+                // TODO finish and inform the user, passing out the fileURI as a variable for sharing
+
+                // TODO attach this to an intent for the sharing to an email or dropbox
+
+                Toast.makeText(EmailAccountsActivity.this, null, Toast.LENGTH_SHORT).show();
             }
         });
 
     }
+
+
 
 
 }

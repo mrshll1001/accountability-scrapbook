@@ -98,7 +98,6 @@ public class FetchScrapbookDialogListener implements View.OnClickListener
             public void onClick(DialogInterface dialogInterface, int i)
             {
                 // Create a new arraylist of strings, and then pass it back to the reference to replace the list each time.
-                ArrayList<String> newSelection = new ArrayList<>();
                 // Add all of the things to the selected scrapbooks via lookup
                 for(Integer index : selectedIndexes)
                 {
