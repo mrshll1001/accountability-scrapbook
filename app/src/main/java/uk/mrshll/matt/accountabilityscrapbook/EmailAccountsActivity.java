@@ -46,35 +46,42 @@ public class EmailAccountsActivity extends AppCompatActivity
         generate.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
-                // Set up the folders and files
-                File folder = new File(Environment.getExternalStorageDirectory() + "/contextual_accounts");
-
-                // Attempt to create the folder if it doesn't exist
-                if (!folder.exists())
+                if (!selectedScrapbooks.isEmpty())
                 {
-                    if(!folder.mkdir())
+                    // Set up the folders and files
+                    File folder = new File(Environment.getExternalStorageDirectory() + "/contextual_accounts");
+
+                    // Attempt to create the folder if it doesn't exist
+                    if (!folder.exists())
                     {
-                        Toast.makeText(EmailAccountsActivity.this, "Error creating folder", Toast.LENGTH_SHORT).show();
+                        if(!folder.mkdir())
+                        {
+                            Toast.makeText(EmailAccountsActivity.this, "Error creating folder", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
+                    // Create a new CSV file
+                    File budgetFile = new File(folder.getPath() + "/budget_" + System.currentTimeMillis() + ".csv");
+
+                    try {
+
+                        writeCSVFile(budgetFile);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(EmailAccountsActivity.this, "Error creating budget file", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
+                    Toast.makeText(EmailAccountsActivity.this, String.format("Saved to %s", budgetFile.getAbsolutePath()), Toast.LENGTH_SHORT).show();
+                } else
+                {
+                    Toast.makeText(EmailAccountsActivity.this, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
                 }
-
-                // Create a new CSV file
-                File budgetFile = new File(folder.getPath() + "/budget_" + System.currentTimeMillis() + ".csv");
-
-                try {
-
-                    writeCSVFile(budgetFile);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(EmailAccountsActivity.this, "Error creating budget file", Toast.LENGTH_SHORT).show();
-                }
-
-
-
-                Toast.makeText(EmailAccountsActivity.this, String.format("Saved to %s", budgetFile.getAbsolutePath()), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -85,11 +92,12 @@ public class EmailAccountsActivity extends AppCompatActivity
      * Handles the write operations for the file
      * @param budgetFile
      * @throws IOException
+     * TODO Check for duplicates coming from multiple scrapbooks and remove them
      */
     private void writeCSVFile(File budgetFile) throws IOException
     {
         // Initialise writer and begin adding lines
-        CSVWriter writer = new CSVWriter(new FileWriter(budgetFile));
+        CSVWriter writer = new CSVWriter(new FileWriter(budgetFile), ',', CSVWriter.NO_QUOTE_CHARACTER);
         LinkedList<String[]> lines = new LinkedList<>();
         lines.add(new String[]{"name", "value", "date"});
 

@@ -81,7 +81,7 @@
 
         <activity android:name=".EmailAccountsActivity"
             android:parentActivityName=".MainActivity"
-            android:label="Email Your Accounts"/>
+            android:label="Generate Budget Report"/>
 
 
 

@@ -24,30 +24,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/generate_accounts_text"
         android:text="@string/button_choose_scrapbooks"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
         />
 
     <Button
+        android:layout_margin="10dp"
         android:id="@+id/generate_accounts_generate_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:text="@string/button_generate_accounts"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_spreadsheet_with_sum_symbol"
         android:layout_below="@+id/generate_accounts_scrapbook_button"
         />
 
-    <Button
-        android:id="@+id/generate_accounts_share_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/generate_accounts_generate_button"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_alignParentRight="true"
-        android:text="@string/button_share_accounts"
-        android:drawableLeft="@drawable/ic_menu_share"
-        android:drawableTint="@color/colorOffWhite"
 
-
-        />
 
 </RelativeLayout>

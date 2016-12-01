@@ -40,7 +40,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 public class AddPhotoscrapActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 2;
-    String currentPhotoPath;
+    static final int REQUEST_IMAGE_PICKER = 100;
     private ArrayList<String> selectedScrapbooks;
     private Realm realm;
 
@@ -56,38 +56,17 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         this.selectedScrapbooks = new ArrayList<String>();
 
         // Add the action to start the camera on the phone
-        final ImageButton cameraButton = (ImageButton) findViewById(R.id.create_photoscrap_camerabutton);
+        final Button cameraButton = (Button) findViewById(R.id.create_photoscrap_camerabutton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Sanity check that there IS a camera activity to return!
-                if (cameraIntent.resolveActivity(getPackageManager()) != null)
-                {
-
-                    File photoFile = null; // Create empty file where image will go
-                    try
-                    {
-                        photoFile = createImageFile();
-                    }catch (IOException ex)
-                    {
-                        ex.printStackTrace();
-                        Toast.makeText(AddPhotoscrapActivity.this, "Shit self when creating image file", Toast.LENGTH_SHORT).show();
-                    }
-
-                    // Continue ONLY IF SUCCESSFUL
-                    if (photoFile != null)
-                    {
-                        photoURI = FileProvider.getUriForFile(AddPhotoscrapActivity.this, "uk.mrshll.matt.accountabilityscrapbook.fileprovider", photoFile);
+            public void onClick(View view)
+            {
+                // Create the intent to the image
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_IMAGE_PICKER);
 
 
-                        // Tell the intent where to stick the output photo
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-                    }
-
-
-                }
             }
         });
 
@@ -106,7 +85,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                 DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform checks
-                if (photoURI == null || currentPhotoPath == null)
+                if (photoURI == null)
                 {
                     Toast.makeText(AddPhotoscrapActivity.this, "Please select a photo", Toast.LENGTH_SHORT).show();
                 } else if (selectedScrapbooks.isEmpty())
@@ -133,7 +112,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                             scrap.setDateGiven(dateGiven);
                             scrap.setType(Scrap.TYPE_PHOTO);
 //                            scrap.setPhotoUri(photoURI.toString());
-                            scrap.setPhotoUri(currentPhotoPath);
+                            scrap.setPhotoUri(photoURI.toString());
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
                             for (String t : tokens)
@@ -190,31 +169,23 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        switch (requestCode)
         {
+            case REQUEST_IMAGE_PICKER:
 
-            ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
+                if (resultCode == RESULT_OK)
+                {
+                    Uri selectedImage = data.getData();
+                    ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
+                    well.setImageURI(selectedImage);
+                    photoURI = selectedImage;
+                }
 
-            well.setImageURI(photoURI);
-//            Toast.makeText(this, photoURI.toString() + " captured, good job!", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
 
 
-    private File createImageFile() throws IOException
-    {
-        // Create image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStorageDirectory();
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-//        currentPhotoPath = "file:" + image.getAbsolutePath();
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-
-    }
 
 }

@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_scrapbook2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="uk.mrshll.matt.accountabilityscrapbook.ViewScrapbookActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+
+
+    <TextView
+        android:id="@+id/view_scrapbook_filter_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_scrapbook_filter_label"
+        android:layout_margin="10dp"
+        />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/view_scrapbook_filter_spinner"
+        android:layout_below="@+id/view_scrapbook_filter_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="64dp"
-        android:layout_marginRight="64dp"
+
         android:entries="@array/scrapbook_filters_arrays"
         android:prompt="@string/scrapbook_filter_prompt"/>
 
     <android.support.v7.widget.RecyclerView
+        android:focusable="false"
         android:id="@+id/view_scrapbook_recycler"
         android:layout_below="@+id/view_scrapbook_filter_spinner"
         android:layout_width="match_parent"

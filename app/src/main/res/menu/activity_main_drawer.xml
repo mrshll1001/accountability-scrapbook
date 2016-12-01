@@ -5,7 +5,7 @@
         <item
             android:id="@+id/nav_add_photo"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Take a Photo" />
+            android:title="Add a Photo" />
         <item
             android:id="@+id/nav_add_spend"
             android:icon="@drawable/ic_coin_stack"
@@ -13,7 +13,7 @@
         <item
             android:id="@+id/nav_quote"
             android:icon="@drawable/ic_quotebubble"
-            android:title="Get a quote" />
+            android:title="Add a quote" />
 
         <item
             android:id="@+id/nav_event"
@@ -30,7 +30,7 @@
             <item
                 android:id="@+id/nav_generate"
                 android:icon="@drawable/ic_spreadsheet_with_sum_symbol"
-                android:title="Generate Accounts" />
+                android:title="Generate Budget Report" />
         </menu>
     </item>
 

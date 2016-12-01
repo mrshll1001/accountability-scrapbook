@@ -50,7 +50,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
 
 //        Preamble
         setTitle("Add Scrapbook");
-        this.scrapbookColour = R.color.colorPrimaryDark;
+        this.scrapbookColour = R.color.colorPrimary;
         realm = Realm.getDefaultInstance();
 
         setContentView(R.layout.activity_create_scrapbook);
@@ -139,7 +139,7 @@ public class CreateScrapbookActivity extends AppCompatActivity {
                 ColorDrawable btnColor = (ColorDrawable) colourBtn.getBackground();
 
                 new ChromaDialog.Builder().
-                        initialColor(btnColor.getColor())
+                        initialColor(scrapbookColour)
                         .colorMode(ColorMode.RGB)
                         .indicatorMode(IndicatorMode.HEX)
                         .onColorSelected(new OnColorSelectedListener() {

@@ -20,7 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            >
 
             <include layout="@layout/component_scrap_card_date"
                      android:id="@+id/photocard_date" />
@@ -38,9 +38,10 @@
             <LinearLayout
                 android:layout_below="@id/photoscrap_imageview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
 
-                <include layout="@layout/component_scrapcard_tags" />
+                <include layout="@layout/component_scrapcard_tags"/>
 
             </LinearLayout>
         </RelativeLayout>
