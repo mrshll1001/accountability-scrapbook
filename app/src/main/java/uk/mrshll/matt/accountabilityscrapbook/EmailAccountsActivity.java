@@ -13,9 +13,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class EmailAccountsActivity extends AppCompatActivity
 {
@@ -57,26 +61,56 @@ public class EmailAccountsActivity extends AppCompatActivity
                 }
 
                 // Create a new CSV file
-                File budgetFile = new File(folder.getPath() + System.currentTimeMillis());
+                File budgetFile = new File(folder.getPath() + "/budget_" + System.currentTimeMillis() + ".csv");
+
                 try {
 
-                    CSVWriter writer = new CSVWriter(new FileWriter(budgetFile));
+                    writeCSVFile(budgetFile);
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(EmailAccountsActivity.this, "Error creating budget file", Toast.LENGTH_SHORT).show();
                 }
 
-                // TODO get each scrapbook by querying for the name
 
-                // TODO get the list of spends and iterate through them, writing each as a line in a CSV
 
-                // TODO finish and inform the user, passing out the fileURI as a variable for sharing
+                Toast.makeText(EmailAccountsActivity.this, String.format("Saved to %s", budgetFile.getAbsolutePath()), Toast.LENGTH_SHORT).show();
 
-                // TODO attach this to an intent for the sharing to an email or dropbox
-
-                Toast.makeText(EmailAccountsActivity.this, null, Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    /**
+     * Handles the write operations for the file
+     * @param budgetFile
+     * @throws IOException
+     */
+    private void writeCSVFile(File budgetFile) throws IOException
+    {
+        // Initialise writer and begin adding lines
+        CSVWriter writer = new CSVWriter(new FileWriter(budgetFile));
+        LinkedList<String[]> lines = new LinkedList<>();
+        lines.add(new String[]{"name", "value", "date"});
+
+        for (String selectedScrapbookName : selectedScrapbooks)
+        {
+            // Get each scrapbook by querying for the name
+            Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", selectedScrapbookName).findFirst();
+
+            // Get the list of spends and iterate through them, adding each as a line
+            RealmList<Scrap> spends = scrapbook.getScrapListByType(Scrap.TYPE_SPEND);
+            for (Scrap s : spends)
+            {
+                String[] spendLine = {s.getName(), String.valueOf(s.getSpendValue()), s.getFormattedDateString(s.getDateGiven())};
+                lines.add(spendLine);
+            }
+
+        }
+
+        // Finally, write all lines out to a CSV file and close
+        writer.writeAll(lines);
+        writer.close();
 
     }
 
