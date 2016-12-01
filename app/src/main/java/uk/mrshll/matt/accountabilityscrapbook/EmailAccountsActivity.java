@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.opencsv.CSVWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class EmailAccountsActivity extends AppCompatActivity
                 // Create a new CSV file
                 File budgetFile = new File(folder.getPath() + System.currentTimeMillis());
                 try {
-                    // TODO install the csvwriter library from apache!! https://sourceforge.net/projects/opencsv/
+
                     CSVWriter writer = new CSVWriter(new FileWriter(budgetFile));
 
                 } catch (IOException e) {
