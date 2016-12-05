@@ -67,7 +67,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
         // Retrieve Location button
         final Activity mug = this;
-        final ImageButton getLocation = (ImageButton) findViewById(R.id.create_eventscrap_mapbutton);
+        final Button getLocation = (Button) findViewById(R.id.create_eventscrap_mapbutton);
         getLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -203,8 +203,6 @@ public class AddEventscrapActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK)
             {
                 Place place = PlacePicker.getPlace(this, data);
-                String toast = String.format("Hello: %s", place.getLatLng());
-                Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
 
                 this.placeAddress = place.getAddress().toString();
                 this.placeLatLong = place.getLatLng();
@@ -247,7 +245,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                         {
                             final ImageView well = (ImageView) findViewById(R.id.create_eventcrap_imagewell);
                             well.setImageBitmap(bitmap);
-                            address.setTextColor(getResources().getColor(R.color.colorWellGrey));
+
 
                         }
                     }

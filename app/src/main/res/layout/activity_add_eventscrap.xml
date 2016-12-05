@@ -24,21 +24,22 @@
                 android:scaleType="centerCrop"
                 />
 
-            <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:id="@+id/create_eventscrap_mapbutton"
-                android:background="@drawable/ic_map_marker"
-                android:backgroundTint="#FFFFFFFF" />
-            <TextView
-                android:id="@+id/create_eventscrap_address"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose a Place"
-                android:textColor="#FFFFFFFF"
+                android:layout_gravity="center"
+                android:text="@string/button_pick_place"
+                android:id="@+id/create_eventscrap_mapbutton"/>
+
+            <TextView
+                android:id="@+id/create_eventscrap_address"
+                android:layout_gravity="bottom"
                 android:layout_margin="10dp"
-                android:layout_gravity="bottom"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+
+                />
 
         </FrameLayout>
 
