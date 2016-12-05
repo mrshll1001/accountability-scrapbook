@@ -6,8 +6,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWellGrey">#BDC3C7</color>
     <color name="colorLinkBlue">#59ABE3</color>
-
     <color name="colorOffWhite">#f5f5f5</color>
-
+    <color name="colorKeyYellow">#F7CA18</color>
 
 </resources>

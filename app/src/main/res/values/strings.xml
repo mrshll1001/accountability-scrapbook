@@ -116,6 +116,8 @@
     <string name="view_scrapbook_total">Items</string>
     <string name="view_scrapbook_filter_label">Filter by type:</string>
 
+    <string name="snackbar_removed_item">Removed item from Scrapbook</string>
+
     <string name="button_choose_scrapbooks">Choose Scrapbooks</string>
     <string name="button_generate_accounts">Generate</string>
     <string name="button_share_accounts">Share</string>

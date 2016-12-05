@@ -53,19 +53,19 @@
 
         <activity
             android:name=".AddPhotoscrapActivity"
-            android:label="Add a Photo Scrap"
+            android:label="Add an Image"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AddSpendscrapActivity"
-            android:label="Add a Spend Scrap"
+            android:label="Add a Spend"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AddQuotescrapActivity"
-            android:label="Add a Quote Scrap"
+            android:label="Add a Quote"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AddEventscrapActivity"
-            android:label="Add an Event Scrap"
+            android:label="Add an Event"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ViewScrapbookActivity"
@@ -81,7 +81,7 @@
 
         <activity android:name=".EmailAccountsActivity"
             android:parentActivityName=".MainActivity"
-            android:label="Generate Budget Report"/>
+            android:label="Generate a Budget Report"/>
 
 
 

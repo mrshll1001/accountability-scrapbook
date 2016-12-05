@@ -1,10 +1,13 @@
 package uk.mrshll.matt.accountabilityscrapbook.Adapter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -54,17 +57,31 @@ public class ConnectedServiceAdapter extends RecyclerView.Adapter<RecyclerView.V
     {
         private ConnectedService item;
         private TextView itemName;
+        private ImageView apiKeyIcon;
+        private TextView apiKey;
 
         public ConnectedServiceViewHolder(View v)
         {
             super(v);
 
             this.itemName = (TextView) v.findViewById(R.id.connected_service_item_text);
+            this.apiKeyIcon = (ImageView) v.findViewById(R.id.connected_service_item_key_icon);
+            this.apiKey = (TextView) v.findViewById(R.id.connected_service_api_key);
         }
 
         public void bindItem(ConnectedService item)
         {
             itemName.setText(item.getEndpointUrl());
+            apiKey.setText(item.getApiKey());
+
+            if (item.getApiKey().length() <= 0)
+            {
+                apiKeyIcon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_house_key_grey));
+            }else
+            {
+                apiKeyIcon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_house_key_gold));
+
+            }
         }
 
     }

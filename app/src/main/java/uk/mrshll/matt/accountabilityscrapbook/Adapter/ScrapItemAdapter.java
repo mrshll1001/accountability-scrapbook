@@ -290,7 +290,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.scrap = s;
 
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
-            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_menu_camera));
+            icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_menu_gallery));
             tags.setText(this.scrap.getFormattedTagString(true, true));
 
             // Load a smaller bitmap so that it doesn't crap itself

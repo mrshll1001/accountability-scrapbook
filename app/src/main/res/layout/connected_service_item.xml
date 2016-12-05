@@ -10,13 +10,21 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_link_symbol"/>
 
-    <TextView
+    <ImageView
+        android:id="@+id/connected_service_item_key_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/connected_service_item_icon"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:layout_toRightOf="@+id/connected_service_item_key_icon"
         android:layout_marginLeft="10dp"
         android:id="@+id/connected_service_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:textColor="@color/colorLinkBlue"/>
+        android:textColor="@color/colorLinkBlue"
+        />
 
 </RelativeLayout>

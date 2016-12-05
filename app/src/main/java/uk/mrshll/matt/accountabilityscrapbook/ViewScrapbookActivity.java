@@ -78,7 +78,7 @@ public class ViewScrapbookActivity extends AppCompatActivity
                 recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
 //                adapter.notifyDataSetChanged();
 
-                Snackbar snackbar = Snackbar.make(recycler, String.format("Removed %s from Scrapbook", deletedScrap.getName()), Snackbar.LENGTH_LONG)
+                Snackbar snackbar = Snackbar.make(recycler, R.string.snackbar_removed_item, Snackbar.LENGTH_INDEFINITE)
                         .setAction("UNDO", new View.OnClickListener()
                         {
                             @Override
