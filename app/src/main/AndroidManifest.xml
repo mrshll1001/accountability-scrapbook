@@ -76,7 +76,7 @@
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ManageConnectedServicesActivity"
-            android:label="Manage Connected Services"
+            android:label="Manage Sharing Services"
             android:parentActivityName=".MainActivity"/>
 
         <activity android:name=".EmailAccountsActivity"

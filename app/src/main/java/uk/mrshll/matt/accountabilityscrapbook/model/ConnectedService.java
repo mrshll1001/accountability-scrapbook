@@ -11,6 +11,7 @@ public class ConnectedService extends RealmObject
 {
     @PrimaryKey
     String endpointUrl;
+    String apiKey;
 
     public String getEndpointUrl() {
         return endpointUrl;
@@ -18,5 +19,13 @@ public class ConnectedService extends RealmObject
 
     public void setEndpointUrl(String endpointUrl) {
         this.endpointUrl = endpointUrl;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
