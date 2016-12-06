@@ -83,6 +83,7 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                             scrap.setQuoteText(quoteText.getText().toString());
                             scrap.setQuoteSource(quoteSource.getText().toString());
                             scrap.setType(Scrap.TYPE_QUOTE);
+                            scrap.setAttachedScrapbooks(0);
 
                             // Add the tags
                             // Add the tags
@@ -111,6 +112,8 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
                                 result.getScrapList().add(scrap);
+                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
+
 
                             }
 

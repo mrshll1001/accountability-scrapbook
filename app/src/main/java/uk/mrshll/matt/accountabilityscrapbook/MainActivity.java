@@ -178,32 +178,39 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_add_photo) {
+        if (id == R.id.nav_add_photo)
+        {
             // Start the create photo scrap
             Intent intent = new Intent(MainActivity.this, AddPhotoscrapActivity.class);
             startActivityForResult(intent, CREATE_PHOTO_REQUEST);
 
-        } else if (id == R.id.nav_add_spend) {
-
-
+        } else if (id == R.id.nav_add_spend)
+        {
             // Start the create spend scrap
             Intent intent =  new Intent(MainActivity.this, AddSpendscrapActivity.class);
             startActivityForResult(intent, CREATE_SPEND_REQUEST);
 
-        } else if (id == R.id.nav_quote) {
+        } else if (id == R.id.nav_quote)
+        {
             // Start the create quote scrap
             Intent intent  = new Intent(MainActivity.this, AddQuotescrapActivity.class);
             startActivityForResult(intent, CREATE_QUOTE_REQUEST);
 
-        } else if (id == R.id.nav_event) {
+        } else if (id == R.id.nav_event)
+        {
             Intent intent = new Intent(MainActivity.this, AddEventscrapActivity.class);
             startActivityForResult(intent, CREATE_EVENT_REQUEST);
 
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.nav_share)
+        {
+            // TODO
         } else if (id == R.id.nav_generate)
         {
             Intent intent = new Intent(MainActivity.this, EmailAccountsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_archive)
+        {
+            Intent intent = new Intent(MainActivity.this, ArchiveActivity.class);
             startActivity(intent);
         }
 

@@ -139,6 +139,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                             scrap.setPlaceAddress(placeAddress);
                             scrap.setPlaceName(placeName);
                             scrap.setPlaceLatLng(placeLatLong.toString());
+                            scrap.setAttachedScrapbooks(0); // This is important so it has an initial value
 
                             // Sort the tags
                             String[] tokens = tags.getText().toString().split(" ");
@@ -166,6 +167,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
                                 result.getScrapList().add(scrap);
+                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
 
 
                             }

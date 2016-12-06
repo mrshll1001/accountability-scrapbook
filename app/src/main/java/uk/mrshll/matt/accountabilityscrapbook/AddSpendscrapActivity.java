@@ -96,6 +96,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateOfSpend);
                             scrap.setType(Scrap.TYPE_SPEND);
+                            scrap.setAttachedScrapbooks(0);
 
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
@@ -123,7 +124,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
                                 result.getScrapList().add(scrap);
-
+                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
 
                             }
 

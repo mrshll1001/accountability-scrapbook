@@ -31,6 +31,9 @@ public class Scrap extends RealmObject
     private RealmList<Tag> inheritedTags;   // Tags inherited from parent scrapbooks
     private RealmList<Tag> customTags;      // Tags individual to the Scrap
 
+    // Number of Scrapbooks
+    private int attachedScrapbooks;         // Maintain a number of Scrapbooks it's affiliated with in order to make orphan detection easy
+
     // Independent fields
     private String name;                    // Name of the item
 
@@ -140,6 +143,14 @@ public class Scrap extends RealmObject
 
     public void setPlaceAddress(String placeAddress) {
         this.placeAddress = placeAddress;
+    }
+
+    public int getAttachedScrapbooks() {
+        return attachedScrapbooks;
+    }
+
+    public void setAttachedScrapbooks(int attachedScrapbooks) {
+        this.attachedScrapbooks = attachedScrapbooks;
     }
 
     /**

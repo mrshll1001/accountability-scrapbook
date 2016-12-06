@@ -41,7 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".CreateScrapbookActivity"
+        <activity
+            android:name=".CreateScrapbookActivity"
             android:parentActivityName=".MainActivity"/>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -78,12 +79,13 @@
             android:name=".ManageConnectedServicesActivity"
             android:label="Manage Sharing Services"
             android:parentActivityName=".MainActivity"/>
-
-        <activity android:name=".EmailAccountsActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="Generate a Budget Report"/>
-
-
+        <activity
+            android:name=".EmailAccountsActivity"
+            android:label="Generate a Budget Report"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ArchiveActivity"
+                  android:label="Archive"
+                  android:parentActivityName=".MainActivity" />
 
     </application>
 

@@ -111,8 +111,9 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateGiven);
                             scrap.setType(Scrap.TYPE_PHOTO);
-//                            scrap.setPhotoUri(photoURI.toString());
                             scrap.setPhotoUri(photoURI.toString());
+                            scrap.setAttachedScrapbooks(0); // Initialise
+
                             // Add the tags
                             String[] tokens = tags.getText().toString().split(" ");
                             for (String t : tokens)
@@ -139,6 +140,8 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                                 scrap.getInheritedTags().addAll(result.getTagList());
 
                                 result.getScrapList().add(scrap);
+                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
+
                             }
 
                         }

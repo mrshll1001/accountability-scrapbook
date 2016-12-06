@@ -23,8 +23,8 @@
     <string name="manage_services_add_button">Add</string>
     <string name="manage_services_api_key_hint">If you have an API Key for this service, paste it here</string>
     <string name="manage_services_url_prefix">http://</string>
-    
-    
+
+
     <!-- Options for the spinner in ViewScrapbook to filter items -->
     <string name="scrapbook_filter_prompt">What type of item to show?</string>
     <string-array name="scrapbook_filters_arrays">
@@ -123,8 +123,10 @@
     <string name="button_share_accounts">Share</string>
     <string name="button_choose_photo">Choose Image</string>
     <string name="button_pick_place">Pick a Place</string>
-    
+
     <!-- On-screen instructions for email accounts etc -->
     <string name="email_accounts_text">This screen allows you to generate records for use in your budget software. Select your Scrapbooks below, and hit the button. This will go through each scrapbook, find all the spends, and then generate a CSV file which you can then share via services such as email or Dropbox. This file can be imported, or copied, to software such Libreoffice Calc, Microsoft Excel, or Sage Accounts (among others).</string>
 
+    <!--Activity: Archive-->
+    <string name="text_archive_introduction">This is the archive. When an item is no longer in any scrapbooks it is kept here in case you change your mind. Tap an item to choose some scrapbooks again, if you want.</string>
 </resources>
