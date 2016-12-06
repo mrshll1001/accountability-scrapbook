@@ -40,6 +40,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             super(v);
             this.context = c;
 
+
             this.scrapbookName = (TextView) v.findViewById(R.id.scrapbook_row_heading);
             this.scrapbookItemCount = (TextView) v.findViewById(R.id.scrapbook_row_itemcount);
             this.scrapbookSubtitle = (TextView) v.findViewById(R.id.scrapbook_row_subtitle);
