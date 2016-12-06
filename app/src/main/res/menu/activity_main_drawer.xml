@@ -21,6 +21,14 @@
             android:title="Add an Event" />
     </group>
 
+    <group>
+        <item
+            android:id="@+id/nav_archive"
+            android:icon="@drawable/ic_archive_black_24px"
+            android:title="Archive" />
+
+    </group>
+
     <item android:title="Communicate">
         <menu>
             <item

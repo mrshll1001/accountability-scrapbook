@@ -58,7 +58,7 @@ public class ConnectedServiceAdapter extends RecyclerView.Adapter<RecyclerView.V
         private ConnectedService item;
         private TextView itemName;
         private ImageView apiKeyIcon;
-        private TextView apiKey;
+
 
         public ConnectedServiceViewHolder(View v)
         {
@@ -66,13 +66,12 @@ public class ConnectedServiceAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             this.itemName = (TextView) v.findViewById(R.id.connected_service_item_text);
             this.apiKeyIcon = (ImageView) v.findViewById(R.id.connected_service_item_key_icon);
-            this.apiKey = (TextView) v.findViewById(R.id.connected_service_api_key);
         }
 
         public void bindItem(ConnectedService item)
         {
             itemName.setText(item.getEndpointUrl());
-            apiKey.setText(item.getApiKey());
+        
 
             if (item.getApiKey().length() <= 0)
             {
