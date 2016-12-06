@@ -203,7 +203,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share)
         {
-            // TODO
+            Intent intent = new Intent(MainActivity.this, ShareDataActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_generate)
         {
             Intent intent = new Intent(MainActivity.this, EmailAccountsActivity.class);

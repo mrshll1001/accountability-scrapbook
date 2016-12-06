@@ -127,6 +127,10 @@
     <!-- On-screen instructions for email accounts etc -->
     <string name="email_accounts_text">This screen allows you to generate records for use in your budget software. Select your Scrapbooks below, and hit the button. This will go through each scrapbook, find all the spends, and then generate a CSV file which you can then share via services such as email or Dropbox. This file can be imported, or copied, to software such Libreoffice Calc, Microsoft Excel, or Sage Accounts (among others).</string>
 
+
+    <!--Activity: Share-->
+    <string name="text_share_introduction">This screen allows you to share your data with the services you\'ve added. Select your Scrapbooks, then use the buttons to share to whichever services you wish. This will then share all of the data to that service.</string>
+
     <!--Activity: Archive-->
     <string name="text_archive_introduction">This is the archive. When an item is no longer in any scrapbooks it is kept here in case you change your mind. Tap an item to choose some scrapbooks again, if you want.</string>
 </resources>

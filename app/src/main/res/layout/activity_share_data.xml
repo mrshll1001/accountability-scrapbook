@@ -11,4 +11,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="uk.mrshll.matt.accountabilityscrapbook.ShareDataActivity">
 
+    <TextView
+        android:id="@+id/share_data_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_share_introduction"
+        />
+
+    <Button
+        android:id="@+id/share_data_scrapbooks_button"
+        android:layout_margin="10dp"
+        android:layout_below="@id/share_data_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_choose_scrapbooks"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/share_data_recycler"
+        android:layout_below="@+id/share_data_scrapbooks_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
