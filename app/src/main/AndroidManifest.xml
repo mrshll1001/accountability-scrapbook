@@ -83,10 +83,15 @@
             android:name=".EmailAccountsActivity"
             android:label="Generate a Budget Report"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".ArchiveActivity"
-                  android:label="Archive"
-                  android:parentActivityName=".MainActivity" />
-
+        <activity
+            android:name=".ArchiveActivity"
+            android:label="Archive"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".ShareDataActivity"
+            android:label="Share Data"
+            android:parentActivityName=".MainActivity"
+            />
     </application>
 
 </manifest>
