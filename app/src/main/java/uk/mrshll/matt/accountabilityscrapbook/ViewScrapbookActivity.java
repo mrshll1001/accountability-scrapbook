@@ -70,11 +70,14 @@ public class ViewScrapbookActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+
                 realm.beginTransaction();
                 final Scrap deletedScrap = scrapbook.getScrapList().get(viewHolder.getAdapterPosition());
                 scrapbook.getScrapList().remove(deletedScrap);
+                deletedScrap.setAttachedScrapbooks(deletedScrap.getAttachedScrapbooks() - 1);
                 realm.commitTransaction();
-//                 adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+
                 recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
 //                adapter.notifyDataSetChanged();
 
@@ -85,6 +88,7 @@ public class ViewScrapbookActivity extends AppCompatActivity
                             public void onClick(View view) {
                                 realm.beginTransaction();
                                 scrapbook.getScrapList().add(deletedScrap);
+                                deletedScrap.setAttachedScrapbooks(deletedScrap.getAttachedScrapbooks() + 1);
                                 realm.commitTransaction();
 
                                 recycler.setAdapter(new ScrapItemAdapter(ViewScrapbookActivity.this, scrapbook.getScrapList()));
