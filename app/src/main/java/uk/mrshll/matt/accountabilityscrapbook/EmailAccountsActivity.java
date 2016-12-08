@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import io.realm.Realm;
@@ -92,7 +93,7 @@ public class EmailAccountsActivity extends AppCompatActivity
      * Handles the write operations for the file
      * @param budgetFile
      * @throws IOException
-     * TODO Check for duplicates coming from multiple scrapbooks and remove them
+     *
      */
     private void writeCSVFile(File budgetFile) throws IOException
     {
@@ -101,19 +102,24 @@ public class EmailAccountsActivity extends AppCompatActivity
         LinkedList<String[]> lines = new LinkedList<>();
         lines.add(new String[]{"name", "value", "date"});
 
+        ArrayList<Scrap> scrapList = new ArrayList<>();
+
         for (String selectedScrapbookName : selectedScrapbooks)
         {
             // Get each scrapbook by querying for the name
             Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", selectedScrapbookName).findFirst();
 
-            // Get the list of spends and iterate through them, adding each as a line
+            // Get the list of spends and add all to the collection
             RealmList<Scrap> spends = scrapbook.getScrapListByType(Scrap.TYPE_SPEND);
-            for (Scrap s : spends)
-            {
-                String[] spendLine = {s.getName(), String.valueOf(s.getSpendValue()), s.getFormattedDateString(s.getDateGiven())};
-                lines.add(spendLine);
-            }
+            scrapList.addAll(spends);
+        }
 
+        // Convert the ArrayList (which may contain duplicates) to a HashSet to remove duplicates added from each scrapbook
+        HashSet<Scrap> scrapSet = Scrapbook.listsToSet(scrapList);
+        for (Scrap s : scrapSet)
+        {
+            String[] spendLine = {s.getName(), String.valueOf(s.getSpendValue()), s.getFormattedDateString(s.getDateGiven())};
+            lines.add(spendLine);
         }
 
         // Finally, write all lines out to a CSV file and close

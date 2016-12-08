@@ -2,6 +2,9 @@ package uk.mrshll.matt.accountabilityscrapbook.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -128,5 +131,14 @@ public class Scrapbook extends RealmObject
         }
 
         return list;
+    }
+
+    /**
+     * Takes an array of ScrapLists, then merges them into one, sorts, and removes duplicates
+     * @return
+     */
+    public static HashSet<Scrap> listsToSet(List<Scrap> list)
+    {
+        return new HashSet<>(list);
     }
 }
