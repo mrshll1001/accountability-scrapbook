@@ -62,6 +62,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // Check if using api key
         // If yes, add to post string
         // Transform fields into JSON (pics as a Byte array)
+        // Check if fields are null, before adding them, otherwise set them as null
         // Post (asynchronously)
 
     }
