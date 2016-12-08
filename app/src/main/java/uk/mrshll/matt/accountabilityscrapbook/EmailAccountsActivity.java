@@ -102,8 +102,8 @@ public class EmailAccountsActivity extends AppCompatActivity
         LinkedList<String[]> lines = new LinkedList<>();
         lines.add(new String[]{"name", "value", "date"});
 
+        // Compile a list of all the spendy-type scraps
         ArrayList<Scrap> scrapList = new ArrayList<>();
-
         for (String selectedScrapbookName : selectedScrapbooks)
         {
             // Get each scrapbook by querying for the name
@@ -116,6 +116,8 @@ public class EmailAccountsActivity extends AppCompatActivity
 
         // Convert the ArrayList (which may contain duplicates) to a HashSet to remove duplicates added from each scrapbook
         HashSet<Scrap> scrapSet = Scrapbook.listsToSet(scrapList);
+
+        // Write everything in the set to the writer
         for (Scrap s : scrapSet)
         {
             String[] spendLine = {s.getName(), String.valueOf(s.getSpendValue()), s.getFormattedDateString(s.getDateGiven())};
