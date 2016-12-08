@@ -134,7 +134,7 @@ public class Scrapbook extends RealmObject
     }
 
     /**
-     * Takes an array of ScrapLists, then merges them into one, sorts, and removes duplicates
+     * Removes duplicates
      * @return
      */
     public static HashSet<Scrap> listsToSet(List<Scrap> list)

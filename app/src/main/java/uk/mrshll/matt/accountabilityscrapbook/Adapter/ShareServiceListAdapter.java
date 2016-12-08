@@ -7,14 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import io.realm.RealmResults;
-import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.R;
-import uk.mrshll.matt.accountabilityscrapbook.ShareDataActivity;
+import uk.mrshll.matt.accountabilityscrapbook.RecyclerViewItemClickListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.ConnectedService;
 
 /**
@@ -26,11 +22,13 @@ public class ShareServiceListAdapter extends RecyclerView.Adapter<RecyclerView.V
 {
     private RealmResults<ConnectedService> data;
     private Context context;
+    private RecyclerViewItemClickListener itemListener;
 
-    public ShareServiceListAdapter(Context c, RealmResults<ConnectedService> data)
+    public ShareServiceListAdapter(Context c, RealmResults<ConnectedService> data, RecyclerViewItemClickListener listener)
     {
         this.data = data;
-        this.context = context;
+        this.context = c;
+        this.itemListener = listener;
     }
 
     @Override
@@ -72,14 +70,11 @@ public class ShareServiceListAdapter extends RecyclerView.Adapter<RecyclerView.V
         {
             this.service = item;
             url.setText(item.getEndpointUrl());
-
             shareButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view) {
-
-                    // Can do a thing here
-
+                    itemListener.recyclerViewListClicked(view, getLayoutPosition());
                 }
             });
 
