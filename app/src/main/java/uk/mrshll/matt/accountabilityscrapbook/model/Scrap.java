@@ -186,7 +186,7 @@ public class Scrap extends RealmObject
         StringBuilder builder = new StringBuilder();
         for (Tag t : tagList)
         {
-            builder.append(t.getTagName());
+            builder.append(t.getAsHashtag());
             if(tagList.indexOf(t) != tagList.size() - 1)
             {
                 builder.append(", ");

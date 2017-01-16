@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -80,6 +83,15 @@ public class MainActivity extends AppCompatActivity
 //        TRY TO INITIALISE REALM DATABASE
         realm = Realm.getDefaultInstance();
 
+        // Check to see if we have a device id in the preferences, if we don't then we generate one.
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!preferences.contains("device-id"))
+        {
+            String deviceID = generateRandomDeviceID();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("device-id", deviceID);
+            editor.apply();
+        }
 //        Check to see if we have scrapbooks. If we don't, then we start off by running the activity to create one
         RealmResults<Scrapbook> results = realm.where(Scrapbook.class).findAll();
 //        Toast.makeText(this, results.size(), Toast.LENGTH_SHORT).show();
@@ -102,6 +114,16 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
+
+    /**
+     * Generates the random device id for JSON transactions
+     * @return
+     */
+    private String generateRandomDeviceID()
+    {
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(130, random).toString(32);
     }
 
     @Override

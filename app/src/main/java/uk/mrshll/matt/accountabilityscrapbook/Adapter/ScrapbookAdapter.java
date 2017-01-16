@@ -69,7 +69,7 @@ public class ScrapbookAdapter extends RecyclerView.Adapter<ScrapbookAdapter.View
             StringBuilder sb = new StringBuilder();
             for (Tag t:s.getTagList())
             {
-                sb.append(t.getTagName());
+                sb.append(t.getAsHashtag());
                 if(s.getTagList().indexOf(t) != s.getTagList().size() -1)
                 {
                     sb.append(", ");

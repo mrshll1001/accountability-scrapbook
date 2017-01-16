@@ -91,13 +91,13 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                             for (String t : tokens)
                             {
 
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", "#"+t).findFirst();
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", t).findFirst();
 
                                 if (tag == null)
                                 {
                                     Log.d("Add Quote:", "Found a null tag, attempting to add");
                                     // Create if not null
-                                    tag = realm.createObject(Tag.class, "#"+t);
+                                    tag = realm.createObject(Tag.class, t);
                                 }
 
                                 scrap.getCustomTags().add(tag);

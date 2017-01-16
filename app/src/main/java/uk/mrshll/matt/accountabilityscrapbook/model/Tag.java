@@ -22,6 +22,11 @@ public class Tag extends RealmObject
         return this.tagName;
     }
 
+    public String getAsHashtag()
+    {
+        return String.format("#%s", tagName);
+    }
+
     public void setTagName(String tagName)
     {
         this.tagName = tagName;
