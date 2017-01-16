@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -55,6 +56,16 @@ public class Scrap extends RealmObject
 
     public RealmList<Tag> getCustomTags() {
         return customTags;
+    }
+
+    public HashSet<Tag> getAllUniqueTags()
+    {
+        HashSet<Tag> tagSet = new HashSet<>();
+
+        tagSet.addAll(getInheritedTags());
+        tagSet.addAll(getCustomTags());
+
+        return tagSet;
     }
 
     public Date getDateCreated() {
