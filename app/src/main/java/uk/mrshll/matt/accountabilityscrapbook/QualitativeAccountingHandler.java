@@ -1,9 +1,11 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Base64;
 
 import org.json.*;
@@ -22,9 +24,12 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 public class QualitativeAccountingHandler
 {
     Context context;
+    SharedPreferences preferences;
     public QualitativeAccountingHandler(Context c)
     {
         this.context = c;
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
     }
 
     /**
@@ -40,8 +45,11 @@ public class QualitativeAccountingHandler
 
         try // Fill out the scheme with information from the fields
         {
-            //TODO Find some way to generate the ID properly!!!
-            jsonScrap.put("id", null);
+            //Id
+            String id = generateItemIDString(s);
+            jsonScrap.put("id", id);
+
+            // Dates
             jsonScrap.put("date_created", s.getDateCreated());
             jsonScrap.put("date_given", s.getDateGiven());
 
@@ -127,6 +135,19 @@ public class QualitativeAccountingHandler
 
         return byteString;
 
+    }
+
+    /**
+     * Generates the id field for the QA data standard, from the preferences and the Scrap's date.
+     * Implemented for cleanliness
+     * @param s
+     * @return
+     */
+    private String generateItemIDString(Scrap s)
+    {
+        String dateString = s.getDateCreatedAsTransactionID();
+
+        return String.format(context.getString(R.string.qualitative_accounting_id_format), preferences.getString("device-id", "n/a"), dateString);
     }
 
 

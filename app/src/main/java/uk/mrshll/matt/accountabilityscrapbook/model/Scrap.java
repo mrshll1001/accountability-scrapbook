@@ -165,6 +165,15 @@ public class Scrap extends RealmObject
     }
 
     /**
+     * Returns a datetime in the format yyyy-mm-dd-hhmm, used for transaction ids
+     * @return
+     */
+    public String getDateCreatedAsTransactionID()
+    {
+        return String.format("%d-%d-%d-%d%d", dateCreated.getYear(), dateCreated.getMonth()+1, dateCreated.getDate(), dateCreated.getHours(), dateCreated.getMinutes());
+    }
+
+    /**
      * Returns a formatted string comprised of all tags
      * @return
      */
