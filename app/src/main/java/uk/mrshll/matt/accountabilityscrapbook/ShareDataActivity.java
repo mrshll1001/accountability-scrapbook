@@ -9,12 +9,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ShareServiceListAdapter;
+import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostScrapParams;
+import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostScrapTask;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.ConnectedService;
+import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 
 public class ShareDataActivity extends AppCompatActivity implements RecyclerViewItemClickListener
@@ -52,18 +56,42 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // TODO Make post requests to the service listed for each item (asynchronously), over https
 
         // Retrieve scrapbooks from list of selectedScrapbooks
+        if(!selectedScrapbooks.isEmpty())
+        {
+            // Set up a HashSet to add scraps to, removing duplicates as we go
+            HashSet<Scrap> scrapSet = new HashSet<>();
 
-        // Query for scrapbooks
-        // Get all scraps
-        // Merge the fuckers
-        // Turn merged list into a hashset to remove duplicates
+            // Iterate over the selected scrapbooks
+            for (String selectedScrapbookName : selectedScrapbooks)
+            {
+                // Query for the scrapbook
+                Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", selectedScrapbookName).findFirst();
+                // Add all scraps to the hashset (which removes duplicates)
+                scrapSet.addAll(scrapbook.getScrapList());
+            }
 
-        // For each item in set
-        // Check if using api key
-        // If yes, add to post string
-        // Transform fields into JSON (pics as a Byte array)
-        // Check if fields are null, before adding them, otherwise set them as null
-        // Post (asynchronously)
+            // Now scrapSet contains all unique scraps that belong to those scrapbooks.
+                    // Create an Async task to handle sharing so the UI thread doesn't crash.
+
+             PostScrapParams params = new PostScrapParams(this, service.getEndpointUrl(), scrapSet);
+            new PostScrapTask().execute(params);
+
+                    // Convert a scrap to JSON
+                    // Make a HTTP Post Request to the service url
+                    // Check if using api key
+                    // If yes, add to post string
+                    // Transform fields into JSON (pics as a Byte array)
+                    // Check if fields are null, before adding them, otherwise set them as null
+                    // Post (asynchronously)
+
+
+        } else
+        {
+            Toast.makeText(this, "Please select some Scrapbooks", Toast.LENGTH_SHORT).show();
+
+        }
+
+
 
     }
 }

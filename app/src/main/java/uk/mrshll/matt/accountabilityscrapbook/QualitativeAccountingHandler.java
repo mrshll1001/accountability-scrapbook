@@ -88,14 +88,21 @@ public class QualitativeAccountingHandler
             }
 
             // Location
-            JSONObject jsonLocation = new JSONObject();
-            jsonLocation.put("name", s.getPlaceName());
-            jsonLocation.put("address", s.getPlaceAddress());
-            String placeLatLong = s.getPlaceLatLng();
-            String[] latLongSplit = placeLatLong.split(" ");
-            jsonLocation.put("latitude", latLongSplit[0]);
-            jsonLocation.put("longitude", latLongSplit[1]);
-            jsonScrap.put("location", jsonLocation);
+            if(s.getPlaceLatLng() != null)
+            {
+                JSONObject jsonLocation = new JSONObject();
+                jsonLocation.put("name", s.getPlaceName());
+                jsonLocation.put("address", s.getPlaceAddress());
+                String placeLatLong = s.getPlaceLatLng();
+                String[] latLongSplit = placeLatLong.split(" ");
+                jsonLocation.put("latitude", latLongSplit[0]);
+                jsonLocation.put("longitude", latLongSplit[1]);
+                jsonScrap.put("location", jsonLocation);
+            } else
+            {
+                jsonScrap.put("location", null);
+            }
+
 
             // Description
             jsonScrap.put("description", s.getName());
