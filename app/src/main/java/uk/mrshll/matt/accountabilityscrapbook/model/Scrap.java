@@ -1,5 +1,8 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -163,6 +166,7 @@ public class Scrap extends RealmObject
     public void setAttachedScrapbooks(int attachedScrapbooks) {
         this.attachedScrapbooks = attachedScrapbooks;
     }
+
 
     /**
      * Returns a datetime in the format yyyy-mm-dd-hhmm, used for transaction ids

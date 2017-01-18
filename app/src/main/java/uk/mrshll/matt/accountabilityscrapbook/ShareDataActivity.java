@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,10 +13,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ShareServiceListAdapter;
-import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostScrapParams;
-import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostScrapTask;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.ConnectedService;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
@@ -27,6 +27,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
     private RealmResults<ConnectedService> results;
+    private ArrayList<String> jsonData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,6 +38,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // Set up
         this.realm = realm.getDefaultInstance();
         this.selectedScrapbooks = new ArrayList<>();
+        this.jsonData = new ArrayList<String>();
 
         Button scrapbooksButton = (Button) findViewById(R.id.share_data_scrapbooks_button);
         scrapbooksButton.setOnClickListener(new FetchScrapbookDialogListener(this, realm, selectedScrapbooks));
@@ -58,31 +60,37 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // Retrieve scrapbooks from list of selectedScrapbooks
         if(!selectedScrapbooks.isEmpty())
         {
-            // Set up a HashSet to add scraps to, removing duplicates as we go
-            HashSet<Scrap> scrapSet = new HashSet<>();
+            // Query for the scrapbooks
+            RealmQuery<Scrapbook> query = realm.where(Scrapbook.class);
 
-            // Iterate over the selected scrapbooks
-            for (String selectedScrapbookName : selectedScrapbooks)
+            for(String s : selectedScrapbooks)
             {
-                // Query for the scrapbook
-                Scrapbook scrapbook = realm.where(Scrapbook.class).equalTo("name", selectedScrapbookName).findFirst();
-                // Add all scraps to the hashset (which removes duplicates)
-                scrapSet.addAll(scrapbook.getScrapList());
+                query.equalTo("name", s);
             }
 
-            // Now scrapSet contains all unique scraps that belong to those scrapbooks.
-                    // Create an Async task to handle sharing so the UI thread doesn't crash.
+            RealmResults<Scrapbook> results = query.findAll();
 
-             PostScrapParams params = new PostScrapParams(this, service.getEndpointUrl(), scrapSet);
-            new PostScrapTask().execute(params);
+            // Add all to the HashSet
+            HashSet<Scrap> scrapHashSet = new HashSet<>();
+            for(Scrapbook s : results)
+            {
+                scrapHashSet.addAll(s.getScrapList());
+            }
 
-                    // Convert a scrap to JSON
-                    // Make a HTTP Post Request to the service url
-                    // Check if using api key
-                    // If yes, add to post string
-                    // Transform fields into JSON (pics as a Byte array)
-                    // Check if fields are null, before adding them, otherwise set them as null
-                    // Post (asynchronously)
+            // Convert to JSON (should be relatively quick)
+            ArrayList<String> jsonData = new ArrayList<>();
+            String deviceID = PreferenceManager.getDefaultSharedPreferences(this).getString("device-id", "n/a");
+            String format = getResources().getString(R.string.qualitative_accounting_id_format);
+
+            for (Scrap s : scrapHashSet)
+            {
+                String id = String.format(format, deviceID, s.getDateCreatedAsTransactionID());
+                QualitativeAccountingHandler qa = new QualitativeAccountingHandler(id);
+                jsonData.add(qa.scrapToJSON(s));
+
+            }
+
+
 
 
         } else
@@ -94,4 +102,5 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 
 
     }
+
 }

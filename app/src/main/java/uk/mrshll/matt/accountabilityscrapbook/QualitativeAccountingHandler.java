@@ -10,8 +10,15 @@ import android.util.Base64;
 
 import org.json.*;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
@@ -23,13 +30,11 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class QualitativeAccountingHandler
 {
-    Context context;
-    SharedPreferences preferences;
-    public QualitativeAccountingHandler(Context c)
-    {
-        this.context = c;
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    private String idPrefix;
 
+    public QualitativeAccountingHandler(String id)
+    {
+        this.idPrefix = id;
     }
 
     /**
@@ -46,8 +51,7 @@ public class QualitativeAccountingHandler
         try // Fill out the scheme with information from the fields
         {
             //Id
-            String id = generateItemIDString(s);
-            jsonScrap.put("id", id);
+            jsonScrap.put("id", idPrefix);
 
             // Dates
             jsonScrap.put("date_created", s.getDateCreated());
@@ -76,15 +80,10 @@ public class QualitativeAccountingHandler
             // Media
             if (s.getPhotoUri() != null)
             {
-                JSONObject jsonMedia = new JSONObject();
-                jsonMedia.put("raw_data", getByteStringFromImage(s.getPhotoUri()));
-                jsonMedia.put("raw_data_format", "jpeg");
-                jsonMedia.put("uri", null);
-
-                jsonScrap.put("media", jsonMedia);
+                jsonScrap.put("media", getImageFileHash(s.getPhotoUri()));
             } else
             {
-                jsonScrap.put("media", null);
+                jsonScrap.put("media", "");
             }
 
             // Location
@@ -117,45 +116,64 @@ public class QualitativeAccountingHandler
     }
 
     /**
-     * Take a Photo URI and converts it to a Base64 encoded string for JSON transmission
-     * @param photoURI
+     * Returns a SHA-1 hash of the image file if present
      * @return
      */
-    private String getByteStringFromImage(String photoURI)
+    private String getImageFileHash(String photoUri)
     {
-        String byteString = "";
-
-        try
+        if(photoUri != null)
         {
-            Bitmap bm = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(Uri.parse(photoURI)));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try
+            {
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                byte[] buffer = new byte[65536];
 
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] byteArray = baos.toByteArray();
+                InputStream fis = new FileInputStream(Uri.parse(photoUri).getPath());
+                int n = 0;
 
-            byteString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                while(n != -1)
+                {
+                    n = fis.read(buffer);
+                    if (n > 0)
+                    {
+                        digest.update(buffer, 0, n);
+                    }
+                }
+                byte[] digestResult = digest.digest();
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < digestResult.length; i++)
+                {
+                    sb.append(Integer.toString((digestResult[i] & 0xff) + 0x100, 16).substring(1));
+                }
+                return sb.toString();
 
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
+
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
-        return byteString;
+        return null;
 
     }
 
-    /**
-     * Generates the id field for the QA data standard, from the preferences and the Scrap's date.
-     * Implemented for cleanliness
-     * @param s
-     * @return
-     */
-    private String generateItemIDString(Scrap s)
-    {
-        String dateString = s.getDateCreatedAsTransactionID();
-
-        return String.format(context.getString(R.string.qualitative_accounting_id_format), preferences.getString("device-id", "n/a"), dateString);
-    }
+//    /**
+//     * Generates the id field for the QA data standard, from the preferences and the Scrap's date.
+//     * Implemented for cleanliness
+//     * @param s
+//     * @return
+//     */
+//    private String generateItemIDString(Scrap s)
+//    {
+//        String dateString = s.getDateCreatedAsTransactionID();
+//
+//        return String.format(context.getString(R.string.qualitative_accounting_id_format), this.deviceId, dateString);
+//    }
 
 
 }
