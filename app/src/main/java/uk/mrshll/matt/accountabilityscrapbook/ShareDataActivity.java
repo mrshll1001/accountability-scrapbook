@@ -16,6 +16,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ShareServiceListAdapter;
+import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostJSONToWebTask;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.ConnectedService;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
@@ -88,6 +89,12 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
                 QualitativeAccountingHandler qa = new QualitativeAccountingHandler(id);
                 jsonData.add(qa.scrapToJSON(s));
 
+            }
+
+            // Now fire off a bunch of tasks to send to the web
+            for (String s : jsonData)
+            {
+                new PostJSONToWebTask(service.getEndpointUrl()).execute(s);
             }
 
 
