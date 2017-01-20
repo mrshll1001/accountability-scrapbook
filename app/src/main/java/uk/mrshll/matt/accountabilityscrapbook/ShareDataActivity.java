@@ -1,5 +1,8 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,6 +20,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ShareServiceListAdapter;
+import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostImageToWebTask;
 import uk.mrshll.matt.accountabilityscrapbook.AsyncTask.PostJSONToWebTask;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.model.ConnectedService;
@@ -95,6 +100,20 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
             for (String s : jsonData)
             {
                 new PostJSONToWebTask(service.getEndpointUrl()).execute(s);
+            }
+
+            for (Scrap s: scrapHashSet)
+            {
+                if (s.getType() == Scrap.TYPE_PHOTO)
+                {
+                    try {
+                        Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(s.getPhotoUri())));
+                        new PostImageToWebTask(service.getEndpointUrl()).execute(image);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
 
 
