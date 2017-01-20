@@ -2,6 +2,7 @@ package uk.mrshll.matt.accountabilityscrapbook.AsyncTask;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +26,8 @@ public class PostImageToWebTask extends AsyncTask<Bitmap, Integer, Boolean>
     @Override
     protected Boolean doInBackground(Bitmap... bitmaps)
     {
+        Log.d("Post Image to Web", "Started task");
+
         // Treat the String as the file path
         for (Bitmap b : bitmaps)
         {
@@ -39,6 +42,8 @@ public class PostImageToWebTask extends AsyncTask<Bitmap, Integer, Boolean>
                 OutputStream output = connection.getOutputStream();
                 b.compress(Bitmap.CompressFormat.JPEG, 100, output);
                 output.close();
+
+                Log.d("Post Image to Web", "Seems to have worked");
 
 
 

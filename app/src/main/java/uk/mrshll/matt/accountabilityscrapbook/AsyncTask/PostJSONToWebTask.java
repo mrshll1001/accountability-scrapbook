@@ -24,6 +24,8 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
     protected Boolean doInBackground(String... strings) {
 
         // Should really only be one, but still.
+        Log.d("PostToWeb", "Started Job");
+
         for(String s : strings)
         {
             try
