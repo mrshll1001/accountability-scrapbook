@@ -3,7 +3,10 @@ package uk.mrshll.matt.accountabilityscrapbook.AsyncTask;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -14,10 +17,13 @@ import java.net.URL;
 public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
 {
     private String urlString;
+    private String tokenString;
 
-    public PostJSONToWebTask(String urlString)
+    public PostJSONToWebTask(String urlString, String tokenString)
     {
         this.urlString = urlString;
+        this.tokenString = tokenString;
+
     }
 
     @Override
@@ -40,11 +46,18 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
 
+                // Set the output stuff
+                OutputStream os = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+                writer.write(String.format("token=%s&data=%s", this.tokenString, s));
+                writer.flush();
+                writer.close();
+                os.close();
+
                 // Connect
                 connection.connect();
 
-                // Write the bytes of the JSON data
-                connection.getOutputStream().write(s.getBytes());
 
                 //TODO parse input
                 Log.d("PostToWeb", "Seems to have worked!");

@@ -28,4 +28,22 @@ public class ConnectedService extends RealmObject
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
+
+    /**
+     * Returns the url with the qa-data endpoint
+     * @return
+     */
+    public String getQADataEndpoint()
+    {
+        return String.format("%s/qa-data", this.endpointUrl);
+    }
+
+    /**
+     * Returns the url formatted with the qa-media endpoint
+     * @return
+     */
+    public String getQAMediaEndpoint()
+    {
+        return String.format("%s/qa-media", this.endpointUrl);
+    }
 }

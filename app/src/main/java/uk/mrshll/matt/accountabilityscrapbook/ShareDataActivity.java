@@ -99,7 +99,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
             // Now fire off a bunch of tasks to send to the web
             for (String s : jsonData)
             {
-                new PostJSONToWebTask(service.getEndpointUrl()).execute(s);
+                new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey()).execute(s);
             }
 
             for (Scrap s: scrapHashSet)

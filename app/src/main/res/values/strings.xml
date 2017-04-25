@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Contextual Accounts</string>
+    <string name="app_name">Accounting Scrapbook</string>
+    <string name="app_website">openlab.ncl.ac.uk/accounting-scrapbook</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
