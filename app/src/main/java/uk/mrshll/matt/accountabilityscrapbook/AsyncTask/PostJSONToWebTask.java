@@ -1,14 +1,21 @@
 package uk.mrshll.matt.accountabilityscrapbook.AsyncTask;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
-import java.io.BufferedWriter;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import uk.mrshll.matt.accountabilityscrapbook.Listener.AsyncResponse;
 
 /**
  * Created by marshall on 18/01/17.
@@ -18,16 +25,22 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
 {
     private String urlString;
     private String tokenString;
+    private AsyncResponse callback;
 
-    public PostJSONToWebTask(String urlString, String tokenString)
+    public PostJSONToWebTask(String urlString, String tokenString, AsyncResponse callback)
     {
         this.urlString = urlString;
         this.tokenString = tokenString;
+    }
 
+    protected void onPostExecute(String result)
+    {
+        callback.processFinish(result);
     }
 
     @Override
-    protected Boolean doInBackground(String... strings) {
+    protected Boolean doInBackground(String... strings)
+    {
 
         // Should really only be one, but still.
         Log.d("PostToWeb", "Started Job");
@@ -36,31 +49,24 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
         {
             try
             {
-                // Try open a connection
-                HttpURLConnection connection = (HttpURLConnection) new URL(urlString).openConnection();
-
-                // Set Request method
+                URL url = new URL("https://rosemary-accounts.co.uk/qa-data");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(15000);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
 
-                // Set do Output and Input to true. So we can write and then read a response
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
 
-                // Set the output stuff
-                OutputStream os = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-
-                writer.write(String.format("token=%s&data=%s", this.tokenString, s));
-                writer.flush();
-                writer.close();
-                os.close();
-
-                // Connect
-                connection.connect();
-
+                Log.d("PostToWeb", "Sending data: \n" + s);
+                OutputStream out = connection.getOutputStream();
+                out.write(s.getBytes());
+                out.flush();
+                out.close();
+                int responseCode = connection.getResponseCode();
 
                 //TODO parse input
-                Log.d("PostToWeb", "Seems to have worked!");
+                Log.d("PostToWeb", "ResponseCode: " + responseCode+": "+connection.getResponseMessage());
 
                 // Close connection
                 connection.disconnect();
@@ -73,4 +79,5 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
 
         return true;
     }
+
 }

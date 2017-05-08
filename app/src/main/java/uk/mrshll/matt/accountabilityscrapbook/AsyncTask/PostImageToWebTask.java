@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -34,18 +35,21 @@ public class PostImageToWebTask extends AsyncTask<Bitmap, Integer, Boolean>
             try {
                 URL url = new URL(urlString);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setUseCaches(false);
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
-                connection.connect();
+                connection.setRequestProperty("Connection", "Keep-Alive");
+                connection.setRequestProperty("Content-Type", "multipart/form-data");
 
+                DataOutputStream req = new DataOutputStream(connection.getOutputStream());
                 OutputStream output = connection.getOutputStream();
                 b.compress(Bitmap.CompressFormat.JPEG, 100, output);
                 output.close();
 
+                connection.connect();
+
                 Log.d("Post Image to Web", "Seems to have worked");
-
-
 
 
             } catch (MalformedURLException e) {

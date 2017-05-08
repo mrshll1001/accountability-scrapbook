@@ -30,11 +30,12 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class QualitativeAccountingHandler
 {
-    private String idPrefix;
+    private String accessToken;
 
-    public QualitativeAccountingHandler(String id)
+    public QualitativeAccountingHandler(String accessToken)
     {
-        this.idPrefix = id;
+        this.accessToken = accessToken;
+
     }
 
     /**
@@ -44,14 +45,19 @@ public class QualitativeAccountingHandler
      */
     public String scrapToJSON(Scrap s)
     {
-        // Create the JSOn object
-        JSONObject jsonScrap = new JSONObject();
+
+
+        JSONObject payload = new JSONObject();
+
 
 
         try // Fill out the scheme with information from the fields
         {
-            //Id
-            jsonScrap.put("id", idPrefix);
+
+            payload.put("token", accessToken);
+
+            // Create the JSOn object
+            JSONObject jsonScrap = new JSONObject();
 
             // Dates
             jsonScrap.put("date_created", s.getDateCreated());
@@ -106,13 +112,18 @@ public class QualitativeAccountingHandler
             // Description
             jsonScrap.put("description", s.getName());
 
+            // And finish
+            payload.put("data", jsonScrap);
+
+
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
 
+        return payload.toString();
 
-        return jsonScrap.toString();
+
     }
 
     /**
