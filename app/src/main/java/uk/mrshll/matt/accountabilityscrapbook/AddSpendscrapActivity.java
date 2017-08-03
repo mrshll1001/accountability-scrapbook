@@ -80,7 +80,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
 
                     // All checks have passed -- now get the date fields
                     final Date dateCreated = new Date();
-                    final Date dateOfSpend = new Date(dateField.getYear(), dateField.getMonth(), dateField.getDayOfMonth());
+                    final Date dateOfSpend = new Date(dateField.getYear() - 1900, dateField.getMonth(), dateField.getDayOfMonth());
 
 
                     // Finally, execute the realm transaction
@@ -92,7 +92,7 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                             // Create the spendscrap
                             Scrap scrap = realm.createObject(Scrap.class);
                             scrap.setName(nameField.getText().toString());
-                            scrap.setSpendValue(Double.valueOf(valueField.getText().toString()));
+                            scrap.setSpendValue(0.00 - Double.valueOf(valueField.getText().toString()));
                             scrap.setDateCreated(dateCreated);
                             scrap.setDateGiven(dateOfSpend);
                             scrap.setType(Scrap.TYPE_SPEND);

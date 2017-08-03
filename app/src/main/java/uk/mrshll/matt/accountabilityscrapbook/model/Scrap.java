@@ -45,8 +45,8 @@ public class Scrap extends RealmObject
 
     private String quoteText;               // If item is a quote, this is its content
     private String quoteSource;             // If item is a quote, this its speaker/origin
-
-    private String placeLatLng;             // If item is an event, this is the address
+    private String placeLatitude;           // If item is an event, this is the address
+    private String placeLongitude;          // If item is an event, this is the address
     private String placeName;               // If item is an event, this is the address
     private String placeAddress;            // If item is an event, this is the address
 
@@ -127,13 +127,17 @@ public class Scrap extends RealmObject
         this.quoteSource = quoteSource;
     }
 
-    public String getPlaceLatLng() {
-        return placeLatLng;
+    public String getPlaceLatitude() {
+        return placeLatitude;
     }
 
-    public void setPlaceLatLng(String placeLatLng) {
-        this.placeLatLng = placeLatLng;
+    public void setPlaceLatitude(String latitude) {
+        this.placeLatitude = latitude;
     }
+
+    public String getPlaceLongitude() { return placeLongitude; }
+
+    public void setPlaceLongitude(String longitude) { this.placeLongitude = longitude;}
 
     public String getPlaceName() {
         return placeName;

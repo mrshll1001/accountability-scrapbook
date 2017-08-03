@@ -98,7 +98,7 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                 {
                     // Checks have passed. Get the dates
                     final Date dateCreated = new Date();
-                    final Date dateGiven = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
 
                     // Execute the realm transaction
                     realm.executeTransactionAsync(new Realm.Transaction()

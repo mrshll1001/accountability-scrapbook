@@ -6,6 +6,6 @@ package uk.mrshll.matt.accountabilityscrapbook.Listener;
 
 public interface AsyncResponse
 {
-    void processFinish(String output);
+    void processFinish(Boolean result);
 
 }

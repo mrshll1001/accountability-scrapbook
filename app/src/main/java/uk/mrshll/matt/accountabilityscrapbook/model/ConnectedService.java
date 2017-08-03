@@ -1,5 +1,6 @@
 package uk.mrshll.matt.accountabilityscrapbook.model;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,6 +13,7 @@ public class ConnectedService extends RealmObject
     @PrimaryKey
     String endpointUrl;
     String apiKey;
+    RealmList<Scrap> scrapLog;
 
     public String getEndpointUrl() {
         return endpointUrl;
@@ -28,6 +30,10 @@ public class ConnectedService extends RealmObject
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
+
+    public RealmList<Scrap> getScrapLog() {return  this.scrapLog;}
+
+    public void addScraptoScrapLog(Scrap s) { this.scrapLog.add(s); }
 
     /**
      * Returns the url with the qa-data endpoint

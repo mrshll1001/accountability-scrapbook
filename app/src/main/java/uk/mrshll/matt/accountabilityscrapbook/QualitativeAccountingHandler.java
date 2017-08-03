@@ -93,15 +93,13 @@ public class QualitativeAccountingHandler
             }
 
             // Location
-            if(s.getPlaceLatLng() != null)
+            if(s.getPlaceLatitude() != null && s.getPlaceLongitude() != null)
             {
                 JSONObject jsonLocation = new JSONObject();
                 jsonLocation.put("name", s.getPlaceName());
                 jsonLocation.put("address", s.getPlaceAddress());
-                String placeLatLong = s.getPlaceLatLng();
-                String[] latLongSplit = placeLatLong.split(" ");
-                jsonLocation.put("latitude", latLongSplit[0]);
-                jsonLocation.put("longitude", latLongSplit[1]);
+                jsonLocation.put("latitude", s.getPlaceLatitude());
+                jsonLocation.put("longitude", s.getPlaceLongitude());
                 jsonScrap.put("location", jsonLocation);
             } else
             {

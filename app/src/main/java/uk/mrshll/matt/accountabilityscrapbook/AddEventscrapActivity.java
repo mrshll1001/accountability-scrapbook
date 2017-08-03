@@ -122,7 +122,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                 {
                     // Checks have passed, get the date
                     final Date dateCreated = new Date();
-                    final Date dateGiven = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
 
                     // Let's get realming
                     realm.executeTransactionAsync(new Realm.Transaction()
@@ -138,7 +138,9 @@ public class AddEventscrapActivity extends AppCompatActivity {
                             scrap.setName(eventName.getText().toString());
                             scrap.setPlaceAddress(placeAddress);
                             scrap.setPlaceName(placeName);
-                            scrap.setPlaceLatLng(placeLatLong.toString());
+//                            scrap.setPlaceLatLng(placeLatLong.toString());
+                            scrap.setPlaceLatitude(String.valueOf(placeLatLong.latitude));
+                            scrap.setPlaceLongitude(String.valueOf(placeLatLong.longitude));
                             scrap.setAttachedScrapbooks(0); // This is important so it has an initial value
 
                             // Sort the tags

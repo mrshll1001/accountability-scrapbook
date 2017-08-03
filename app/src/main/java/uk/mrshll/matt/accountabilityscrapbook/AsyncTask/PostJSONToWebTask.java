@@ -31,11 +31,13 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
     {
         this.urlString = urlString;
         this.tokenString = tokenString;
+        this.callback = callback;
     }
 
-    protected void onPostExecute(String result)
+    @Override
+    protected void onPostExecute(Boolean result)
     {
-        callback.processFinish(result);
+        callback.processFinish(result );
     }
 
     @Override

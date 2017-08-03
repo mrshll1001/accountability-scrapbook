@@ -68,7 +68,7 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                     // Checks have passed. Get the dates
                     DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
                     final Date dateCreated = new Date();
-                    final Date dateGiven = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
 
                     // And now we realm
                     realm.executeTransactionAsync(new Realm.Transaction()

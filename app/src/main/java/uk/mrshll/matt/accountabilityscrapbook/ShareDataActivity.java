@@ -62,8 +62,6 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
     public void recyclerViewListClicked(View v, int position)
     {
         ConnectedService service = results.get(position);
-        // TODO Make post requests to the service listed for each item (asynchronously), over https
-
         // Retrieve scrapbooks from list of selectedScrapbooks
         if(!selectedScrapbooks.isEmpty())
         {
@@ -133,8 +131,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 
     }
 
-    @Override
-    public void processFinish(String output) {
+    public void processFinish(Boolean result) {
         Toast.makeText(this, "Async has finished", Toast.LENGTH_SHORT).show();
     }
 }
