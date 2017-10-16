@@ -1,23 +1,29 @@
 package uk.mrshll.matt.accountabilityscrapbook.AsyncTask;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+
 
 /**
  * Created by marshall on 20/01/17.
  */
 
-public class PostImageToWebTask extends AsyncTask<Bitmap, Integer, Boolean>
+public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
 {
     private String urlString;
+    private final OkHttpClient client = new OkHttpClient();
 
     public PostImageToWebTask(String url)
     {
@@ -25,38 +31,48 @@ public class PostImageToWebTask extends AsyncTask<Bitmap, Integer, Boolean>
     }
 
     @Override
-    protected Boolean doInBackground(Bitmap... bitmaps)
+    protected Boolean doInBackground(String... strings)
     {
         Log.d("Post Image to Web", "Started task");
 
         // Treat the String as the file path
-        for (Bitmap b : bitmaps)
+        for (String uri : strings)
         {
-            try {
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setUseCaches(false);
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Connection", "Keep-Alive");
-                connection.setRequestProperty("Content-Type", "multipart/form-data");
-
-                DataOutputStream req = new DataOutputStream(connection.getOutputStream());
-                OutputStream output = connection.getOutputStream();
-                b.compress(Bitmap.CompressFormat.JPEG, 100, output);
-                output.close();
-
-                connection.connect();
-
-                Log.d("Post Image to Web", "Seems to have worked");
+            Uri fileUri = Uri.parse(uri);
+            File file = new File(fileUri.getPath());
 
 
-            } catch (MalformedURLException e) {
+            // Make the body by building a multipart form and calling the image
+            RequestBody requestBody = null;
+            requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("media", uri, RequestBody.create(MediaType.parse("image/png"), file)).build();
+
+            Request request = new Request.Builder()
+                    .header("Client", "Accounting Scrapbook")
+                    .url("https://rosemary-accounts.co.uk/qa-media")
+                    .post(requestBody)
+                    .build();
+            try
+            {
+                Log.d("Post Image to Web", "Attempting to post file " + uri);
+                Response response = client.newCall(request).execute();
+                if (response.code() == 500)
+                {
+                    Log.d("HTTP 500", response.message());
+                }
+            } catch (IOException e)
+            {
+                Log.d("Post Image to web", "File posting failed");
+
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
             }
+            Log.d("Post Image to Web", "Seems to have worked");
+
+
+
+
         }
 
         return null;

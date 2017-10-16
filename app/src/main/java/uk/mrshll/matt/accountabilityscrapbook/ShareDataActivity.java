@@ -75,45 +75,32 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 
             RealmResults<Scrapbook> results = query.findAll();
 
-            // Add all to the HashSet
+            // Add all to the HashSet, to remove all duplicates
             HashSet<Scrap> scrapHashSet = new HashSet<>();
             for(Scrapbook s : results)
             {
                 scrapHashSet.addAll(s.getScrapList());
             }
 
-            // Convert to JSON (should be relatively quick)
-            ArrayList<String> jsonData = new ArrayList<>();
+            // Strings for the JSON conversion and the QA data standard
             String deviceID = PreferenceManager.getDefaultSharedPreferences(this).getString("device-id", "n/a");
             String format = getResources().getString(R.string.qualitative_accounting_id_format);
 
+//            Iterate over the set of Scraps, convert to JSON, post, and post any images.
             for (Scrap s : scrapHashSet)
             {
+                // Convert the Scrap to JSON
                 String id = String.format(format, deviceID, s.getDateCreatedAsTransactionID());
-                QualitativeAccountingHandler qa = new QualitativeAccountingHandler(service.getApiKey());
-                jsonData.add(qa.scrapToJSON(s));
+                QualitativeAccountingHandler qa = new QualitativeAccountingHandler(service.getQAMediaEndpoint(), service.getApiKey());
+                String jsonScrap = qa.scrapToJSON(s);
 
-            }
+                // Fire off a task to send this to the web
+                new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this).execute(jsonScrap);
 
-            // Now fire off a bunch of tasks to send to the web
-            for (String s : jsonData)
-            {
-//                Toast.makeText(this, "Posting " + s + " to " + service.getQADataEndpoint(), Toast.LENGTH_SHORT).show();
-                new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this).execute(s);
-            }
-
-            // Same here for the images
-            for (Scrap s: scrapHashSet)
-            {
+                // Check to see if we do an image posting, if so -- post it.
                 if (s.getType() == Scrap.TYPE_PHOTO)
                 {
-                    try {
-                        Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(s.getPhotoUri())));
-//                        TODO FIX THIS TO ALLOW POSTING IMG FILES TO API ENDPOINT
-//                        new PostImageToWebTask(service.getEndpointUrl()).execute(image);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    new PostImageToWebTask(service.getEndpointUrl()).execute(s.getPhotoUri());
 
                 }
             }
@@ -132,6 +119,6 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
     }
 
     public void processFinish(Boolean result) {
-        Toast.makeText(this, "Async has finished", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Everything has been shared!", Toast.LENGTH_SHORT).show();
     }
 }

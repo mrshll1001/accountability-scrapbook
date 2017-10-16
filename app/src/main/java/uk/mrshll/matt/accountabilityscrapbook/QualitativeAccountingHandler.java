@@ -30,10 +30,13 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
 public class QualitativeAccountingHandler
 {
+    private String endpointURL;
     private String accessToken;
 
-    public QualitativeAccountingHandler(String accessToken)
+
+    public QualitativeAccountingHandler(String endpointUrl, String accessToken)
     {
+        this.endpointURL = endpointUrl;
         this.accessToken = accessToken;
 
     }
@@ -86,7 +89,7 @@ public class QualitativeAccountingHandler
             // Media
             if (s.getPhotoUri() != null)
             {
-                jsonScrap.put("media", getImageFileHash(s.getPhotoUri()));
+                jsonScrap.put("media", this.endpointURL + '/' + getImageFileHash(s.getPhotoUri()));
             } else
             {
                 jsonScrap.put("media", "");
