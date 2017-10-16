@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -34,7 +36,9 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
     private RealmResults<ConnectedService> results;
-    private ArrayList<String> jsonData;
+
+    private HashMap<String, Scrap> jsonToScrapMap;
+    private HashMap<String, ConnectedService> jsonToServiceMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,7 +49,10 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // Set up
         this.realm = realm.getDefaultInstance();
         this.selectedScrapbooks = new ArrayList<>();
-        this.jsonData = new ArrayList<String>();
+
+        // Set up both maps
+        this.jsonToScrapMap = new HashMap<>();
+        this.jsonToServiceMap = new HashMap<>();
 
         Button scrapbooksButton = (Button) findViewById(R.id.share_data_scrapbooks_button);
         scrapbooksButton.setOnClickListener(new FetchScrapbookDialogListener(this, realm, selectedScrapbooks));
@@ -82,6 +89,17 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
                 scrapHashSet.addAll(s.getScrapList());
             }
 
+            Iterator<Scrap> itr = scrapHashSet.iterator();
+            while (itr.hasNext())
+            {
+                Scrap s = itr.next();
+                if (service.getScrapLog().contains(s))
+                {
+                    itr.remove();
+                }
+            }
+
+
             // Strings for the JSON conversion and the QA data standard
             String deviceID = PreferenceManager.getDefaultSharedPreferences(this).getString("device-id", "n/a");
             String format = getResources().getString(R.string.qualitative_accounting_id_format);
@@ -89,20 +107,30 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 //            Iterate over the set of Scraps, convert to JSON, post, and post any images.
             for (Scrap s : scrapHashSet)
             {
-                // Convert the Scrap to JSON
-                String id = String.format(format, deviceID, s.getDateCreatedAsTransactionID());
-                QualitativeAccountingHandler qa = new QualitativeAccountingHandler(service.getQAMediaEndpoint(), service.getApiKey());
-                String jsonScrap = qa.scrapToJSON(s);
-
-                // Fire off a task to send this to the web
-                new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this).execute(jsonScrap);
-
-                // Check to see if we do an image posting, if so -- post it.
-                if (s.getType() == Scrap.TYPE_PHOTO)
+                // Check we don't send duplicates
+                if (!service.getScrapLog().contains(s))
                 {
-                    new PostImageToWebTask(service.getEndpointUrl()).execute(s.getPhotoUri());
+                    // Convert the Scrap to JSON
+                    String id = String.format(format, deviceID, s.getDateCreatedAsTransactionID());
+                    QualitativeAccountingHandler qa = new QualitativeAccountingHandler(service.getQAMediaEndpoint(), service.getApiKey());
+                    String jsonScrap = qa.scrapToJSON(s);
 
+                    // Create entries in the map for use logging use later
+                    jsonToScrapMap.put(jsonScrap, s);
+                    jsonToServiceMap.put(jsonScrap, service);
+
+
+                    // Fire off a task to send this to the web
+                    new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this, jsonScrap).execute(jsonScrap);
+
+
+                    // Check to see if we do an image posting, if so -- post it.
+                    if (s.getType() == Scrap.TYPE_PHOTO)
+                    {
+                        new PostImageToWebTask(service.getEndpointUrl()).execute(s.getPhotoUri());
+                    }
                 }
+
             }
 
 
@@ -118,7 +146,25 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 
     }
 
-    public void processFinish(Boolean result) {
-        Toast.makeText(this, "Everything has been shared!", Toast.LENGTH_SHORT).show();
+    /**
+     * This executes after EACH scrap is shared
+     * @param result
+     */
+    public void processFinish(String result)
+    {
+        // Get the Scrap and the Connected service from the respective maps via the json
+        realm.beginTransaction();
+
+        Scrap scrap = jsonToScrapMap.get(result);
+        ConnectedService service = jsonToServiceMap.get(result);
+
+        // Associate them
+        service.addScraptoScrapLog(scrap);
+
+        realm.commitTransaction();
+
+
+
+        Toast.makeText(this, "Shared Item to Web", Toast.LENGTH_SHORT).show();
     }
 }

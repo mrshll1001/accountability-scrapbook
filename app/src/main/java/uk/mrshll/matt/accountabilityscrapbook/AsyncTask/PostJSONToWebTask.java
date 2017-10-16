@@ -21,27 +21,30 @@ import uk.mrshll.matt.accountabilityscrapbook.Listener.AsyncResponse;
  * Created by marshall on 18/01/17.
  */
 
-public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
+public class PostJSONToWebTask extends AsyncTask<String, Integer, String>
 {
     private String urlString;
     private String tokenString;
     private AsyncResponse callback;
 
-    public PostJSONToWebTask(String urlString, String tokenString, AsyncResponse callback)
+    private String jsonData;
+
+    public PostJSONToWebTask(String urlString, String tokenString, AsyncResponse callback, String jsonData)
     {
         this.urlString = urlString;
         this.tokenString = tokenString;
         this.callback = callback;
+        this.jsonData = jsonData;
     }
 
     @Override
-    protected void onPostExecute(Boolean result)
+    protected void onPostExecute(String result)
     {
-        callback.processFinish(result );
+        callback.processFinish(result);
     }
 
     @Override
-    protected Boolean doInBackground(String... strings)
+    protected String doInBackground(String... strings)
     {
 
         // Should really only be one, but still.
@@ -51,6 +54,7 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
         {
             try
             {
+                this.jsonData = s;
                 URL url = new URL("https://rosemary-accounts.co.uk/qa-data");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setReadTimeout(10000);
@@ -79,7 +83,7 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, Boolean>
             }
         }
 
-        return true;
+        return jsonData;
     }
 
 }
