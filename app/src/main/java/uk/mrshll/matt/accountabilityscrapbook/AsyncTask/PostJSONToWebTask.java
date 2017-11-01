@@ -55,7 +55,9 @@ public class PostJSONToWebTask extends AsyncTask<String, Integer, String>
             try
             {
                 this.jsonData = s;
-                URL url = new URL("https://rosemary-accounts.co.uk/qa-data");
+//                URL url = new URL("https://rosemary-accounts.co.uk/qa-data");
+                Log.d("URL", this.urlString);
+                URL url = new URL(this.urlString);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setReadTimeout(10000);
                 connection.setConnectTimeout(15000);
