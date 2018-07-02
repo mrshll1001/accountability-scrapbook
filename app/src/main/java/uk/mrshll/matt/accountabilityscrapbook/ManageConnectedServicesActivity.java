@@ -1,7 +1,15 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.*;
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import uk.mrshll.matt.accountabilityscrapbook.Adapter.ConnectedServiceAdapter;
@@ -27,6 +41,11 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
     Realm realm;
     RecyclerView recycler;
 
+    // Request code for the QR request
+    public static final int REQUEST_QR_SCAN = 8888;
+
+    public static final int REQUEST_PERMISSION_FOR_SCAN_QR = 5555;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +54,36 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
         // Set up Realm
         this.realm = Realm.getDefaultInstance();
 
-        // Set up the on click of the Button
+        // Set up the click of the Scan QR button
+        Button scanQRButton = (Button) findViewById(R.id.manage_connections_add_by_qr_button);
+        scanQRButton.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View view)
+            {
+
+//                    // Check we have permission
+                    if (Build.VERSION.SDK_INT >= 23)
+                    {
+                        // // Request permission for the file system here, to ensure we can read the photo url later
+                        if (ContextCompat.checkSelfPermission(ManageConnectedServicesActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        {
+                            ActivityCompat.requestPermissions(ManageConnectedServicesActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_FOR_SCAN_QR);
+                        } else
+                        {
+                            startBarcodeScanner();
+                        }
+
+                    } else
+                    {
+                        startBarcodeScanner();
+                    }
+
+            }
+        });
+
+        // Set up the on click of the add manually Button
         Button add = (Button) findViewById(R.id.manage_connections_add_button);
         add.setOnClickListener(new View.OnClickListener()
         {
@@ -97,6 +145,23 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
 
     }
 
+    // Fires when the user clicks the dialog box that requests permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case REQUEST_PERMISSION_FOR_SCAN_QR:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "PErmission Granted", Toast.LENGTH_SHORT).show();
+                    startBarcodeScanner();
+                }
+                return;
+
+        }
+    }
+
     /**
      * Populates the recycler view
      */
@@ -127,6 +192,61 @@ public class ManageConnectedServicesActivity extends AppCompatActivity
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(recycler);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if (result != null)
+        {
+            if (result.getContents() == null)
+            {
+                Toast.makeText(this, "Cancelled Scan", Toast.LENGTH_SHORT).show();
+            } else
+            {
+                // Presume contents is json encoded value
+                JSONObject json = null;
+                try {
+                    json = new JSONObject(result.getContents());
+                    String url = json.getString("url");
+                    String apiKey = json.getString("token");
+
+                    // THere's some weird bugs with Rosemary on QR code generation, so check for a "https://" and if it's not found then replace "https:/" with it
+                    if (!url.contains("https://"))
+                    {
+                        url = url.replaceAll("https:/", "https://");
+                    }
+
+                    // Add it to realm
+                    addConnectedService(url, apiKey);
+
+                    // Repopulate the recycler view just in case
+                    populateRecyclerView();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+    }
+
+
+    /**
+     * Uses embedded barcode scanner activity to scan a qr code
+     */
+    private void startBarcodeScanner()
+    {
+         IntentIntegrator integrator =  new IntentIntegrator(this);
+         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+         integrator.setBeepEnabled(false);
+
+         integrator.initiateScan();
+
+    }
+
+
 
     /**
      * Runs the realm operation to add the connected service item

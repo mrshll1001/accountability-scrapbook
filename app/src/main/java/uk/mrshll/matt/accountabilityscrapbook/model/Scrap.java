@@ -51,6 +51,30 @@ public class Scrap extends RealmObject
     private String placeAddress;            // If item is an event, this is the address
 
     private String photoUri;                // If item is a photo, this is the uro of the file
+    private RealmList<String> imageList;    // Items can now contain multiple images, store them here but still use the photoURI to render images.
+
+
+
+    public RealmList<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(RealmList<String> imageList) {
+        this.imageList = imageList;
+    }
+
+    public void addImage(String uri)
+    {
+        this.imageList.add(uri);
+    }
+
+    public int getNumberOfImages()
+    {
+        return this.imageList.size();
+    }
+
+
+
 
 
     public RealmList<Tag> getInheritedTags() {

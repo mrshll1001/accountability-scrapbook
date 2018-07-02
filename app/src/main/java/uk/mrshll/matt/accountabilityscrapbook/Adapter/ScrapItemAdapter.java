@@ -53,6 +53,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.data = data;
     }
 
+
     @Override
     public int getItemViewType(int position)
     {
@@ -251,7 +252,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             name.setText(this.scrap.getName());
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             DecimalFormat df = new DecimalFormat("#.00");
-            value.setText(String.format("£%s", df.format(this.scrap.getSpendValue())));
+            value.setText(String.format("£%s", df.format(Math.abs(this.scrap.getSpendValue())))); // Use the absolute value to ensure it's displayed correctly
             icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_coin_stack));
 
             tags.setText(this.scrap.getFormattedTagString(true, true));

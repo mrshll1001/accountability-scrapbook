@@ -40,15 +40,13 @@
 
         />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:layout_below="@+id/create_scrap_tags_label"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/create_scrap_tags"
-        android:hint="@string/create_scrap_tags_hint"/>
+    <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:id="@+id/autocomplete_tags"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@id/create_scrap_tags_label"
+        />
+
 
     <Button
         android:text="@string/create_scrap_done_button"
@@ -56,7 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_scrap_done"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_below="@+id/create_scrap_tags"
+        android:layout_below="@+id/autocomplete_tags"
          />
 
 </RelativeLayout>

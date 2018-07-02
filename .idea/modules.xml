@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/accountability-scrapbook.iml" filepath="$PROJECT_DIR$/accountability-scrapbook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/accounting-scrapbook-app.iml" filepath="$PROJECT_DIR$/accounting-scrapbook-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/opencsv-3.8/opencsv-3.8.iml" filepath="$PROJECT_DIR$/opencsv-3.8/opencsv-3.8.iml" />
     </modules>

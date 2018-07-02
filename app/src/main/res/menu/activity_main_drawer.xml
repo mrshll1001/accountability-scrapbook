@@ -18,7 +18,7 @@
         <item
             android:id="@+id/nav_event"
             android:icon="@drawable/ic_calendar_clock"
-            android:title="Add an Event" />
+            android:title="Add an Activity" />
     </group>
 
     <group>
@@ -32,13 +32,15 @@
     <item android:title="Communicate">
         <menu>
             <item
+                android:id="@+id/nav_configure_sharing"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Manage Sharing" />
+
+            <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
-            <item
-                android:id="@+id/nav_generate"
-                android:icon="@drawable/ic_spreadsheet_with_sum_symbol"
-                android:title="Generate Budget Report" />
+
         </menu>
     </item>
 

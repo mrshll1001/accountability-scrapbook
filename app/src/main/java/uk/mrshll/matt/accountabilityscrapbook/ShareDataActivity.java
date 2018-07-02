@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -107,6 +108,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 //            Iterate over the set of Scraps, convert to JSON, post, and post any images.
             for (Scrap s : scrapHashSet)
             {
+
                 // Check we don't send duplicates
                 if (!service.getScrapLog().contains(s))
                 {
@@ -120,6 +122,8 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
                     jsonToServiceMap.put(jsonScrap, service);
 
 
+                    Log.d("JSON VALUE @ ShareData", jsonScrap);
+
                     // Fire off a task to send this to the web
                     new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this, jsonScrap).execute(jsonScrap);
 
@@ -127,7 +131,8 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
                     // Check to see if we do an image posting, if so -- post it.
                     if (s.getType() == Scrap.TYPE_PHOTO)
                     {
-                        new PostImageToWebTask(service.getEndpointUrl()).execute(s.getPhotoUri());
+                        Log.d("photoURI @ ShareData:", s.getPhotoUri());
+                        new PostImageToWebTask(this, service.getEndpointUrl()).execute(s.getPhotoUri());
                     }
                 }
 

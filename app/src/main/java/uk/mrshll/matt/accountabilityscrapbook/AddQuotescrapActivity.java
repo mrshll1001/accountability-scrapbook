@@ -48,7 +48,6 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                 // Get values to check
                 final EditText quoteText = (EditText) findViewById(R.id.create_quotescrap_quote);
                 final EditText quoteSource = (EditText) findViewById(R.id.create_quotescrap_source);
-                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
 
                 // Perform checks
                 if (quoteText.getText().toString().matches(""))
@@ -57,9 +56,6 @@ public class AddQuotescrapActivity extends AppCompatActivity {
                 } else if (quoteSource.getText().toString().matches(""))
                 {
                     Toast.makeText(AddQuotescrapActivity.this, "Please add a source to the quote", Toast.LENGTH_SHORT).show();
-                } else if (tags.getText().toString().matches(""))
-                {
-                    Toast.makeText(AddQuotescrapActivity.this, "Please add some tags", Toast.LENGTH_SHORT).show();
                 } else if (selectedScrapbooks.isEmpty())
                 {
                     Toast.makeText(AddQuotescrapActivity.this, "Please add some scrapbooks", Toast.LENGTH_SHORT).show();
@@ -87,17 +83,17 @@ public class AddQuotescrapActivity extends AppCompatActivity {
 
                             // Add the tags
                             // Add the tags
-                            String[] tokens = tags.getText().toString().split(" ");
+                            String[] tokens = new String[10];
                             for (String t : tokens)
                             {
 
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", t).findFirst();
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", t.trim()).findFirst();
 
                                 if (tag == null)
                                 {
                                     Log.d("Add Quote:", "Found a null tag, attempting to add");
                                     // Create if not null
-                                    tag = realm.createObject(Tag.class, t);
+                                    tag = realm.createObject(Tag.class, t.trim());
                                 }
 
                                 scrap.getCustomTags().add(tag);

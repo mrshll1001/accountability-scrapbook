@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -47,6 +49,21 @@ public class AddSpendscrapActivity extends AppCompatActivity {
         Button addScrapbooks = (Button) findViewById(R.id.create_scrap_scrapbook_button);
         addScrapbooks.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
+        /* Set up the AutoComplete box for the tags */
+        AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+
+        RealmResults<Tag> results = this.realm.where(Tag.class).findAll(); // Get all tags from Realm and populate an array
+        ArrayList<String> tagList = new ArrayList<>();
+        for (Tag t : results)
+        {
+            tagList.add(t.getTagName());
+            Log.d("Added Tag", t.getTagName());
+        }
+        String[] tagArray = tagList.toArray(new String[tagList.size()]);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tagArray);
+        tagField.setAdapter(adapter);
+
+
         // Set the behaviour for the done button
         Button doneButton = (Button) findViewById(R.id.create_scrap_done);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +74,6 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                 final EditText nameField = (EditText) findViewById(R.id.create_spendscrap_name);
                 final EditText valueField = (EditText) findViewById(R.id.create_spendscrap_value);
 
-                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
                 DatePicker dateField = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
 
@@ -72,9 +88,6 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                 } else if (selectedScrapbooks.isEmpty())
                 {
                     Toast.makeText(AddSpendscrapActivity.this, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
-                } else if (tags.getText().toString().matches(""))
-                {
-                    Toast.makeText(AddSpendscrapActivity.this, "Please add some tags", Toast.LENGTH_SHORT).show();
                 } else
                 {
 
@@ -99,7 +112,8 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                             scrap.setAttachedScrapbooks(0);
 
                             // Add the tags
-                            String[] tokens = tags.getText().toString().split(" ");
+//                            String[] tokens = tags.getText().toString().split(" ");
+                            String [] tokens = new String[10];
                             for (String t : tokens)
                             {
 

@@ -101,7 +101,6 @@ public class AddEventscrapActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Get values
                 final EditText eventName = (EditText) findViewById(R.id.create_eventscrap_name);
-                final EditText tags = (EditText) findViewById(R.id.create_scrap_tags);
                 DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform the checks
@@ -111,9 +110,6 @@ public class AddEventscrapActivity extends AppCompatActivity {
                 } else if (eventName.getText().toString().matches(""))
                 {
                     Toast.makeText(mug, "Please enter a name for the event", Toast.LENGTH_SHORT).show();
-                } else if(tags.getText().toString().matches(""))
-                {
-                    Toast.makeText(mug, "Please add some tags", Toast.LENGTH_SHORT).show();
                 } else if(selectedScrapbooks.isEmpty())
                 {
                     Toast.makeText(mug, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
@@ -144,17 +140,17 @@ public class AddEventscrapActivity extends AppCompatActivity {
                             scrap.setAttachedScrapbooks(0); // This is important so it has an initial value
 
                             // Sort the tags
-                            String[] tokens = tags.getText().toString().split(" ");
+                            String[] tokens = new String[10];
                             for (String t : tokens)
                             {
 
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", t).findFirst();
+                                Tag tag = realm.where(Tag.class).equalTo("tagName", t.trim()).findFirst();
 
                                 if (tag == null)
                                 {
                                     Log.d("Add Spend:", "Found a null tag, attempting to add");
                                     // Create if not null
-                                    tag = realm.createObject(Tag.class, t);
+                                    tag = realm.createObject(Tag.class, t.trim());
                                 }
 
                                 scrap.getCustomTags().add(tag);

@@ -10,8 +10,8 @@
     <!-- Common Interface elements -->
     <string name="create_scrap_date_label">On what date was the activity?</string>
     <string name="create_scrap_scrapbooks_button">Select Scrapbooks</string>
-    <string name="create_scrap_tags_label">Add some Tags</string>
-    <string name="create_scrap_tags_hint">(Tags should be separated by spaces)</string>
+    <string name="create_scrap_tags_label">Add some Tags (Optional -- items get tagged with scrapbook tags automatically)</string>
+    <string name="create_scrap_tags_hint">(Tags should be separated by commas)</string>
     <string name="create_scrap_done_button">Done</string>
     <string name="title_activity_view_scrapbook">ViewScrapbookActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
@@ -21,9 +21,12 @@
 
     <!-- Manage connected services activity -->
     <string name="text_manage_services">Here you can add services to share your data with, add the address of the service and data will be sent there every time you hit the share button on the app. Your service should tell you what address or url to enter here, and may provide you with an \"Api Key\" to add as well. You can copy this over.</string>
-    <string name="manage_services_add_button">Add</string>
+    <string name="manage_services_add_button">Add Manually</string>
     <string name="manage_services_api_key_hint">If you have an API Key for this service, paste it here</string>
-    <string name="manage_services_url_prefix">http://</string>
+    <string name="manage_services_url_prefix">https://</string>
+    <string name="manage_services_add_by_qr_button">Scan Code</string>
+    <string name="text_request_install_scanner_dialog_title">We need a QR Scanner installed</string>
+    <string name="text_request_install_scanner_dialog_body">Hey there, dreadfully sorry but to scan a QR code you need an app installed. Click ok to proceed, or you can add the code manually.</string>
 
 
     <!-- Options for the spinner in ViewScrapbook to filter items -->
@@ -33,7 +36,7 @@
         <item>Photographs</item>
         <item>Spends</item>
         <item>Quotes</item>
-        <item>Events</item>
+        <item>Activities</item>
     </string-array>
     <string name="title_activity_settings">Settings</string>
 

@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -227,13 +227,13 @@ public class MainActivity extends AppCompatActivity
         {
             Intent intent = new Intent(MainActivity.this, ShareDataActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_generate)
-        {
-            Intent intent = new Intent(MainActivity.this, EmailAccountsActivity.class);
-            startActivity(intent);
         } else if (id == R.id.nav_archive)
         {
             Intent intent = new Intent(MainActivity.this, ArchiveActivity.class);
+            startActivity(intent);
+        } else if(id == R.id.nav_configure_sharing)
+        {
+            Intent intent = new Intent(MainActivity.this, ManageConnectedServicesActivity.class);
             startActivity(intent);
         }
 

@@ -1,8 +1,10 @@
 package uk.mrshll.matt.accountabilityscrapbook.AsyncTask;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +24,13 @@ import okhttp3.Response;
 
 public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
 {
+    private Context context;
     private String urlString;
     private final OkHttpClient client = new OkHttpClient();
 
-    public PostImageToWebTask(String url)
+    public PostImageToWebTask(Context context, String url)
     {
+        this.context = context;
         this.urlString = url;
     }
 
@@ -38,24 +42,28 @@ public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
         // Treat the String as the file path
         for (String uri : strings)
         {
-            Uri fileUri = Uri.parse(uri);
-            File file = new File(fileUri.getPath());
 
-
-            // Make the body by building a multipart form and calling the image
-            RequestBody requestBody = null;
-            requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("media", uri, RequestBody.create(MediaType.parse("image/png"), file)).build();
-
-            Request request = new Request.Builder()
-                    .header("Client", "Accounting Scrapbook")
-                    .url("https://rosemary-accounts.co.uk/qa-media")
-                    .post(requestBody)
-                    .build();
             try
             {
+                Uri fileUri = Uri.parse(uri);
+                File file = new File(fileUri.getPath());
+
+
+                // Make the body by building a multipart form and calling the image
+                RequestBody requestBody = null;
+                requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("media", uri, RequestBody.create(MediaType.parse("image/png"), file)).build();
+
+                Request request = new Request.Builder()
+                        .header("Client", "Accounting Scrapbook")
+                        .url("https://rosemary-accounts.co.uk/qa-media")
+                        .post(requestBody)
+                        .build();
+
                 Log.d("Post Image to Web", "Attempting to post file " + uri);
+                Log.d("Post Image to Web", "filePath is " + file.getPath());
+
                 Response response = client.newCall(request).execute();
                 if (response.code() == 500)
                 {

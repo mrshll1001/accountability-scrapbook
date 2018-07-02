@@ -58,7 +58,7 @@
                 android:id="@+id/create_eventscrap_name_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="What was the name of the event?"
+                android:text="What was the name of the activity?"
                 android:layout_margin="10dp"/>
 
             <EditText
@@ -68,7 +68,7 @@
                 android:layout_below="@+id/create_eventscrap_name_label"
                 android:id="@+id/create_eventscrap_name"
                 android:textSize="30dp"
-                android:hint="Event Name"/>
+                android:hint="Activity Name"/>
 
         </RelativeLayout>
 

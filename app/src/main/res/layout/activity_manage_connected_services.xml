@@ -19,13 +19,24 @@
         />
 
     <Button
-        android:id="@+id/manage_connections_add_button"
+        android:id="@+id/manage_connections_add_by_qr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/manage_connections_message"
         android:layout_marginTop="20dp"
+        android:text="@string/manage_services_add_by_qr_button"
+        />
+
+    <Button
+        android:id="@+id/manage_connections_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manage_connections_message"
+        android:layout_toRightOf="@+id/manage_connections_add_by_qr_button"
+        android:layout_marginTop="20dp"
         android:text="@string/manage_services_add_button"
         />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/manage_connections_recycler"

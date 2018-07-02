@@ -33,6 +33,13 @@
                 android:id="@+id/create_photoscrap_camerabutton"
                />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:id="@+id/image_count"
+                />
+
         </FrameLayout>
 
           <!-- Common form elements -->
