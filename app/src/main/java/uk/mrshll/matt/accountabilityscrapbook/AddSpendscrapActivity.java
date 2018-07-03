@@ -8,32 +8,43 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import uk.mrshll.matt.accountabilityscrapbook.Listener.AddScrapListener;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.ScrapCreator;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.TagManager;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
-public class AddSpendscrapActivity extends AppCompatActivity {
+public class AddSpendscrapActivity extends AppCompatActivity
+{
 
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
+    private HashSet<String> tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,25 +54,16 @@ public class AddSpendscrapActivity extends AppCompatActivity {
 
         // Initialise realm
         this.realm = Realm.getDefaultInstance();
-        this.selectedScrapbooks = new ArrayList<String>();
+        this.selectedScrapbooks = new ArrayList<>();
 
         // Add the dialog box functionality
         Button addScrapbooks = (Button) findViewById(R.id.create_scrap_scrapbook_button);
         addScrapbooks.setOnClickListener(new FetchScrapbookDialogListener(this, this.realm, this.selectedScrapbooks));
 
         /* Set up the AutoComplete box for the tags */
-        AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        setUpTagAutoComplete();
+        setUpAddTagButton();
 
-        RealmResults<Tag> results = this.realm.where(Tag.class).findAll(); // Get all tags from Realm and populate an array
-        ArrayList<String> tagList = new ArrayList<>();
-        for (Tag t : results)
-        {
-            tagList.add(t.getTagName());
-            Log.d("Added Tag", t.getTagName());
-        }
-        String[] tagArray = tagList.toArray(new String[tagList.size()]);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tagArray);
-        tagField.setAdapter(adapter);
 
 
         // Set the behaviour for the done button
@@ -92,76 +94,31 @@ public class AddSpendscrapActivity extends AppCompatActivity {
                 {
 
                     // All checks have passed -- now get the date fields
-                    final Date dateCreated = new Date();
                     final Date dateOfSpend = new Date(dateField.getYear() - 1900, dateField.getMonth(), dateField.getDayOfMonth());
 
-
-                    // Finally, execute the realm transaction
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm)
-                        {
-
-                            // Create the spendscrap
-                            Scrap scrap = realm.createObject(Scrap.class);
-                            scrap.setName(nameField.getText().toString());
-                            scrap.setSpendValue(0.00 - Double.valueOf(valueField.getText().toString()));
-                            scrap.setDateCreated(dateCreated);
-                            scrap.setDateGiven(dateOfSpend);
-                            scrap.setType(Scrap.TYPE_SPEND);
-                            scrap.setAttachedScrapbooks(0);
-
-                            // Add the tags
-//                            String[] tokens = tags.getText().toString().split(" ");
-                            String [] tokens = new String[10];
-                            for (String t : tokens)
-                            {
-
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", t).findFirst();
-
-                                if (tag == null)
-                                {
-                                    Log.d("Add Spend:", "Found a null tag, attempting to add");
-                                    // Create if not null
-                                    tag = realm.createObject(Tag.class, t);
-                                }
-
-                                scrap.getCustomTags().add(tag);
-                            }
-
-                            // Add the scrap to the scrapbooks
-                            for (String s : selectedScrapbooks)
-                            {
-                                Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
-
-                                // Inherit the tags from the scrapbooks
-                                scrap.getInheritedTags().addAll(result.getTagList());
-
-                                result.getScrapList().add(scrap);
-                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
-
-                            }
-
-
-                        }
-                    }, new Realm.Transaction.OnSuccess()
+                    ScrapCreator sc = new ScrapCreator(realm, new AddScrapListener()
                     {
-
                         @Override
-                        public void onSuccess() {
-
+                        public void realmSuccess() {
                             Intent returnIntent = new Intent();
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
+                        }
+
+                        @Override
+                        public void realmError(Throwable error) {
 
                         }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            Toast.makeText(AddSpendscrapActivity.this, "Error adding Spend", Toast.LENGTH_SHORT).show();
-                            error.printStackTrace();
-                        }
                     });
+
+                    sc.createSpendScrap(nameField.getText().toString(),
+                            Double.valueOf(valueField.getText().toString()),
+                            dateOfSpend,
+                            tags.toArray(new String[tags.size()]),
+                            selectedScrapbooks.toArray(new String[selectedScrapbooks.size()])
+                    );
+
+
 
 
                 }
@@ -169,4 +126,65 @@ public class AddSpendscrapActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setUpTagAutoComplete()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        this.tags = new HashSet<>();
+
+        String[] tagArray = new TagManager(realm).getTagsAsStringArray();
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tagArray);
+        tagField.setAdapter(adapter);
+
+        tagField.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String token = tagField.getText().toString();
+                tags.add(token);
+                tagField.setText(null);
+                updateCustomTagField();
+
+
+
+            }
+        });
+    }
+
+    private void setUpAddTagButton()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        final Button addTagButton = (Button) findViewById(R.id.addTagFieldButton);
+        addTagButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                String[] tokens = tagField.getText().toString().split(",");
+
+                for (String token : tokens)
+                {
+                    tags.add(token.trim());
+                }
+
+                tagField.setText(null);
+                updateCustomTagField();
+            }
+        });
+    }
+
+    private void updateCustomTagField()
+    {
+        TextView tagField = (TextView) findViewById(R.id.currentTagsField);
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : tags)
+        {
+            sb.append(s);
+            sb.append(" ");
+        }
+
+        tagField.setText(sb.toString());
+    }
+
 }
