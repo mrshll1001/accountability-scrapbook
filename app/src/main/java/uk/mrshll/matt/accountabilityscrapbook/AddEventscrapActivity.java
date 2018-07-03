@@ -1,12 +1,20 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +47,12 @@ import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
 
-public class AddEventscrapActivity extends AppCompatActivity {
+import static uk.mrshll.matt.accountabilityscrapbook.AddPhotoscrapActivity.REQUEST_PERMISSION_FOR_READ_STORAGE;
+
+public class AddEventscrapActivity extends AppCompatActivity
+{
+
+    private static final int REQUEST_PERMISSION_FOR_LOCATION = 66;
 
     private String placeName;
     private String placeAddress;
@@ -68,7 +81,8 @@ public class AddEventscrapActivity extends AppCompatActivity {
         // Retrieve Location button
         final Activity mug = this;
         final Button getLocation = (Button) findViewById(R.id.create_eventscrap_mapbutton);
-        getLocation.setOnClickListener(new View.OnClickListener() {
+        getLocation.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view)
             {
@@ -76,14 +90,12 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
                     PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     startActivityForResult(builder.build(mug), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesNotAvailableException e)
-                {
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    getRawGPSData();
 
-                } catch (GooglePlayServicesRepairableException e)
-                {
+                } catch (GooglePlayServicesRepairableException e) {
 
                 }
-
 
 
             }
@@ -104,18 +116,13 @@ public class AddEventscrapActivity extends AppCompatActivity {
                 DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
                 // Perform the checks
-                if (placeLatLong == null)
-                {
+                if (placeLatLong == null) {
                     Toast.makeText(mug, "Please choose a place on the map", Toast.LENGTH_SHORT).show();
-                } else if (eventName.getText().toString().matches(""))
-                {
+                } else if (eventName.getText().toString().matches("")) {
                     Toast.makeText(mug, "Please enter a name for the event", Toast.LENGTH_SHORT).show();
-                } else if(selectedScrapbooks.isEmpty())
-                {
+                } else if (selectedScrapbooks.isEmpty()) {
                     Toast.makeText(mug, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     // Checks have passed, get the date
                     final Date dateCreated = new Date();
                     final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
@@ -141,13 +148,11 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
                             // Sort the tags
                             String[] tokens = new String[10];
-                            for (String t : tokens)
-                            {
+                            for (String t : tokens) {
 
                                 Tag tag = realm.where(Tag.class).equalTo("tagName", t.trim()).findFirst();
 
-                                if (tag == null)
-                                {
+                                if (tag == null) {
                                     Log.d("Add Spend:", "Found a null tag, attempting to add");
                                     // Create if not null
                                     tag = realm.createObject(Tag.class, t.trim());
@@ -157,8 +162,7 @@ public class AddEventscrapActivity extends AppCompatActivity {
                             }
 
                             // Add the scrap to scrapbooks
-                            for (String s : selectedScrapbooks)
-                            {
+                            for (String s : selectedScrapbooks) {
                                 Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
 
                                 // Inherit the tags from the scrapbooks
@@ -169,7 +173,6 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
 
                             }
-
 
 
                         }
@@ -193,6 +196,45 @@ public class AddEventscrapActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    private void getRawGPSData()
+    {
+
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(AddEventscrapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_FOR_LOCATION);
+
+
+            return;
+        }
+        Log.d("Location", "Checking location");
+        Location location = null;
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.d("getRawGPS", "I have GPS!");
+            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            if (location == null){
+                Log.d("getRawGPS", "I have gps but it's null for some reason");
+            }
+        } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        {
+            Log.d("getRawGPS", "I have Network!");
+
+            location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        } else
+        {
+            Log.d("getRawGPS", "No provider, setting to null");
+            Toast.makeText(this, "I don't know your location right now, sorry!", Toast.LENGTH_SHORT).show();
+        }
+
+        if (location != null)
+        {
+            Toast.makeText(this, location.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -256,6 +298,24 @@ public class AddEventscrapActivity extends AppCompatActivity {
 
 
             }
+
+
+        }
+    }
+
+    // Fires when the user clicks the dialog box that requests permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case REQUEST_PERMISSION_FOR_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    getRawGPSData();
+                }
+                return;
+
         }
     }
 }

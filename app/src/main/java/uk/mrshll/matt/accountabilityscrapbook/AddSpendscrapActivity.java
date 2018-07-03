@@ -35,9 +35,7 @@ import uk.mrshll.matt.accountabilityscrapbook.Listener.AddScrapListener;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
 import uk.mrshll.matt.accountabilityscrapbook.Utility.ScrapCreator;
 import uk.mrshll.matt.accountabilityscrapbook.Utility.TagManager;
-import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
-import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
-import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
+
 
 public class AddSpendscrapActivity extends AppCompatActivity
 {

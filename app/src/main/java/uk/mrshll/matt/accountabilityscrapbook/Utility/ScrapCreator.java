@@ -22,6 +22,31 @@ public class ScrapCreator
         this.listener = listener;
     }
 
+    public void createQuoteScrap(final Date dateGiven, final String quoteText, final String quoteSource, final String[] tags, final String[] selectedScrapbooks)
+    {
+        realm.executeTransaction(new Transaction()
+        {
+            @Override
+            public void execute(Realm realm) {
+                Scrap scrap = realm.createObject(Scrap.class);
+                scrap.setDateGiven(dateGiven);
+                scrap.setDateCreated(new Date());
+                scrap.setQuoteText(quoteText);
+                scrap.setQuoteSource(quoteSource);
+                scrap.setType(Scrap.TYPE_QUOTE);
+                scrap.setAttachedScrapbooks(0);
+
+                addTags(scrap, tags);
+                addToScrapbooks(scrap, selectedScrapbooks);
+
+
+                listener.realmSuccess();
+
+
+            }
+        });
+    }
+
     public void createSpendScrap(final String name, final Double spendValue, final Date dateGiven, final String[] tags, final String[] selectedScrapbooks)
     {
         realm.executeTransaction(new Transaction(){
@@ -38,19 +63,8 @@ public class ScrapCreator
                 scrap.setAttachedScrapbooks(0);
 
                 addTags(scrap, tags);
+                addToScrapbooks(scrap, selectedScrapbooks);
 
-                // Add the scrap to the scrapbooks
-                for (String s : selectedScrapbooks)
-                {
-                    Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
-
-                    // Inherit the tags from the scrapbooks
-                    scrap.getInheritedTags().addAll(result.getTagList());
-
-                    result.getScrapList().add(scrap);
-                    scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
-
-                }
 
                 listener.realmSuccess();
 
@@ -58,7 +72,20 @@ public class ScrapCreator
         });
     }
 
+    private void addToScrapbooks(Scrap scrap, String[] selectedScrapbooks)
+    {
+        for (String s : selectedScrapbooks)
+        {
+            Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
 
+            // Inherit the tags from the scrapbooks
+            scrap.getInheritedTags().addAll(result.getTagList());
+
+            result.getScrapList().add(scrap);
+            scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
+
+        }
+    }
 
     private void addTags(Scrap s, String[] tags)
     {
