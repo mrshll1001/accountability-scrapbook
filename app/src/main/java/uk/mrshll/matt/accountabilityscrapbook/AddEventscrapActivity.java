@@ -1,6 +1,7 @@
 package uk.mrshll.matt.accountabilityscrapbook;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,16 +37,28 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.Listener.AddScrapListener;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.ScrapCreator;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.TagManager;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
@@ -60,8 +76,10 @@ public class AddEventscrapActivity extends AppCompatActivity
 
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
+    private HashSet<String> tags;
 
     int PLACE_PICKER_REQUEST = 3;
+    int OSM_PICKER_REQUEST = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,6 +95,10 @@ public class AddEventscrapActivity extends AppCompatActivity
         // Set up realm and the scrapbooks
         this.realm = Realm.getDefaultInstance();
         this.selectedScrapbooks = new ArrayList<String>();
+
+        /* Set up the AutoComplete box for the tags */
+        setUpTagAutoComplete();
+        setUpAddTagButton();
 
         // Retrieve Location button
         final Activity mug = this;
@@ -124,73 +146,32 @@ public class AddEventscrapActivity extends AppCompatActivity
                     Toast.makeText(mug, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
                 } else {
                     // Checks have passed, get the date
-                    final Date dateCreated = new Date();
                     final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
 
-                    // Let's get realming
-                    realm.executeTransactionAsync(new Realm.Transaction()
+                    ScrapCreator sc = new ScrapCreator(realm, new AddScrapListener()
                     {
                         @Override
-                        public void execute(Realm realm)
-                        {
-                            // Create the scraps
-                            Scrap scrap = realm.createObject(Scrap.class);
-                            scrap.setDateCreated(dateCreated);
-                            scrap.setDateGiven(dateGiven);
-                            scrap.setType(Scrap.TYPE_EVENT);
-                            scrap.setName(eventName.getText().toString());
-                            scrap.setPlaceAddress(placeAddress);
-                            scrap.setPlaceName(placeName);
-//                            scrap.setPlaceLatLng(placeLatLong.toString());
-                            scrap.setPlaceLatitude(String.valueOf(placeLatLong.latitude));
-                            scrap.setPlaceLongitude(String.valueOf(placeLatLong.longitude));
-                            scrap.setAttachedScrapbooks(0); // This is important so it has an initial value
-
-                            // Sort the tags
-                            String[] tokens = new String[10];
-                            for (String t : tokens) {
-
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", t.trim()).findFirst();
-
-                                if (tag == null) {
-                                    Log.d("Add Spend:", "Found a null tag, attempting to add");
-                                    // Create if not null
-                                    tag = realm.createObject(Tag.class, t.trim());
-                                }
-
-                                scrap.getCustomTags().add(tag);
-                            }
-
-                            // Add the scrap to scrapbooks
-                            for (String s : selectedScrapbooks) {
-                                Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
-
-                                // Inherit the tags from the scrapbooks
-                                scrap.getInheritedTags().addAll(result.getTagList());
-
-                                result.getScrapList().add(scrap);
-                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
-
-
-                            }
-
-
-                        }
-                    }, new Realm.Transaction.OnSuccess()
-                    {
-                        @Override
-                        public void onSuccess() {
+                        public void realmSuccess() {
                             Intent returnIntent = new Intent();
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
-                    }, new Realm.Transaction.OnError()
-                    {
+
                         @Override
-                        public void onError(Throwable error) {
-                            Toast.makeText(mug, "Error creating Scrap", Toast.LENGTH_SHORT).show();
+                        public void realmError(Throwable error) {
+
                         }
                     });
+
+                    sc.createEventScrap(dateGiven,
+                            eventName.getText().toString(),
+                            placeAddress,
+                            placeName,
+                            placeLatLong,
+                            tags.toArray(new String[tags.size()]),
+                            selectedScrapbooks.toArray(new String[selectedScrapbooks.size()])
+                            );
+
                 }
 
             }
@@ -210,31 +191,124 @@ public class AddEventscrapActivity extends AppCompatActivity
 
             return;
         }
-        Log.d("Location", "Checking location");
-        Location location = null;
-        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        {
-            Log.d("getRawGPS", "I have GPS!");
-            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Intent intent = new Intent(this, OSMPickerActivity.class);
+        startActivityForResult(intent, OSM_PICKER_REQUEST);
+    }
 
-            if (location == null){
-                Log.d("getRawGPS", "I have gps but it's null for some reason");
+    @SuppressLint("StaticFieldLeak")
+    private void getAddressFromLatLonOSM(final Double lat, final Double lon)
+    {
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>()
+        {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                StringBuilder result = new StringBuilder();
+                try
+                {
+//                    URL lookup = new URL("http://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lon+"&zoom=18&addressdetails=1");
+                    URL lookup = new URL(URLEncoder.encode("https://nominatim.openstreetmap.org/reverse?format=json&lat=54.97394378741926&lon=-1.613917350769043&zoom=18&addressdetails=1"));
+
+                    HttpURLConnection connection = (HttpURLConnection) lookup.openConnection();
+                    connection.setRequestMethod("GET");
+                    InputStream stream = connection.getInputStream();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                    String line;
+
+                    while ((line = reader.readLine()) != null)
+                    {
+                     result.append(line);
+                    }
+
+                    Log.d("GetAddress", stream.toString());
+
+                    return result.toString();
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-        } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        {
-            Log.d("getRawGPS", "I have Network!");
 
-            location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        } else
-        {
-            Log.d("getRawGPS", "No provider, setting to null");
-            Toast.makeText(this, "I don't know your location right now, sorry!", Toast.LENGTH_SHORT).show();
-        }
+            protected void onPostExecute(String address)
+            {
+                updateAddress(address);
+//                try {
+//                    JSONObject json = new JSONObject(address);
+//
+//                    String display = json.getString("display_name");
+//
+//                    updateAddress(display);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        };
 
-        if (location != null)
-        {
-            Toast.makeText(this, location.toString(), Toast.LENGTH_LONG).show();
-        }
+        task.execute();
+    }
+
+    private void updateAddress(String address)
+    {
+        // Update the UI
+        final TextView addressField = (TextView) findViewById(R.id.create_eventscrap_address);
+        addressField.setText(address);
+
+
+    }
+
+    private void updateImageWell(final double latitude,final double longitude)
+    {
+//        // Update the UI
+//        final TextView address = (TextView) findViewById(R.id.create_eventscrap_address);
+//        address.setText("Currently not fetching address");
+
+        // Try to fetch a static map from GMaps and set the image as the background
+        AsyncTask<Void, Void, Bitmap> getMapImage = new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... voids)
+            {
+                Bitmap map = null;
+                try
+                {
+                    URL mapbox = new URL("https://api.mapbox.com/styles/v1/mrshll-ncl/cjj5vzskl0wjt2sqa3fn66s0a/static/"+longitude+","+latitude+",15,0,0/300x200?access_token=pk.eyJ1IjoibXJzaGxsLW5jbCIsImEiOiJjamo1dm9idGQxeHB5M3ZxZ2V6bDY1bW56In0.ZBBG6HuWyj04L7k6Jzewhg");
+                    URL url = new URL("http://maps.google.com/maps/api/staticmap?center="+longitude+","+latitude+"&zoom=15&size=200x200&sensor=false");
+                    HttpURLConnection connection = (HttpURLConnection) mapbox.openConnection();
+                    connection.setRequestMethod("GET");
+                    InputStream stream = connection.getInputStream();
+                    map = BitmapFactory.decodeStream(stream);
+
+
+                } catch (MalformedURLException e)
+                {
+                    Toast.makeText(AddEventscrapActivity.this, "Malformed URL", Toast.LENGTH_SHORT).show();
+                } catch (IOException e)
+                {
+                    Toast.makeText(AddEventscrapActivity.this, "IO Exception", Toast.LENGTH_SHORT).show();
+                }
+
+                return map;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                if (bitmap != null)
+                {
+                    final ImageView well = (ImageView) findViewById(R.id.create_eventcrap_imagewell);
+                    well.setImageBitmap(bitmap);
+
+
+                }
+            }
+        };
+
+        getMapImage.execute();
     }
 
     @Override
@@ -263,7 +337,7 @@ public class AddEventscrapActivity extends AppCompatActivity
                         try
                         {
 
-                            URL url = new URL("http://maps.google.com/maps/api/staticmap?center="+placeLatLong.latitude+","+placeLatLong.longitude+"&zoom=15&size=200x200&sensor=false");
+                            URL url = new URL("http://maps.google.com/maps/api/staticmap?center="+placeLatLong.latitude+","+placeLatLong.longitude+"&zoom=8&size=200x200&sensor=false");
                             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                             connection.setRequestMethod("GET");
                             InputStream stream = connection.getInputStream();
@@ -300,8 +374,21 @@ public class AddEventscrapActivity extends AppCompatActivity
             }
 
 
+        } else if(requestCode == OSM_PICKER_REQUEST)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                Double lat = data.getDoubleExtra("latitude", 0);
+                Double lon = data.getDoubleExtra("longitude", 0);
+
+                this.placeLatLong = new LatLng(lat, lon);
+                getAddressFromLatLonOSM(lat, lon);
+                updateImageWell(lat, lon);
+            }
         }
     }
+
+
 
     // Fires when the user clicks the dialog box that requests permission
     @Override
@@ -317,5 +404,65 @@ public class AddEventscrapActivity extends AppCompatActivity
                 return;
 
         }
+    }
+
+    private void setUpTagAutoComplete()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        this.tags = new HashSet<>();
+
+        String[] tagArray = new TagManager(realm).getTagsAsStringArray();
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tagArray);
+        tagField.setAdapter(adapter);
+
+        tagField.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String token = tagField.getText().toString();
+                tags.add(token);
+                tagField.setText(null);
+                updateCustomTagField();
+
+
+
+            }
+        });
+    }
+
+    private void setUpAddTagButton()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        final Button addTagButton = (Button) findViewById(R.id.addTagFieldButton);
+        addTagButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                String[] tokens = tagField.getText().toString().split(",");
+
+                for (String token : tokens)
+                {
+                    tags.add(token.trim());
+                }
+
+                tagField.setText(null);
+                updateCustomTagField();
+            }
+        });
+    }
+
+    private void updateCustomTagField()
+    {
+        TextView tagField = (TextView) findViewById(R.id.currentTagsField);
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : tags)
+        {
+            sb.append(s);
+            sb.append(" ");
+        }
+
+        tagField.setText(sb.toString());
     }
 }

@@ -65,6 +65,12 @@ public class Scrap extends RealmObject
 
     public void addImage(String uri)
     {
+
+        if (this.imageList == null)
+        {
+            this.imageList = new RealmList<String>();
+        }
+
         this.imageList.add(uri);
     }
 

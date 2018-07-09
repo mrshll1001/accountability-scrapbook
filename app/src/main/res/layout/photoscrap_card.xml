@@ -35,6 +35,15 @@
                 android:layout_marginTop="20dp"
                 />
 
+            <TextView
+                android:id="@+id/photoscrap_imagecount"
+                android:layout_marginTop="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:layout_marginLeft="2dp"
+                />
+
             <LinearLayout
                 android:layout_below="@id/photoscrap_imageview"
                 android:layout_width="wrap_content"

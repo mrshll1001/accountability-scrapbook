@@ -273,6 +273,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView date;
         private TextView tags;
         private ImageView icon;
+        private TextView imageCount;
 
         public PhotoViewHolder(View v, Context c)
         {
@@ -280,6 +281,7 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.context = c;
 
             this.imageView = (ImageView) v.findViewById(R.id.photoscrap_imageview);
+            this.imageCount = (TextView) v.findViewById(R.id.photoscrap_imagecount);
             this.date = (TextView) v.findViewById(R.id.scrapcard_date);
             this.icon = (ImageView) v.findViewById(R.id.scrapcard_icon);
             this.tags = (TextView) v.findViewById(R.id.scrapcard_tags_content);
@@ -293,11 +295,12 @@ public class ScrapItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             date.setText(this.scrap.getFormattedDateString(this.scrap.getDateGiven()));
             icon.setBackground(itemView.getResources().getDrawable(R.drawable.ic_menu_gallery));
             tags.setText(this.scrap.getFormattedTagString(true, true));
+            imageCount.setText(this.scrap.getImageList().size() + " images");
 
             // Load a smaller bitmap so that it doesn't crap itself
 //
             try {
-                Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(context.getContentResolver().openInputStream(Uri.parse(scrap.getPhotoUri()))),200,200);
+                Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(context.getContentResolver().openInputStream(Uri.parse(scrap.getImageList().first()))),200,200);
                 imageView.setImageBitmap(bitmap);
 
             } catch (FileNotFoundException e) {

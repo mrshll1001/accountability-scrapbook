@@ -114,7 +114,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
                 {
                     // Convert the Scrap to JSON
                     String id = String.format(format, deviceID, s.getDateCreatedAsTransactionID());
-                    QualitativeAccountingHandler qa = new QualitativeAccountingHandler(service.getQAMediaEndpoint(), service.getApiKey());
+                    QualitativeAccountingHandler qa = new QualitativeAccountingHandler(this, service.getQAMediaEndpoint(), service.getApiKey());
                     String jsonScrap = qa.scrapToJSON(s);
 
                     // Create entries in the map for use logging use later
@@ -124,15 +124,20 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
 
                     Log.d("JSON VALUE @ ShareData", jsonScrap);
 
-                    // Fire off a task to send this to the web
+//                    // Fire off a task to send this to the web
                     new PostJSONToWebTask(service.getQADataEndpoint(), service.getApiKey(), this, jsonScrap).execute(jsonScrap);
-
-
-                    // Check to see if we do an image posting, if so -- post it.
+//
+//
+//                    // Check to see if we do an image posting, if so -- post it.
                     if (s.getType() == Scrap.TYPE_PHOTO)
                     {
-                        Log.d("photoURI @ ShareData:", s.getPhotoUri());
-                        new PostImageToWebTask(this, service.getEndpointUrl()).execute(s.getPhotoUri());
+                        Log.d("Posting images", "Image scrap. Posting images");
+                        for (String uri : s.getImageList())
+                        {
+                            Log.d("Posting image", "Image: " + uri);
+                            new PostImageToWebTask(this, service.getEndpointUrl()).execute(uri);
+
+                        }
                     }
                 }
 

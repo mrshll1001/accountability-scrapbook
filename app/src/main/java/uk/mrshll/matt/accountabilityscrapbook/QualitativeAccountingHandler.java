@@ -32,10 +32,12 @@ public class QualitativeAccountingHandler
 {
     private String endpointURL;
     private String accessToken;
+    private Context context;
 
 
-    public QualitativeAccountingHandler(String endpointUrl, String accessToken)
+    public QualitativeAccountingHandler(Context context, String endpointUrl, String accessToken)
     {
+        this.context = context;
         this.endpointURL = endpointUrl;
         this.accessToken = accessToken;
 
@@ -87,9 +89,15 @@ public class QualitativeAccountingHandler
             jsonScrap.put("financial_data", jsonFinance);
 
             // Media
-            if (s.getPhotoUri() != null)
+            if (!s.getImageList().isEmpty())
             {
-                jsonScrap.put("media", this.endpointURL + '/' + getImageFileHash(s.getPhotoUri()));
+                JSONArray mediaArray = new JSONArray();
+                for (String uri : s.getImageList())
+                {
+                    mediaArray.put(this.endpointURL + "/" + getImageFileHash(uri));
+                }
+                jsonScrap.put("media", mediaArray);
+
             } else
             {
                 jsonScrap.put("media", "");
@@ -140,7 +148,8 @@ public class QualitativeAccountingHandler
                 MessageDigest digest = MessageDigest.getInstance("SHA-1");
                 byte[] buffer = new byte[65536];
 
-                InputStream fis = new FileInputStream(Uri.parse(photoUri).getPath());
+//                InputStream fis = new FileInputStream(Uri.parse(photoUri).getPath());
+                InputStream fis = context.getContentResolver().openInputStream(Uri.parse(photoUri)); // New version using content resolver
                 int n = 0;
 
                 while(n != -1)

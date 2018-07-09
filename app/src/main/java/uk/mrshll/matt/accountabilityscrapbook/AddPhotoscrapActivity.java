@@ -20,6 +20,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -37,9 +40,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 
 import io.realm.Realm;
+import uk.mrshll.matt.accountabilityscrapbook.Listener.AddScrapListener;
 import uk.mrshll.matt.accountabilityscrapbook.Listener.FetchScrapbookDialogListener;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.ScrapCreator;
+import uk.mrshll.matt.accountabilityscrapbook.Utility.TagManager;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrap;
 import uk.mrshll.matt.accountabilityscrapbook.model.Scrapbook;
 import uk.mrshll.matt.accountabilityscrapbook.model.Tag;
@@ -52,14 +59,14 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
     static final int REQUEST_PERMISSION_FOR_READ_STORAGE = 0;
     static final int REQUEST_PERMISSION_FOR_WRITE_STORAGE = 9999;
 
-    static final int REQUEST_IMAGE_CAPTURE = 2;
     static final int REQUEST_IMAGE_PICKER = 100;
 
     private ArrayList<String> imageURIs;
     private ArrayList<String> selectedScrapbooks;
+    private HashSet<String> tags;
+
     private Realm realm;
 
-    Uri photoURI;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -70,6 +77,10 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         this.realm = Realm.getDefaultInstance();
         this.selectedScrapbooks = new ArrayList<String>();
         this.imageURIs = new ArrayList<>();
+
+        /* Set up the AutoComplete box for the tags */
+        setUpTagAutoComplete();
+        setUpAddTagButton();
 
 
 
@@ -97,13 +108,6 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                 }
 
 
-
-
-
-
-
-
-
             }
         });
 
@@ -120,91 +124,51 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                 // Get the details
                 DatePicker datePicker = (DatePicker) findViewById(R.id.create_scrap_date_picker);
 
-                // Perform checks
-                if (photoURI == null)
+                // TODO checks and get date
+
+                if (imageURIs == null || imageURIs.size() == 0)
                 {
-                    Toast.makeText(AddPhotoscrapActivity.this, "Please select a photo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPhotoscrapActivity.this, "Please select some images", Toast.LENGTH_SHORT).show();
                 } else if (selectedScrapbooks.isEmpty())
                 {
                     Toast.makeText(AddPhotoscrapActivity.this, "Please select some scrapbooks", Toast.LENGTH_SHORT).show();
                 } else
                 {
-                    // Checks have passed. Get the dates
-                    final Date dateCreated = new Date();
                     final Date dateGiven = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
 
-                    // Execute the realm transaction
-                    realm.executeTransactionAsync(new Realm.Transaction()
+                    ScrapCreator sc = new ScrapCreator(realm, new AddScrapListener()
                     {
                         @Override
-                        public void execute(Realm realm) {
-
-                            // Create the photo scrap
-                            Scrap scrap = realm.createObject(Scrap.class);
-                            scrap.setDateCreated(dateCreated);
-                            scrap.setDateGiven(dateGiven);
-                            scrap.setType(Scrap.TYPE_PHOTO);
-
-                            // URI may require converting if it is of type content://
-                            scrap.setPhotoUri(photoURI.toString());
-
-                            // Dump the contents of imageUris into the scrapbook ones.
-                            for (String uri : imageURIs)
-                            {
-                                scrap.addImage(uri);
-                            }
-
-
-                            scrap.setAttachedScrapbooks(0); // Initialise
-
-                            // Add the tags
-                            String[] tokens = new String[10];
-                            for (String t : tokens)
-                            {
-
-                                Tag tag = realm.where(Tag.class).equalTo("tagName", t.trim()).findFirst();
-
-                                if (tag == null)
-                                {
-                                    Log.d("Add Spend:", "Found a null tag, attempting to add");
-                                    // Create if not null
-                                    tag = realm.createObject(Tag.class, t.trim());
-                                }
-
-                                scrap.getCustomTags().add(tag);
-                            }
-
-                            // Add the scrap to the scrapbooks
-                            for (String s : selectedScrapbooks)
-                            {
-                                Scrapbook result = realm.where(Scrapbook.class).equalTo("name", s).findFirst();
-
-                                // Inherit the tags from the scrapbooks
-                                scrap.getInheritedTags().addAll(result.getTagList());
-
-                                result.getScrapList().add(scrap);
-                                scrap.setAttachedScrapbooks(scrap.getAttachedScrapbooks() + 1); // Increment by 1
-
-                            }
-
-                        }
-                    }, new Realm.Transaction.OnSuccess()
-                    {
-                        @Override
-                        public void onSuccess() {
+                        public void realmSuccess() {
                             Intent returnIntent = new Intent();
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
-                    }, new Realm.Transaction.OnError()
-                    {
+
                         @Override
-                        public void onError(Throwable error) {
-                            Toast.makeText(AddPhotoscrapActivity.this, "Error creating Scrap!", Toast.LENGTH_SHORT).show();
+                        public void realmError(Throwable error) {
+
                         }
                     });
+
+                    sc.createImageScrap(dateGiven,
+                                        imageURIs.toArray(new String[imageURIs.size()]),
+                                        tags.toArray(new String[tags.size()]),
+                                        selectedScrapbooks.toArray(new String[selectedScrapbooks.size()])
+                                        );
+
                 }
 
+                if (imageURIs != null)
+                {
+                    for (String s : imageURIs)
+                    {
+                        Log.d("imageURI", s.toString());
+
+                    }
+                } else {
+                        Log.d("imageUri", "Array is null");
+                }
             }
         });
 
@@ -250,12 +214,13 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                     if (data.getData() != null)
                     {
                         Uri selectedImage = data.getData();
+                        int takeFlags = data.getFlags();
+                        takeFlags &= Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        this.getContentResolver().takePersistableUriPermission(selectedImage, takeFlags);
 
-                        ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
-                        well.setImageURI(selectedImage);
-                        photoURI = selectedImage;
-                        this.imageURIs.add(photoURI.toString());
-                        contentURIToFileURI(photoURI);
+                        updateImageWell(selectedImage);
+
+                        this.imageURIs.add(selectedImage.toString());
 
                     }
 
@@ -263,23 +228,21 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
                     if (data.getClipData() != null)
                     {
                         Item firstItem = data.getClipData().getItemAt(0);
-                        Uri uri = firstItem.getUri();
-                        photoURI = uri;
+                        updateImageWell(firstItem.getUri());
 
-                        ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
-                        well.setImageURI(uri);
+
+
 
                         for(int i = 0; i < data.getClipData().getItemCount(); i++)
                         {
                             Item item = data.getClipData().getItemAt(i);
+                            Uri imageUri = item.getUri();
+                            int takeFlags = data.getFlags();
+                            takeFlags &= Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                            this.getContentResolver().takePersistableUriPermission(imageUri, takeFlags);
                             this.imageURIs.add(item.getUri().toString());
                             Log.d("Uri to List", item.getUri().toString());
 
-                            final int takeFlags = data.getFlags()
-                                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                            // Check for the freshest data.
-                            getContentResolver().takePersistableUriPermission(uri, takeFlags);
                         }
 
 
@@ -294,37 +257,143 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
         }
     }
 
-    private String contentURIToFileURI(Uri uri)
-    {
-        if (uri != null && "content".equals(uri.getScheme()))
-        {
-            Cursor cursor = this.getContentResolver().query(uri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
-            cursor.moveToFirst();
-            String filepath = cursor.getString(0);
-            cursor.close();
-            Log.d("Content->File", "Converted: " + filepath);
 
-            return filepath;
-        } else
-        {
-            Log.d("Content->File", "No conversion needed");
-            return uri.toString();
-        }
-    }
+
+
 
     private void getImageFromGallery()
     {
         // Create the intent to the image
-        Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         photoPickerIntent.setType("image/*");
         photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         photoPickerIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        photoPickerIntent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
         photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_PICKER);
     }
 
+    private void updateImageWell(Uri uri)
+    {
+        ImageView well = (ImageView) findViewById(R.id.create_photoscrap_imagewell);
+        well.setImageURI(uri);
+    }
 
+    private void setUpTagAutoComplete()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        this.tags = new HashSet<>();
+
+        String[] tagArray = new TagManager(realm).getTagsAsStringArray();
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tagArray);
+        tagField.setAdapter(adapter);
+
+        tagField.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String token = tagField.getText().toString();
+                tags.add(token);
+                tagField.setText(null);
+                updateCustomTagField();
+
+
+
+            }
+        });
+    }
+
+    private void setUpAddTagButton()
+    {
+        final AutoCompleteTextView tagField = (AutoCompleteTextView) findViewById(R.id.autocomplete_tags);
+        final Button addTagButton = (Button) findViewById(R.id.addTagFieldButton);
+        addTagButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                String[] tokens = tagField.getText().toString().split(",");
+
+                for (String token : tokens)
+                {
+                    tags.add(token.trim());
+                }
+
+                tagField.setText(null);
+                updateCustomTagField();
+            }
+        });
+    }
+
+    private void updateCustomTagField()
+    {
+        TextView tagField = (TextView) findViewById(R.id.currentTagsField);
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : tags)
+        {
+            sb.append(s);
+            sb.append(" ");
+        }
+
+        tagField.setText(sb.toString());
+    }
+
+
+
+
+    /*LEGACY: Attempts to convert the content URI to a file uri.*/
+
+    //    private String contentURIToFileURI(Uri uri)
+//    {
+//        Log.d("convertURI" ,"Attemting to convert " + uri.toString());
+//        if (uri != null && "content".equals(uri.getScheme()))
+//        {
+//            String[] projection = {MediaStore.MediaColumns.DATA};
+//            String[] oldProjection = {android.provider.MediaStore.Images.ImageColumns.DATA};
+//
+//            Cursor cursor = this.getContentResolver().query(uri, projection, null, null, null);
+//            cursor.moveToFirst();
+//            String filepath = cursor.getString(0);
+//            cursor.close();
+//            Log.d("Content->File", "Converted: " + filepath);
+//
+//            if (filepath == null || filepath.equals("null"))
+//            {
+//                Log.d("Content->File", "Equals null, attempting new stuff");
+//                try {
+//                    String pathsegment[] = uri.getLastPathSegment().split(":");
+//                    String id = pathsegment[0];
+//                    final String[] imageColumns = { MediaStore.Images.Media.DATA };
+//                    final String imageOrderBy = null;
+//
+//                    Uri newUri = getInternalOrExternalUri();
+//                    Cursor imageCursor = this.getContentResolver().query(newUri, imageColumns,
+//                            MediaStore.Images.Media._ID + "=" + id, null, null);
+//
+//                    if (imageCursor.moveToFirst()) {
+//                       String value = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+//                       Log.d("New attempt", value);
+//                    }
+//
+//                } catch (Exception e) {
+//                    Toast.makeText(this, "Failed to get image", Toast.LENGTH_LONG).show();
+//                }
+//
+//            } else
+//            {
+//
+//                return filepath;
+//            }
+//
+//            return filepath;
+//        } else
+//        {
+//            Log.d("Content->File", "No conversion needed");
+//            return uri.toString();
+//        }
+//    }
 
 
 

@@ -94,8 +94,9 @@
         <activity
             android:name=".ShareDataActivity"
             android:label="Share Data"
-            android:parentActivityName=".MainActivity"
-            />
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".OSMPickerActivity">
+        </activity>
     </application>
 
 </manifest>

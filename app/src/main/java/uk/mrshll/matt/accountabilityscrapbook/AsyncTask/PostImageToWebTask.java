@@ -6,8 +6,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,14 +51,19 @@ public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
             try
             {
                 Uri fileUri = Uri.parse(uri);
-                File file = new File(fileUri.getPath());
+//                File file = new File(uri);
+
+
+                InputStream is = context.getContentResolver().openInputStream(fileUri);
+                byte[] imageBytes = streamToByteArray(is);
+
 
 
                 // Make the body by building a multipart form and calling the image
                 RequestBody requestBody = null;
                 requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        .addFormDataPart("media", uri, RequestBody.create(MediaType.parse("image/png"), file)).build();
+                        .addFormDataPart("media", uri, RequestBody.create(MediaType.parse("image/png"), imageBytes)).build();
 
                 Request request = new Request.Builder()
                         .header("Client", "Accounting Scrapbook")
@@ -62,7 +72,7 @@ public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
                         .build();
 
                 Log.d("Post Image to Web", "Attempting to post file " + uri);
-                Log.d("Post Image to Web", "filePath is " + file.getPath());
+                Log.d("Post Image to Web", "filePath is " + fileUri.toString());
 
                 Response response = client.newCall(request).execute();
                 if (response.code() == 500)
@@ -84,5 +94,21 @@ public class PostImageToWebTask extends AsyncTask<String, Integer, Boolean>
         }
 
         return null;
+    }
+
+    private byte[] streamToByteArray(InputStream is) throws IOException
+    {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[16384];
+
+        while ((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        buffer.flush();
+
+        return buffer.toByteArray();
     }
 }
