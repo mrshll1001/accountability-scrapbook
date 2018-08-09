@@ -248,8 +248,6 @@ public class AddPhotoscrapActivity extends AppCompatActivity {
 
                     }
 
-                    Toast.makeText(this, "imageUris: " + this.imageURIs.size(), Toast.LENGTH_SHORT).show();
-
 
                 }
 

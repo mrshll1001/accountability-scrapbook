@@ -116,6 +116,7 @@ public class AddEventscrapActivity extends AppCompatActivity
                     getRawGPSData();
 
                 } catch (GooglePlayServicesRepairableException e) {
+                    getRawGPSData();
 
                 }
 

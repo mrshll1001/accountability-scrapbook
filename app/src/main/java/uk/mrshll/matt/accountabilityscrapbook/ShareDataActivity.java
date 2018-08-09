@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -37,9 +39,13 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
     private Realm realm;
     private ArrayList<String> selectedScrapbooks;
     private RealmResults<ConnectedService> results;
+    private int remainingToShareCount = 0;
 
     private HashMap<String, Scrap> jsonToScrapMap;
     private HashMap<String, ConnectedService> jsonToServiceMap;
+    private String ITEMS_REMAINING_TEXT = " items to share";
+
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,6 +60,7 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         // Set up both maps
         this.jsonToScrapMap = new HashMap<>();
         this.jsonToServiceMap = new HashMap<>();
+
 
         Button scrapbooksButton = (Button) findViewById(R.id.share_data_scrapbooks_button);
         scrapbooksButton.setOnClickListener(new FetchScrapbookDialogListener(this, realm, selectedScrapbooks));
@@ -74,31 +81,55 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         if(!selectedScrapbooks.isEmpty())
         {
             // Query for the scrapbooks
-            RealmQuery<Scrapbook> query = realm.where(Scrapbook.class);
-
+//            RealmQuery<Scrapbook> query = realm.where(Scrapbook.class);
+            LinkedList<Scrapbook> scrapbookList = new LinkedList<>();
             for(String s : selectedScrapbooks)
             {
-                query.equalTo("name", s);
+                Log.d("Querying for scrapbook:", s);
+                scrapbookList.add(realm.where(Scrapbook.class)
+                        .equalTo("name", s)
+                        .findFirst());
             }
 
-            RealmResults<Scrapbook> results = query.findAll();
+//            RealmResults<Scrapbook> results = query.findAll();
+            Log.d("total scrapbooks", ""+scrapbookList.size());
+
+
 
             // Add all to the HashSet, to remove all duplicates
             HashSet<Scrap> scrapHashSet = new HashSet<>();
-            for(Scrapbook s : results)
-            {
-                scrapHashSet.addAll(s.getScrapList());
-            }
 
-            Iterator<Scrap> itr = scrapHashSet.iterator();
-            while (itr.hasNext())
+            for (Scrapbook scrapbook : scrapbookList)
             {
-                Scrap s = itr.next();
-                if (service.getScrapLog().contains(s))
+                for (Scrap scrap : scrapbook.getScrapList())
                 {
-                    itr.remove();
+                    if (!service.getScrapLog().contains(scrap))
+                    {
+                        scrapHashSet.add(scrap);
+                    }
                 }
             }
+
+            remainingToShareCount = scrapHashSet.size();
+            TextView shareCountTextView = (TextView) findViewById(R.id.share_data_scrap_count);
+            shareCountTextView.setText(remainingToShareCount + " items to share");
+
+//            for(Scrapbook s : results)
+//            {
+//                scrapHashSet.addAll(s.getScrapList());
+//            }
+//
+//            Iterator<Scrap> itr = scrapHashSet.iterator();
+//            while (itr.hasNext())
+//            {
+//                Scrap s = itr.next();
+//                if (service.getScrapLog().contains(s))
+//                {
+//                    itr.remove();
+//                }
+//            }
+
+            Toast.makeText(this, "Sharing " + scrapHashSet.size() + "items:", Toast.LENGTH_SHORT).show();
 
 
             // Strings for the JSON conversion and the QA data standard
@@ -162,6 +193,8 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
      */
     public void processFinish(String result)
     {
+        this.count++;
+        this.remainingToShareCount--;
         // Get the Scrap and the Connected service from the respective maps via the json
         realm.beginTransaction();
 
@@ -174,7 +207,15 @@ public class ShareDataActivity extends AppCompatActivity implements RecyclerView
         realm.commitTransaction();
 
 
+        TextView itemsRemaining = (TextView) findViewById(R.id.share_data_scrap_count);
+        if (remainingToShareCount > 0)
+        {
+            itemsRemaining.setText(remainingToShareCount + this.ITEMS_REMAINING_TEXT);
 
-        Toast.makeText(this, "Shared Item to Web", Toast.LENGTH_SHORT).show();
+        } else
+        {
+            itemsRemaining.setText("All Items have been shared, have a nice day");
+        }
+        Toast.makeText(this, "Shared Item " + count + " to Web", Toast.LENGTH_SHORT).show();
     }
 }

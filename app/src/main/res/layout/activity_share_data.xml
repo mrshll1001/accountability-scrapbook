@@ -33,4 +33,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_data_recycler"
+        android:id="@+id/share_data_scrap_count"
+        android:layout_centerHorizontal="true"
+        />
+
 </RelativeLayout>
